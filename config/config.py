@@ -27,6 +27,9 @@ AZURE_CV_API_KEY = os.getenv("AZURE_CV_API_KEY")
 
 # Database Configuration
 DATABASE_URL = os.getenv("DATABASE_URL")
+# OpenRouter LLM Configuration
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
 
 # Processing Settings
 PDF_DPI = int(os.getenv("PDF_DPI", "450"))
