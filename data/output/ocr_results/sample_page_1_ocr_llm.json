@@ -1,0 +1,231 @@
+{
+  "extracted_fields": {
+    "engine_tsn": {
+      "standard_name": "Engine TSN (Time Since New)",
+      "value": "16300",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 1732.0,
+        "top": 2447.0,
+        "right": 1883.0,
+        "bottom": 2499.0,
+        "width": 151.0,
+        "height": 52.0
+      },
+      "ocr_confidence": 0.981,
+      "label_block_id": 74,
+      "value_block_id": 82,
+      "label_bounding_box": {
+        "left": 566.0,
+        "top": 2376.0,
+        "right": 689.0,
+        "bottom": 2435.0,
+        "width": 123.0,
+        "height": 59.0
+      },
+      "label_text": "Total"
+    },
+    "engine_csn": {
+      "standard_name": "Engine CSN (Cycles Since New)",
+      "value": "8200",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 1746.0,
+        "top": 2589.0,
+        "right": 1860.0,
+        "bottom": 2642.0,
+        "width": 114.0,
+        "height": 53.0
+      },
+      "ocr_confidence": 0.961,
+      "label_block_id": 85,
+      "value_block_id": 93,
+      "label_bounding_box": {
+        "left": 558.0,
+        "top": 2524.0,
+        "right": 688.0,
+        "bottom": 2583.0,
+        "width": 130.0,
+        "height": 59.0
+      },
+      "label_text": "Total"
+    },
+    "flight_hours_month": {
+      "standard_name": "Flight Hours This Month",
+      "value": "197.25",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 2163.0,
+        "top": 1262.0,
+        "right": 2329.0,
+        "bottom": 1321.0,
+        "width": 166.0,
+        "height": 59.0
+      },
+      "ocr_confidence": 0.997,
+      "label_block_id": 28,
+      "value_block_id": 33,
+      "label_bounding_box": {
+        "left": 538.0,
+        "top": 1262.0,
+        "right": 740.0,
+        "bottom": 1326.0,
+        "width": 202.0,
+        "height": 64.0
+      },
+      "label_text": "HOURS"
+    },
+    "flight_cycles_month": {
+      "standard_name": "Flight Cycles This Month",
+      "value": "230",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 2197.0,
+        "top": 1390.0,
+        "right": 2279.0,
+        "bottom": 1439.0,
+        "width": 82.0,
+        "height": 49.0
+      },
+      "ocr_confidence": 0.998,
+      "label_block_id": 34,
+      "value_block_id": 37,
+      "label_bounding_box": {
+        "left": 544.0,
+        "top": 1382.0,
+        "right": 1074.0,
+        "bottom": 1446.0,
+        "width": 530.0,
+        "height": 64.0
+      },
+      "label_text": "CYCLES/LANDINGS"
+    },
+    "engine_serial_number": {
+      "standard_name": "Engine Serial Number",
+      "value": "862909",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 1715.0,
+        "top": 2002.0,
+        "right": 1900.0,
+        "bottom": 2054.0,
+        "width": 185.0,
+        "height": 52.0
+      },
+      "ocr_confidence": 0.994,
+      "label_block_id": 52,
+      "value_block_id": 56,
+      "label_bounding_box": {
+        "left": 556.0,
+        "top": 1998.0,
+        "right": 646.0,
+        "bottom": 2057.0,
+        "width": 90.0,
+        "height": 59.0
+      },
+      "label_text": "S/N"
+    },
+    "aircraft_registration": {
+      "standard_name": "Aircraft Registration",
+      "value": "A-7575",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 2851.0,
+        "top": 910.0,
+        "right": 3043.0,
+        "bottom": 982.0,
+        "width": 192.0,
+        "height": 72.0
+      },
+      "ocr_confidence": 0.997,
+      "label_block_id": 14,
+      "value_block_id": 15,
+      "label_bounding_box": {
+        "left": 2088.0,
+        "top": 911.0,
+        "right": 2534.0,
+        "bottom": 978.0,
+        "width": 446.0,
+        "height": 67.0
+      },
+      "label_text": "REGISTRATION:"
+    },
+    "engine_position": {
+      "standard_name": "Engine Position",
+      "value": "NO.1",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 1885.0,
+        "top": 1842.0,
+        "right": 2025.0,
+        "bottom": 1909.0,
+        "width": 140.0,
+        "height": 67.0
+      },
+      "ocr_confidence": 0.989,
+      "label_block_id": 47,
+      "value_block_id": 48,
+      "label_bounding_box": {
+        "left": 1593.0,
+        "top": 1840.0,
+        "right": 1860.0,
+        "bottom": 1904.0,
+        "width": 267.0,
+        "height": 64.0
+      },
+      "label_text": "POSITION"
+    },
+    "operator": {
+      "standard_name": "Operator",
+      "value": "AIRLINES",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 1426.0,
+        "top": 453.0,
+        "right": 1749.0,
+        "bottom": 531.0,
+        "width": 323.0,
+        "height": 78.0
+      },
+      "ocr_confidence": 0.993,
+      "label_block_id": 1,
+      "value_block_id": 1,
+      "label_bounding_box": {
+        "left": 1426.0,
+        "top": 453.0,
+        "right": 1749.0,
+        "bottom": 531.0,
+        "width": 323.0,
+        "height": 78.0
+      },
+      "label_text": "AIRLINES"
+    },
+    "aircraft_msn": {
+      "standard_name": "Aircraft MSN",
+      "value": "9999",
+      "confidence": "high",
+      "bounding_box": {
+        "left": 2900.0,
+        "top": 765.0,
+        "right": 3030.0,
+        "bottom": 830.0,
+        "width": 130.0,
+        "height": 65.0
+      },
+      "ocr_confidence": 0.997,
+      "label_block_id": 9,
+      "value_block_id": 10,
+      "label_bounding_box": {
+        "left": 2092.0,
+        "top": 770.0,
+        "right": 2238.0,
+        "bottom": 829.0,
+        "width": 146.0,
+        "height": 59.0
+      },
+      "label_text": "MSN:"
+    }
+  },
+  "total_fields_found": 9,
+  "document_type": "Utilization Report"
+}

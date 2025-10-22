@@ -50,7 +50,7 @@ test-results/
 # =========================================
 # Data folders
 # =========================================
-data/output/ocr_results/
+
 data/output/visualizations/
 data/cache/
 
