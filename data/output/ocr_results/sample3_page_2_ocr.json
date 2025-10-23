@@ -1,0 +1,7407 @@
+{
+  "image_size": {
+    "width": 3719,
+    "height": 5257
+  },
+  "pages": [
+    {
+      "page_number": 1,
+      "width": 3719.0,
+      "height": 5257.0,
+      "lines": [
+        {
+          "text": "Aircraft Lessor Report",
+          "bounding_box": {
+            "left": 1027.0,
+            "top": 158.0,
+            "right": 2275.0,
+            "bottom": 287.0,
+            "width": 1248.0,
+            "height": 129.0
+          },
+          "words": [
+            {
+              "text": "Aircraft",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 1033.0,
+                "top": 159.0,
+                "right": 1463.0,
+                "bottom": 276.0,
+                "width": 430.0,
+                "height": 117.0
+              }
+            },
+            {
+              "text": "Lessor",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1485.0,
+                "top": 159.0,
+                "right": 1853.0,
+                "bottom": 283.0,
+                "width": 368.0,
+                "height": 124.0
+              }
+            },
+            {
+              "text": "Report",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1875.0,
+                "top": 160.0,
+                "right": 2269.0,
+                "bottom": 288.0,
+                "width": 394.0,
+                "height": 128.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "02.Sep.2025",
+          "bounding_box": {
+            "left": 2670.0,
+            "top": 200.0,
+            "right": 3037.0,
+            "bottom": 268.0,
+            "width": 367.0,
+            "height": 68.0
+          },
+          "words": [
+            {
+              "text": "02.Sep.2025",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 2671.0,
+                "top": 201.0,
+                "right": 3027.0,
+                "bottom": 269.0,
+                "width": 356.0,
+                "height": 68.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Page 2 / 2",
+          "bounding_box": {
+            "left": 3172.0,
+            "top": 197.0,
+            "right": 3539.0,
+            "bottom": 285.0,
+            "width": 367.0,
+            "height": 88.0
+          },
+          "words": [
+            {
+              "text": "Page",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 3173.0,
+                "top": 198.0,
+                "right": 3353.0,
+                "bottom": 282.0,
+                "width": 180.0,
+                "height": 84.0
+              }
+            },
+            {
+              "text": "2",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3369.0,
+                "top": 198.0,
+                "right": 3408.0,
+                "bottom": 282.0,
+                "width": 39.0,
+                "height": 84.0
+              }
+            },
+            {
+              "text": "/",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 3424.0,
+                "top": 198.0,
+                "right": 3458.0,
+                "bottom": 284.0,
+                "width": 34.0,
+                "height": 86.0
+              }
+            },
+            {
+              "text": "2",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 3473.0,
+                "top": 199.0,
+                "right": 3523.0,
+                "bottom": 286.0,
+                "width": 50.0,
+                "height": 87.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "01.Aug.2025 to 31.Aug.2025",
+          "bounding_box": {
+            "left": 894.0,
+            "top": 323.0,
+            "right": 2408.0,
+            "bottom": 442.0,
+            "width": 1514.0,
+            "height": 119.0
+          },
+          "words": [
+            {
+              "text": "01.Aug.2025",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 894.0,
+                "top": 325.0,
+                "right": 1559.0,
+                "bottom": 443.0,
+                "width": 665.0,
+                "height": 118.0
+              }
+            },
+            {
+              "text": "to",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1583.0,
+                "top": 325.0,
+                "right": 1702.0,
+                "bottom": 443.0,
+                "width": 119.0,
+                "height": 118.0
+              }
+            },
+            {
+              "text": "31.Aug.2025",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1727.0,
+                "top": 325.0,
+                "right": 2400.0,
+                "bottom": 443.0,
+                "width": 673.0,
+                "height": 118.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "11:33",
+          "bounding_box": {
+            "left": 2755.0,
+            "top": 332.0,
+            "right": 2948.0,
+            "bottom": 399.0,
+            "width": 193.0,
+            "height": 67.0
+          },
+          "words": [
+            {
+              "text": "11:33",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2763.0,
+                "top": 333.0,
+                "right": 2937.0,
+                "bottom": 400.0,
+                "width": 174.0,
+                "height": 67.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "415261",
+          "bounding_box": {
+            "left": 3227.0,
+            "top": 328.0,
+            "right": 3477.0,
+            "bottom": 403.0,
+            "width": 250.0,
+            "height": 75.0
+          },
+          "words": [
+            {
+              "text": "415261",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3231.0,
+                "top": 329.0,
+                "right": 3475.0,
+                "bottom": 402.0,
+                "width": 244.0,
+                "height": 73.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Aircraft",
+          "bounding_box": {
+            "left": 1736.0,
+            "top": 513.0,
+            "right": 1976.0,
+            "bottom": 575.0,
+            "width": 240.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Aircraft",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1737.0,
+                "top": 514.0,
+                "right": 1975.0,
+                "bottom": 573.0,
+                "width": 238.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Registration",
+          "bounding_box": {
+            "left": 338.0,
+            "top": 593.0,
+            "right": 721.0,
+            "bottom": 655.0,
+            "width": 383.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Registration",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 339.0,
+                "top": 594.0,
+                "right": 709.0,
+                "bottom": 655.0,
+                "width": 370.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "C-Chk exp.",
+          "bounding_box": {
+            "left": 935.0,
+            "top": 588.0,
+            "right": 1262.0,
+            "bottom": 657.0,
+            "width": 327.0,
+            "height": 69.0
+          },
+          "words": [
+            {
+              "text": "C-Chk",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 939.0,
+                "top": 588.0,
+                "right": 1111.0,
+                "bottom": 657.0,
+                "width": 172.0,
+                "height": 69.0
+              }
+            },
+            {
+              "text": "exp.",
+              "confidence": 0.988,
+              "bounding_box": {
+                "left": 1128.0,
+                "top": 594.0,
+                "right": 1262.0,
+                "bottom": 657.0,
+                "width": 134.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "D-Chk exp.",
+          "bounding_box": {
+            "left": 1312.0,
+            "top": 589.0,
+            "right": 1643.0,
+            "bottom": 663.0,
+            "width": 331.0,
+            "height": 74.0
+          },
+          "words": [
+            {
+              "text": "D-Chk",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1312.0,
+                "top": 590.0,
+                "right": 1493.0,
+                "bottom": 660.0,
+                "width": 181.0,
+                "height": 70.0
+              }
+            },
+            {
+              "text": "exp.",
+              "confidence": 0.988,
+              "bounding_box": {
+                "left": 1506.0,
+                "top": 594.0,
+                "right": 1643.0,
+                "bottom": 663.0,
+                "width": 137.0,
+                "height": 69.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "MSN",
+          "bounding_box": {
+            "left": 1785.0,
+            "top": 593.0,
+            "right": 1935.0,
+            "bottom": 651.0,
+            "width": 150.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "MSN",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1785.0,
+                "top": 593.0,
+                "right": 1907.0,
+                "bottom": 651.0,
+                "width": 122.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "TAH",
+          "bounding_box": {
+            "left": 2171.0,
+            "top": 588.0,
+            "right": 2301.0,
+            "bottom": 653.0,
+            "width": 130.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "TAH",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2174.0,
+                "top": 588.0,
+                "right": 2286.0,
+                "bottom": 653.0,
+                "width": 112.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "TAC",
+          "bounding_box": {
+            "left": 2551.0,
+            "top": 591.0,
+            "right": 2680.0,
+            "bottom": 648.0,
+            "width": 129.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "TAC",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2557.0,
+                "top": 591.0,
+                "right": 2669.0,
+                "bottom": 648.0,
+                "width": 112.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2850.0,
+            "top": 594.0,
+            "right": 3140.0,
+            "bottom": 657.0,
+            "width": 290.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2851.0,
+                "top": 594.0,
+                "right": 3013.0,
+                "bottom": 658.0,
+                "width": 162.0,
+                "height": 64.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3028.0,
+                "top": 594.0,
+                "right": 3139.0,
+                "bottom": 658.0,
+                "width": 111.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3231.0,
+            "top": 593.0,
+            "right": 3522.0,
+            "bottom": 660.0,
+            "width": 291.0,
+            "height": 67.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 3232.0,
+                "top": 594.0,
+                "right": 3392.0,
+                "bottom": 657.0,
+                "width": 160.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3404.0,
+                "top": 594.0,
+                "right": 3517.0,
+                "bottom": 661.0,
+                "width": 113.0,
+                "height": 67.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "AKNV",
+          "bounding_box": {
+            "left": 464.0,
+            "top": 686.0,
+            "right": 588.0,
+            "bottom": 733.0,
+            "width": 124.0,
+            "height": 47.0
+          },
+          "words": [
+            {
+              "text": "AKNV",
+              "confidence": 0.847,
+              "bounding_box": {
+                "left": 464.0,
+                "top": 686.0,
+                "right": 586.0,
+                "bottom": 733.0,
+                "width": 122.0,
+                "height": 47.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "06.02.2026",
+          "bounding_box": {
+            "left": 933.0,
+            "top": 682.0,
+            "right": 1266.0,
+            "bottom": 744.0,
+            "width": 333.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "06.02.2026",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 937.0,
+                "top": 683.0,
+                "right": 1248.0,
+                "bottom": 744.0,
+                "width": 311.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "18.11.2029",
+          "bounding_box": {
+            "left": 1325.0,
+            "top": 684.0,
+            "right": 1641.0,
+            "bottom": 748.0,
+            "width": 316.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "18.11.2029",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1325.0,
+                "top": 686.0,
+                "right": 1626.0,
+                "bottom": 749.0,
+                "width": 301.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "02632",
+          "bounding_box": {
+            "left": 1688.0,
+            "top": 683.0,
+            "right": 1838.0,
+            "bottom": 739.0,
+            "width": 150.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "02632",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1688.0,
+                "top": 683.0,
+                "right": 1831.0,
+                "bottom": 739.0,
+                "width": 143.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "45585:00",
+          "bounding_box": {
+            "left": 2199.0,
+            "top": 688.0,
+            "right": 2425.0,
+            "bottom": 743.0,
+            "width": 226.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "45585:00",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 2199.0,
+                "top": 689.0,
+                "right": 2408.0,
+                "bottom": 743.0,
+                "width": 209.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "37133",
+          "bounding_box": {
+            "left": 2647.0,
+            "top": 684.0,
+            "right": 2805.0,
+            "bottom": 739.0,
+            "width": 158.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "37133",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 2648.0,
+                "top": 685.0,
+                "right": 2791.0,
+                "bottom": 740.0,
+                "width": 143.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3004.0,
+            "top": 685.0,
+            "right": 3171.0,
+            "bottom": 740.0,
+            "width": 167.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.984,
+              "bounding_box": {
+                "left": 3007.0,
+                "top": 686.0,
+                "right": 3168.0,
+                "bottom": 741.0,
+                "width": 161.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3462.0,
+            "top": 690.0,
+            "right": 3553.0,
+            "bottom": 735.0,
+            "width": 91.0,
+            "height": 45.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3462.0,
+                "top": 690.0,
+                "right": 3538.0,
+                "bottom": 735.0,
+                "width": 76.0,
+                "height": 45.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Title Engines",
+          "bounding_box": {
+            "left": 1668.0,
+            "top": 769.0,
+            "right": 2055.0,
+            "bottom": 838.0,
+            "width": 387.0,
+            "height": 69.0
+          },
+          "words": [
+            {
+              "text": "Title",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1668.0,
+                "top": 769.0,
+                "right": 1795.0,
+                "bottom": 833.0,
+                "width": 127.0,
+                "height": 64.0
+              }
+            },
+            {
+              "text": "Engines",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1807.0,
+                "top": 771.0,
+                "right": 2052.0,
+                "bottom": 839.0,
+                "width": 245.0,
+                "height": 68.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Installed in",
+          "bounding_box": {
+            "left": 353.0,
+            "top": 852.0,
+            "right": 710.0,
+            "bottom": 914.0,
+            "width": 357.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Installed",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 354.0,
+                "top": 852.0,
+                "right": 620.0,
+                "bottom": 914.0,
+                "width": 266.0,
+                "height": 62.0
+              }
+            },
+            {
+              "text": "in",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 635.0,
+                "top": 855.0,
+                "right": 693.0,
+                "bottom": 914.0,
+                "width": 58.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Pos.",
+          "bounding_box": {
+            "left": 1033.0,
+            "top": 858.0,
+            "right": 1156.0,
+            "bottom": 913.0,
+            "width": 123.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "Pos.",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1034.0,
+                "top": 858.0,
+                "right": 1154.0,
+                "bottom": 913.0,
+                "width": 120.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "PN",
+          "bounding_box": {
+            "left": 1421.0,
+            "top": 848.0,
+            "right": 1531.0,
+            "bottom": 908.0,
+            "width": 110.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "PN",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1423.0,
+                "top": 848.0,
+                "right": 1499.0,
+                "bottom": 908.0,
+                "width": 76.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SN",
+          "bounding_box": {
+            "left": 1805.0,
+            "top": 855.0,
+            "right": 1908.0,
+            "bottom": 911.0,
+            "width": 103.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "SN",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1808.0,
+                "top": 855.0,
+                "right": 1878.0,
+                "bottom": 911.0,
+                "width": 70.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Hrs",
+          "bounding_box": {
+            "left": 2099.0,
+            "top": 851.0,
+            "right": 2379.0,
+            "bottom": 916.0,
+            "width": 280.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2103.0,
+                "top": 852.0,
+                "right": 2252.0,
+                "bottom": 913.0,
+                "width": 149.0,
+                "height": 61.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2264.0,
+                "top": 852.0,
+                "right": 2376.0,
+                "bottom": 917.0,
+                "width": 112.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Cyc",
+          "bounding_box": {
+            "left": 2481.0,
+            "top": 849.0,
+            "right": 2759.0,
+            "bottom": 916.0,
+            "width": 278.0,
+            "height": 67.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2484.0,
+                "top": 850.0,
+                "right": 2633.0,
+                "bottom": 913.0,
+                "width": 149.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 852.0,
+                "right": 2757.0,
+                "bottom": 917.0,
+                "width": 112.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2851.0,
+            "top": 851.0,
+            "right": 3137.0,
+            "bottom": 916.0,
+            "width": 286.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2852.0,
+                "top": 851.0,
+                "right": 3013.0,
+                "bottom": 914.0,
+                "width": 161.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3024.0,
+                "top": 853.0,
+                "right": 3136.0,
+                "bottom": 916.0,
+                "width": 112.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3228.0,
+            "top": 850.0,
+            "right": 3530.0,
+            "bottom": 916.0,
+            "width": 302.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 3228.0,
+                "top": 850.0,
+                "right": 3392.0,
+                "bottom": 915.0,
+                "width": 164.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3408.0,
+                "top": 852.0,
+                "right": 3520.0,
+                "bottom": 917.0,
+                "width": 112.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "AKNV",
+          "bounding_box": {
+            "left": 465.0,
+            "top": 938.0,
+            "right": 599.0,
+            "bottom": 987.0,
+            "width": 134.0,
+            "height": 49.0
+          },
+          "words": [
+            {
+              "text": "AKNV",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 465.0,
+                "top": 939.0,
+                "right": 590.0,
+                "bottom": 987.0,
+                "width": 125.0,
+                "height": 48.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "1",
+          "bounding_box": {
+            "left": 1088.0,
+            "top": 935.0,
+            "right": 1125.0,
+            "bottom": 1001.0,
+            "width": 37.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "1",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1088.0,
+                "top": 935.0,
+                "right": 1126.0,
+                "bottom": 1000.0,
+                "width": 38.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "CFM56-5B6P",
+          "bounding_box": {
+            "left": 1305.0,
+            "top": 938.0,
+            "right": 1609.0,
+            "bottom": 990.0,
+            "width": 304.0,
+            "height": 52.0
+          },
+          "words": [
+            {
+              "text": "CFM56-5B6P",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1305.0,
+                "top": 939.0,
+                "right": 1603.0,
+                "bottom": 991.0,
+                "width": 298.0,
+                "height": 52.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "779710",
+          "bounding_box": {
+            "left": 1689.0,
+            "top": 939.0,
+            "right": 1863.0,
+            "bottom": 995.0,
+            "width": 174.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "779710",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1689.0,
+                "top": 940.0,
+                "right": 1858.0,
+                "bottom": 995.0,
+                "width": 169.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "60580:19",
+          "bounding_box": {
+            "left": 2199.0,
+            "top": 941.0,
+            "right": 2416.0,
+            "bottom": 990.0,
+            "width": 217.0,
+            "height": 49.0
+          },
+          "words": [
+            {
+              "text": "60580:19",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 2199.0,
+                "top": 942.0,
+                "right": 2411.0,
+                "bottom": 991.0,
+                "width": 212.0,
+                "height": 49.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "45014",
+          "bounding_box": {
+            "left": 2648.0,
+            "top": 941.0,
+            "right": 2799.0,
+            "bottom": 993.0,
+            "width": 151.0,
+            "height": 52.0
+          },
+          "words": [
+            {
+              "text": "45014",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 2649.0,
+                "top": 942.0,
+                "right": 2790.0,
+                "bottom": 994.0,
+                "width": 141.0,
+                "height": 52.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3007.0,
+            "top": 940.0,
+            "right": 3180.0,
+            "bottom": 994.0,
+            "width": 173.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3010.0,
+                "top": 941.0,
+                "right": 3166.0,
+                "bottom": 994.0,
+                "width": 156.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3459.0,
+            "top": 938.0,
+            "right": 3555.0,
+            "bottom": 993.0,
+            "width": 96.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 3459.0,
+                "top": 938.0,
+                "right": 3543.0,
+                "bottom": 993.0,
+                "width": 84.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "AKNV",
+          "bounding_box": {
+            "left": 467.0,
+            "top": 1021.0,
+            "right": 607.0,
+            "bottom": 1076.0,
+            "width": 140.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "AKNV",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 467.0,
+                "top": 1022.0,
+                "right": 592.0,
+                "bottom": 1077.0,
+                "width": 125.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "2",
+          "bounding_box": {
+            "left": 1078.0,
+            "top": 1029.0,
+            "right": 1120.0,
+            "bottom": 1087.0,
+            "width": 42.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "2",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1086.0,
+                "top": 1029.0,
+                "right": 1121.0,
+                "bottom": 1085.0,
+                "width": 35.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "CFM56-5B6P",
+          "bounding_box": {
+            "left": 1298.0,
+            "top": 1017.0,
+            "right": 1608.0,
+            "bottom": 1083.0,
+            "width": 310.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "CFM56-5B6P",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 1301.0,
+                "top": 1018.0,
+                "right": 1605.0,
+                "bottom": 1082.0,
+                "width": 304.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "779660",
+          "bounding_box": {
+            "left": 1683.0,
+            "top": 1021.0,
+            "right": 1858.0,
+            "bottom": 1081.0,
+            "width": 175.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "779660",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1686.0,
+                "top": 1021.0,
+                "right": 1859.0,
+                "bottom": 1081.0,
+                "width": 173.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "59697:00",
+          "bounding_box": {
+            "left": 2190.0,
+            "top": 1026.0,
+            "right": 2419.0,
+            "bottom": 1081.0,
+            "width": 229.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "59697:00",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 2190.0,
+                "top": 1026.0,
+                "right": 2414.0,
+                "bottom": 1082.0,
+                "width": 224.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "44103",
+          "bounding_box": {
+            "left": 2643.0,
+            "top": 1025.0,
+            "right": 2789.0,
+            "bottom": 1075.0,
+            "width": 146.0,
+            "height": 50.0
+          },
+          "words": [
+            {
+              "text": "44103",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2644.0,
+                "top": 1026.0,
+                "right": 2788.0,
+                "bottom": 1076.0,
+                "width": 144.0,
+                "height": 50.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3005.0,
+            "top": 1024.0,
+            "right": 3177.0,
+            "bottom": 1079.0,
+            "width": 172.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3008.0,
+                "top": 1025.0,
+                "right": 3168.0,
+                "bottom": 1080.0,
+                "width": 160.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3452.0,
+            "top": 1024.0,
+            "right": 3547.0,
+            "bottom": 1079.0,
+            "width": 95.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3454.0,
+                "top": 1024.0,
+                "right": 3541.0,
+                "bottom": 1079.0,
+                "width": 87.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Installed Engines (at 31.Aug.2025)",
+          "bounding_box": {
+            "left": 1342.0,
+            "top": 1104.0,
+            "right": 2371.0,
+            "bottom": 1170.0,
+            "width": 1029.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "Installed",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1342.0,
+                "top": 1107.0,
+                "right": 1612.0,
+                "bottom": 1171.0,
+                "width": 270.0,
+                "height": 64.0
+              }
+            },
+            {
+              "text": "Engines",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1628.0,
+                "top": 1107.0,
+                "right": 1866.0,
+                "bottom": 1170.0,
+                "width": 238.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "(at",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1878.0,
+                "top": 1107.0,
+                "right": 1965.0,
+                "bottom": 1170.0,
+                "width": 87.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "31.Aug.2025)",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 1977.0,
+                "top": 1105.0,
+                "right": 2369.0,
+                "bottom": 1170.0,
+                "width": 392.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Pos.",
+          "bounding_box": {
+            "left": 658.0,
+            "top": 1197.0,
+            "right": 783.0,
+            "bottom": 1254.0,
+            "width": 125.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "Pos.",
+              "confidence": 0.964,
+              "bounding_box": {
+                "left": 660.0,
+                "top": 1197.0,
+                "right": 783.0,
+                "bottom": 1254.0,
+                "width": 123.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "PN",
+          "bounding_box": {
+            "left": 1428.0,
+            "top": 1191.0,
+            "right": 1529.0,
+            "bottom": 1251.0,
+            "width": 101.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "PN",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 1428.0,
+                "top": 1192.0,
+                "right": 1500.0,
+                "bottom": 1251.0,
+                "width": 72.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SN",
+          "bounding_box": {
+            "left": 1811.0,
+            "top": 1193.0,
+            "right": 1900.0,
+            "bottom": 1249.0,
+            "width": 89.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "SN",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1812.0,
+                "top": 1194.0,
+                "right": 1878.0,
+                "bottom": 1248.0,
+                "width": 66.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Hrs",
+          "bounding_box": {
+            "left": 2098.0,
+            "top": 1192.0,
+            "right": 2376.0,
+            "bottom": 1257.0,
+            "width": 278.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2101.0,
+                "top": 1192.0,
+                "right": 2256.0,
+                "bottom": 1258.0,
+                "width": 155.0,
+                "height": 66.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2265.0,
+                "top": 1192.0,
+                "right": 2375.0,
+                "bottom": 1256.0,
+                "width": 110.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Cyc",
+          "bounding_box": {
+            "left": 2472.0,
+            "top": 1190.0,
+            "right": 2763.0,
+            "bottom": 1257.0,
+            "width": 291.0,
+            "height": 67.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2476.0,
+                "top": 1191.0,
+                "right": 2631.0,
+                "bottom": 1256.0,
+                "width": 155.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2643.0,
+                "top": 1192.0,
+                "right": 2756.0,
+                "bottom": 1258.0,
+                "width": 113.0,
+                "height": 66.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2846.0,
+            "top": 1194.0,
+            "right": 3135.0,
+            "bottom": 1253.0,
+            "width": 289.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 2849.0,
+                "top": 1195.0,
+                "right": 3009.0,
+                "bottom": 1254.0,
+                "width": 160.0,
+                "height": 59.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3025.0,
+                "top": 1195.0,
+                "right": 3133.0,
+                "bottom": 1254.0,
+                "width": 108.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3227.0,
+            "top": 1195.0,
+            "right": 3523.0,
+            "bottom": 1254.0,
+            "width": 296.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 3231.0,
+                "top": 1196.0,
+                "right": 3390.0,
+                "bottom": 1255.0,
+                "width": 159.0,
+                "height": 59.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3406.0,
+                "top": 1196.0,
+                "right": 3516.0,
+                "bottom": 1255.0,
+                "width": 110.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "1",
+          "bounding_box": {
+            "left": 702.0,
+            "top": 1283.0,
+            "right": 742.0,
+            "bottom": 1347.0,
+            "width": 40.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "1",
+              "confidence": 0.986,
+              "bounding_box": {
+                "left": 702.0,
+                "top": 1283.0,
+                "right": 742.0,
+                "bottom": 1346.0,
+                "width": 40.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "CFM56-5B6P",
+          "bounding_box": {
+            "left": 1306.0,
+            "top": 1282.0,
+            "right": 1607.0,
+            "bottom": 1340.0,
+            "width": 301.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "CFM56-5B6P",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1307.0,
+                "top": 1282.0,
+                "right": 1604.0,
+                "bottom": 1340.0,
+                "width": 297.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "779710",
+          "bounding_box": {
+            "left": 1689.0,
+            "top": 1284.0,
+            "right": 1865.0,
+            "bottom": 1343.0,
+            "width": 176.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "779710",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 1690.0,
+                "top": 1285.0,
+                "right": 1859.0,
+                "bottom": 1343.0,
+                "width": 169.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "60580:19",
+          "bounding_box": {
+            "left": 2182.0,
+            "top": 1282.0,
+            "right": 2416.0,
+            "bottom": 1339.0,
+            "width": 234.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "60580:19",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2189.0,
+                "top": 1284.0,
+                "right": 2412.0,
+                "bottom": 1340.0,
+                "width": 223.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "45014",
+          "bounding_box": {
+            "left": 2641.0,
+            "top": 1285.0,
+            "right": 2803.0,
+            "bottom": 1341.0,
+            "width": 162.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "45014",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2644.0,
+                "top": 1287.0,
+                "right": 2791.0,
+                "bottom": 1342.0,
+                "width": 147.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3003.0,
+            "top": 1282.0,
+            "right": 3172.0,
+            "bottom": 1341.0,
+            "width": 169.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 3006.0,
+                "top": 1285.0,
+                "right": 3170.0,
+                "bottom": 1342.0,
+                "width": 164.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3460.0,
+            "top": 1286.0,
+            "right": 3551.0,
+            "bottom": 1341.0,
+            "width": 91.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3460.0,
+                "top": 1286.0,
+                "right": 3543.0,
+                "bottom": 1341.0,
+                "width": 83.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "2",
+          "bounding_box": {
+            "left": 695.0,
+            "top": 1378.0,
+            "right": 753.0,
+            "bottom": 1443.0,
+            "width": 58.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "2",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 700.0,
+                "top": 1378.0,
+                "right": 738.0,
+                "bottom": 1442.0,
+                "width": 38.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "CFM56-5B6P",
+          "bounding_box": {
+            "left": 1311.0,
+            "top": 1371.0,
+            "right": 1612.0,
+            "bottom": 1433.0,
+            "width": 301.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "CFM56-5B6P",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 1311.0,
+                "top": 1372.0,
+                "right": 1603.0,
+                "bottom": 1433.0,
+                "width": 292.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "779660",
+          "bounding_box": {
+            "left": 1681.0,
+            "top": 1371.0,
+            "right": 1856.0,
+            "bottom": 1433.0,
+            "width": 175.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "779660",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1684.0,
+                "top": 1375.0,
+                "right": 1854.0,
+                "bottom": 1434.0,
+                "width": 170.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "59697:00",
+          "bounding_box": {
+            "left": 2188.0,
+            "top": 1372.0,
+            "right": 2421.0,
+            "bottom": 1433.0,
+            "width": 233.0,
+            "height": 61.0
+          },
+          "words": [
+            {
+              "text": "59697:00",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 2191.0,
+                "top": 1375.0,
+                "right": 2415.0,
+                "bottom": 1433.0,
+                "width": 224.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "44103",
+          "bounding_box": {
+            "left": 2645.0,
+            "top": 1376.0,
+            "right": 2787.0,
+            "bottom": 1430.0,
+            "width": 142.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "44103",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 1376.0,
+                "right": 2785.0,
+                "bottom": 1430.0,
+                "width": 140.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 2998.0,
+            "top": 1374.0,
+            "right": 3171.0,
+            "bottom": 1430.0,
+            "width": 173.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3004.0,
+                "top": 1375.0,
+                "right": 3168.0,
+                "bottom": 1431.0,
+                "width": 164.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3453.0,
+            "top": 1375.0,
+            "right": 3546.0,
+            "bottom": 1426.0,
+            "width": 93.0,
+            "height": 51.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3455.0,
+                "top": 1375.0,
+                "right": 3541.0,
+                "bottom": 1426.0,
+                "width": 86.0,
+                "height": 51.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Title APU",
+          "bounding_box": {
+            "left": 1719.0,
+            "top": 1459.0,
+            "right": 1994.0,
+            "bottom": 1528.0,
+            "width": 275.0,
+            "height": 69.0
+          },
+          "words": [
+            {
+              "text": "Title",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1723.0,
+                "top": 1460.0,
+                "right": 1850.0,
+                "bottom": 1527.0,
+                "width": 127.0,
+                "height": 67.0
+              }
+            },
+            {
+              "text": "APU",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1863.0,
+                "top": 1460.0,
+                "right": 1984.0,
+                "bottom": 1529.0,
+                "width": 121.0,
+                "height": 69.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Installed in",
+          "bounding_box": {
+            "left": 170.0,
+            "top": 1545.0,
+            "right": 516.0,
+            "bottom": 1609.0,
+            "width": 346.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "Installed",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 170.0,
+                "top": 1545.0,
+                "right": 431.0,
+                "bottom": 1609.0,
+                "width": 261.0,
+                "height": 64.0
+              }
+            },
+            {
+              "text": "in",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 448.0,
+                "top": 1545.0,
+                "right": 505.0,
+                "bottom": 1610.0,
+                "width": 57.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Pos.",
+          "bounding_box": {
+            "left": 655.0,
+            "top": 1551.0,
+            "right": 785.0,
+            "bottom": 1602.0,
+            "width": 130.0,
+            "height": 51.0
+          },
+          "words": [
+            {
+              "text": "Pos.",
+              "confidence": 0.986,
+              "bounding_box": {
+                "left": 656.0,
+                "top": 1551.0,
+                "right": 783.0,
+                "bottom": 1602.0,
+                "width": 127.0,
+                "height": 51.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Shop Visit",
+          "bounding_box": {
+            "left": 934.0,
+            "top": 1544.0,
+            "right": 1261.0,
+            "bottom": 1611.0,
+            "width": 327.0,
+            "height": 67.0
+          },
+          "words": [
+            {
+              "text": "Shop",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 942.0,
+                "top": 1544.0,
+                "right": 1095.0,
+                "bottom": 1609.0,
+                "width": 153.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Visit",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1114.0,
+                "top": 1544.0,
+                "right": 1259.0,
+                "bottom": 1612.0,
+                "width": 145.0,
+                "height": 68.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "PN",
+          "bounding_box": {
+            "left": 1423.0,
+            "top": 1544.0,
+            "right": 1531.0,
+            "bottom": 1604.0,
+            "width": 108.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "PN",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1426.0,
+                "top": 1545.0,
+                "right": 1499.0,
+                "bottom": 1604.0,
+                "width": 73.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SN",
+          "bounding_box": {
+            "left": 1807.0,
+            "top": 1546.0,
+            "right": 1905.0,
+            "bottom": 1604.0,
+            "width": 98.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "SN",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1809.0,
+                "top": 1546.0,
+                "right": 1881.0,
+                "bottom": 1604.0,
+                "width": 72.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Hrs",
+          "bounding_box": {
+            "left": 2097.0,
+            "top": 1545.0,
+            "right": 2374.0,
+            "bottom": 1609.0,
+            "width": 277.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2100.0,
+                "top": 1546.0,
+                "right": 2253.0,
+                "bottom": 1606.0,
+                "width": 153.0,
+                "height": 60.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2264.0,
+                "top": 1547.0,
+                "right": 2371.0,
+                "bottom": 1610.0,
+                "width": 107.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Cyc",
+          "bounding_box": {
+            "left": 2477.0,
+            "top": 1543.0,
+            "right": 2757.0,
+            "bottom": 1609.0,
+            "width": 280.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2481.0,
+                "top": 1544.0,
+                "right": 2634.0,
+                "bottom": 1609.0,
+                "width": 153.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 1549.0,
+                "right": 2753.0,
+                "bottom": 1609.0,
+                "width": 108.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2851.0,
+            "top": 1546.0,
+            "right": 3134.0,
+            "bottom": 1607.0,
+            "width": 283.0,
+            "height": 61.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2851.0,
+                "top": 1546.0,
+                "right": 3008.0,
+                "bottom": 1606.0,
+                "width": 157.0,
+                "height": 60.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3025.0,
+                "top": 1549.0,
+                "right": 3131.0,
+                "bottom": 1607.0,
+                "width": 106.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3230.0,
+            "top": 1544.0,
+            "right": 3531.0,
+            "bottom": 1610.0,
+            "width": 301.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 3231.0,
+                "top": 1544.0,
+                "right": 3393.0,
+                "bottom": 1608.0,
+                "width": 162.0,
+                "height": 64.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3409.0,
+                "top": 1548.0,
+                "right": 3518.0,
+                "bottom": 1611.0,
+                "width": 109.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "EUL",
+          "bounding_box": {
+            "left": 286.0,
+            "top": 1630.0,
+            "right": 397.0,
+            "bottom": 1683.0,
+            "width": 111.0,
+            "height": 53.0
+          },
+          "words": [
+            {
+              "text": "EUL",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 292.0,
+                "top": 1630.0,
+                "right": 391.0,
+                "bottom": 1683.0,
+                "width": 99.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "4005KM",
+          "bounding_box": {
+            "left": 619.0,
+            "top": 1631.0,
+            "right": 818.0,
+            "bottom": 1685.0,
+            "width": 199.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "4005KM",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 620.0,
+                "top": 1633.0,
+                "right": 797.0,
+                "bottom": 1686.0,
+                "width": 177.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "01.08.2014",
+          "bounding_box": {
+            "left": 955.0,
+            "top": 1624.0,
+            "right": 1238.0,
+            "bottom": 1687.0,
+            "width": 283.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "01.08.2014",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 958.0,
+                "top": 1625.0,
+                "right": 1229.0,
+                "bottom": 1687.0,
+                "width": 271.0,
+                "height": 62.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "3800708-1",
+          "bounding_box": {
+            "left": 1291.0,
+            "top": 1628.0,
+            "right": 1551.0,
+            "bottom": 1688.0,
+            "width": 260.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "3800708-1",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1302.0,
+                "top": 1629.0,
+                "right": 1549.0,
+                "bottom": 1688.0,
+                "width": 247.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "P-3067",
+          "bounding_box": {
+            "left": 1683.0,
+            "top": 1628.0,
+            "right": 1847.0,
+            "bottom": 1685.0,
+            "width": 164.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "P-3067",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1683.0,
+                "top": 1628.0,
+                "right": 1843.0,
+                "bottom": 1685.0,
+                "width": 160.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "24259.0",
+          "bounding_box": {
+            "left": 2226.0,
+            "top": 1626.0,
+            "right": 2410.0,
+            "bottom": 1691.0,
+            "width": 184.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "24259.0",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 2226.0,
+                "top": 1628.0,
+                "right": 2410.0,
+                "bottom": 1692.0,
+                "width": 184.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "58632",
+          "bounding_box": {
+            "left": 2645.0,
+            "top": 1631.0,
+            "right": 2787.0,
+            "bottom": 1682.0,
+            "width": 142.0,
+            "height": 51.0
+          },
+          "words": [
+            {
+              "text": "58632",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 1631.0,
+                "right": 2784.0,
+                "bottom": 1682.0,
+                "width": 139.0,
+                "height": 51.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "110.0",
+          "bounding_box": {
+            "left": 3035.0,
+            "top": 1628.0,
+            "right": 3166.0,
+            "bottom": 1684.0,
+            "width": 131.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "110.0",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3041.0,
+                "top": 1628.0,
+                "right": 3163.0,
+                "bottom": 1684.0,
+                "width": 122.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "274",
+          "bounding_box": {
+            "left": 3456.0,
+            "top": 1628.0,
+            "right": 3544.0,
+            "bottom": 1683.0,
+            "width": 88.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "274",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 3457.0,
+                "top": 1628.0,
+                "right": 3544.0,
+                "bottom": 1683.0,
+                "width": 87.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Installed APU (at 31.Aug.2025)",
+          "bounding_box": {
+            "left": 1393.0,
+            "top": 1709.0,
+            "right": 2306.0,
+            "bottom": 1772.0,
+            "width": 913.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "Installed",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1394.0,
+                "top": 1710.0,
+                "right": 1661.0,
+                "bottom": 1772.0,
+                "width": 267.0,
+                "height": 62.0
+              }
+            },
+            {
+              "text": "APU",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1677.0,
+                "top": 1709.0,
+                "right": 1796.0,
+                "bottom": 1772.0,
+                "width": 119.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "(at",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1822.0,
+                "top": 1709.0,
+                "right": 1909.0,
+                "bottom": 1772.0,
+                "width": 87.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "31.Aug.2025)",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 1920.0,
+                "top": 1709.0,
+                "right": 2306.0,
+                "bottom": 1772.0,
+                "width": 386.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Pos.",
+          "bounding_box": {
+            "left": 467.0,
+            "top": 1792.0,
+            "right": 585.0,
+            "bottom": 1850.0,
+            "width": 118.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "Pos.",
+              "confidence": 0.818,
+              "bounding_box": {
+                "left": 467.0,
+                "top": 1792.0,
+                "right": 582.0,
+                "bottom": 1850.0,
+                "width": 115.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Shop Visit",
+          "bounding_box": {
+            "left": 944.0,
+            "top": 1790.0,
+            "right": 1249.0,
+            "bottom": 1852.0,
+            "width": 305.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Shop",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 944.0,
+                "top": 1794.0,
+                "right": 1093.0,
+                "bottom": 1852.0,
+                "width": 149.0,
+                "height": 58.0
+              }
+            },
+            {
+              "text": "Visit",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1111.0,
+                "top": 1791.0,
+                "right": 1249.0,
+                "bottom": 1852.0,
+                "width": 138.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "PN",
+          "bounding_box": {
+            "left": 1423.0,
+            "top": 1789.0,
+            "right": 1529.0,
+            "bottom": 1852.0,
+            "width": 106.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "PN",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1425.0,
+                "top": 1790.0,
+                "right": 1500.0,
+                "bottom": 1852.0,
+                "width": 75.0,
+                "height": 62.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SN",
+          "bounding_box": {
+            "left": 1810.0,
+            "top": 1789.0,
+            "right": 1907.0,
+            "bottom": 1852.0,
+            "width": 97.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "SN",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1810.0,
+                "top": 1790.0,
+                "right": 1881.0,
+                "bottom": 1852.0,
+                "width": 71.0,
+                "height": 62.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Hrs",
+          "bounding_box": {
+            "left": 2100.0,
+            "top": 1791.0,
+            "right": 2377.0,
+            "bottom": 1854.0,
+            "width": 277.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2100.0,
+                "top": 1791.0,
+                "right": 2253.0,
+                "bottom": 1854.0,
+                "width": 153.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2264.0,
+                "top": 1791.0,
+                "right": 2375.0,
+                "bottom": 1855.0,
+                "width": 111.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Cyc",
+          "bounding_box": {
+            "left": 2474.0,
+            "top": 1792.0,
+            "right": 2760.0,
+            "bottom": 1854.0,
+            "width": 286.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2477.0,
+                "top": 1793.0,
+                "right": 2634.0,
+                "bottom": 1854.0,
+                "width": 157.0,
+                "height": 61.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 1795.0,
+                "right": 2756.0,
+                "bottom": 1854.0,
+                "width": 111.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2846.0,
+            "top": 1794.0,
+            "right": 3130.0,
+            "bottom": 1853.0,
+            "width": 284.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2849.0,
+                "top": 1795.0,
+                "right": 3011.0,
+                "bottom": 1853.0,
+                "width": 162.0,
+                "height": 58.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3026.0,
+                "top": 1794.0,
+                "right": 3129.0,
+                "bottom": 1853.0,
+                "width": 103.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3234.0,
+            "top": 1795.0,
+            "right": 3519.0,
+            "bottom": 1857.0,
+            "width": 285.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 3235.0,
+                "top": 1796.0,
+                "right": 3389.0,
+                "bottom": 1854.0,
+                "width": 154.0,
+                "height": 58.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3409.0,
+                "top": 1796.0,
+                "right": 3518.0,
+                "bottom": 1858.0,
+                "width": 109.0,
+                "height": 62.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "4005KM",
+          "bounding_box": {
+            "left": 430.0,
+            "top": 1880.0,
+            "right": 643.0,
+            "bottom": 1934.0,
+            "width": 213.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "4005KM",
+              "confidence": 0.958,
+              "bounding_box": {
+                "left": 431.0,
+                "top": 1881.0,
+                "right": 609.0,
+                "bottom": 1934.0,
+                "width": 178.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "28.11.2014",
+          "bounding_box": {
+            "left": 955.0,
+            "top": 1878.0,
+            "right": 1236.0,
+            "bottom": 1935.0,
+            "width": 281.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "28.11.2014",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 962.0,
+                "top": 1879.0,
+                "right": 1224.0,
+                "bottom": 1936.0,
+                "width": 262.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "3800708-1",
+          "bounding_box": {
+            "left": 1307.0,
+            "top": 1878.0,
+            "right": 1555.0,
+            "bottom": 1932.0,
+            "width": 248.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "3800708-1",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1307.0,
+                "top": 1879.0,
+                "right": 1554.0,
+                "bottom": 1932.0,
+                "width": 247.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "P-4431",
+          "bounding_box": {
+            "left": 1677.0,
+            "top": 1879.0,
+            "right": 1852.0,
+            "bottom": 1932.0,
+            "width": 175.0,
+            "height": 53.0
+          },
+          "words": [
+            {
+              "text": "P-4431",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1680.0,
+                "top": 1880.0,
+                "right": 1852.0,
+                "bottom": 1933.0,
+                "width": 172.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "16421.0",
+          "bounding_box": {
+            "left": 2211.0,
+            "top": 1878.0,
+            "right": 2415.0,
+            "bottom": 1936.0,
+            "width": 204.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "16421.0",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 2224.0,
+                "top": 1880.0,
+                "right": 2415.0,
+                "bottom": 1936.0,
+                "width": 191.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "44851",
+          "bounding_box": {
+            "left": 2652.0,
+            "top": 1881.0,
+            "right": 2787.0,
+            "bottom": 1933.0,
+            "width": 135.0,
+            "height": 52.0
+          },
+          "words": [
+            {
+              "text": "44851",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 2652.0,
+                "top": 1881.0,
+                "right": 2784.0,
+                "bottom": 1933.0,
+                "width": 132.0,
+                "height": 52.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "120.0",
+          "bounding_box": {
+            "left": 3036.0,
+            "top": 1878.0,
+            "right": 3167.0,
+            "bottom": 1927.0,
+            "width": 131.0,
+            "height": 49.0
+          },
+          "words": [
+            {
+              "text": "120.0",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 3041.0,
+                "top": 1878.0,
+                "right": 3164.0,
+                "bottom": 1927.0,
+                "width": 123.0,
+                "height": 49.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "293",
+          "bounding_box": {
+            "left": 3441.0,
+            "top": 1881.0,
+            "right": 3547.0,
+            "bottom": 1934.0,
+            "width": 106.0,
+            "height": 53.0
+          },
+          "words": [
+            {
+              "text": "293",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3453.0,
+                "top": 1881.0,
+                "right": 3540.0,
+                "bottom": 1934.0,
+                "width": 87.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Installed Landing Gear (at 31.Aug.2025)",
+          "bounding_box": {
+            "left": 1257.0,
+            "top": 1959.0,
+            "right": 2445.0,
+            "bottom": 2024.0,
+            "width": 1188.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "Installed",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1258.0,
+                "top": 1961.0,
+                "right": 1524.0,
+                "bottom": 2024.0,
+                "width": 266.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Landing",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 1541.0,
+                "top": 1960.0,
+                "right": 1788.0,
+                "bottom": 2025.0,
+                "width": 247.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Gear",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 1804.0,
+                "top": 1960.0,
+                "right": 1952.0,
+                "bottom": 2025.0,
+                "width": 148.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "(at",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1963.0,
+                "top": 1960.0,
+                "right": 2049.0,
+                "bottom": 2025.0,
+                "width": 86.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "31.Aug.2025)",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 2059.0,
+                "top": 1960.0,
+                "right": 2444.0,
+                "bottom": 2025.0,
+                "width": 385.0,
+                "height": 65.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Description",
+          "bounding_box": {
+            "left": 356.0,
+            "top": 2048.0,
+            "right": 715.0,
+            "bottom": 2112.0,
+            "width": 359.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "Description",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 357.0,
+                "top": 2049.0,
+                "right": 699.0,
+                "bottom": 2113.0,
+                "width": 342.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Shop Visit",
+          "bounding_box": {
+            "left": 946.0,
+            "top": 2045.0,
+            "right": 1257.0,
+            "bottom": 2113.0,
+            "width": 311.0,
+            "height": 68.0
+          },
+          "words": [
+            {
+              "text": "Shop",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 946.0,
+                "top": 2046.0,
+                "right": 1096.0,
+                "bottom": 2112.0,
+                "width": 150.0,
+                "height": 66.0
+              }
+            },
+            {
+              "text": "Visit",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1108.0,
+                "top": 2046.0,
+                "right": 1256.0,
+                "bottom": 2113.0,
+                "width": 148.0,
+                "height": 67.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "PN",
+          "bounding_box": {
+            "left": 1425.0,
+            "top": 2045.0,
+            "right": 1516.0,
+            "bottom": 2103.0,
+            "width": 91.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "PN",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1426.0,
+                "top": 2046.0,
+                "right": 1500.0,
+                "bottom": 2103.0,
+                "width": 74.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SN",
+          "bounding_box": {
+            "left": 1805.0,
+            "top": 2052.0,
+            "right": 1908.0,
+            "bottom": 2106.0,
+            "width": 103.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "SN",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1811.0,
+                "top": 2052.0,
+                "right": 1879.0,
+                "bottom": 2106.0,
+                "width": 68.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Hrs",
+          "bounding_box": {
+            "left": 2093.0,
+            "top": 2048.0,
+            "right": 2380.0,
+            "bottom": 2112.0,
+            "width": 287.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2096.0,
+                "top": 2049.0,
+                "right": 2254.0,
+                "bottom": 2111.0,
+                "width": 158.0,
+                "height": 62.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2264.0,
+                "top": 2049.0,
+                "right": 2378.0,
+                "bottom": 2112.0,
+                "width": 114.0,
+                "height": 63.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Total Cyc",
+          "bounding_box": {
+            "left": 2474.0,
+            "top": 2046.0,
+            "right": 2759.0,
+            "bottom": 2112.0,
+            "width": 285.0,
+            "height": 66.0
+          },
+          "words": [
+            {
+              "text": "Total",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2478.0,
+                "top": 2047.0,
+                "right": 2632.0,
+                "bottom": 2112.0,
+                "width": 154.0,
+                "height": 65.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2642.0,
+                "top": 2047.0,
+                "right": 2756.0,
+                "bottom": 2113.0,
+                "width": 114.0,
+                "height": 66.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Hrs",
+          "bounding_box": {
+            "left": 2851.0,
+            "top": 2049.0,
+            "right": 3136.0,
+            "bottom": 2111.0,
+            "width": 285.0,
+            "height": 62.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 2852.0,
+                "top": 2049.0,
+                "right": 3010.0,
+                "bottom": 2110.0,
+                "width": 158.0,
+                "height": 61.0
+              }
+            },
+            {
+              "text": "Hrs",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3024.0,
+                "top": 2052.0,
+                "right": 3135.0,
+                "bottom": 2112.0,
+                "width": 111.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "Delta Cyc",
+          "bounding_box": {
+            "left": 3224.0,
+            "top": 2047.0,
+            "right": 3528.0,
+            "bottom": 2112.0,
+            "width": 304.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "Delta",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 3228.0,
+                "top": 2048.0,
+                "right": 3390.0,
+                "bottom": 2111.0,
+                "width": 162.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "Cyc",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3406.0,
+                "top": 2049.0,
+                "right": 3516.0,
+                "bottom": 2113.0,
+                "width": 110.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "LEG & DRESSING LH A319/A320",
+          "bounding_box": {
+            "left": 176.0,
+            "top": 2136.0,
+            "right": 916.0,
+            "bottom": 2200.0,
+            "width": 740.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "LEG",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 177.0,
+                "top": 2141.0,
+                "right": 253.0,
+                "bottom": 2198.0,
+                "width": 76.0,
+                "height": 57.0
+              }
+            },
+            {
+              "text": "&",
+              "confidence": 0.981,
+              "bounding_box": {
+                "left": 270.0,
+                "top": 2140.0,
+                "right": 308.0,
+                "bottom": 2197.0,
+                "width": 38.0,
+                "height": 57.0
+              }
+            },
+            {
+              "text": "DRESSING",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 320.0,
+                "top": 2137.0,
+                "right": 567.0,
+                "bottom": 2197.0,
+                "width": 247.0,
+                "height": 60.0
+              }
+            },
+            {
+              "text": "LH",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 578.0,
+                "top": 2137.0,
+                "right": 641.0,
+                "bottom": 2197.0,
+                "width": 63.0,
+                "height": 60.0
+              }
+            },
+            {
+              "text": "A319/A320",
+              "confidence": 0.838,
+              "bounding_box": {
+                "left": 656.0,
+                "top": 2136.0,
+                "right": 917.0,
+                "bottom": 2200.0,
+                "width": 261.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "201582001-040 M-DG-1899",
+          "bounding_box": {
+            "left": 1296.0,
+            "top": 2137.0,
+            "right": 1953.0,
+            "bottom": 2196.0,
+            "width": 657.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "201582001-040",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1300.0,
+                "top": 2138.0,
+                "right": 1669.0,
+                "bottom": 2197.0,
+                "width": 369.0,
+                "height": 59.0
+              }
+            },
+            {
+              "text": "M-DG-1899",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 1680.0,
+                "top": 2138.0,
+                "right": 1953.0,
+                "bottom": 2197.0,
+                "width": 273.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2190.0,
+            "top": 2138.0,
+            "right": 2415.0,
+            "bottom": 2199.0,
+            "width": 225.0,
+            "height": 61.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2193.0,
+                "top": 2139.0,
+                "right": 2411.0,
+                "bottom": 2200.0,
+                "width": 218.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2648.0,
+            "top": 2141.0,
+            "right": 2787.0,
+            "bottom": 2199.0,
+            "width": 139.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 2648.0,
+                "top": 2141.0,
+                "right": 2783.0,
+                "bottom": 2199.0,
+                "width": 135.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3010.0,
+            "top": 2142.0,
+            "right": 3173.0,
+            "bottom": 2198.0,
+            "width": 163.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3010.0,
+                "top": 2142.0,
+                "right": 3168.0,
+                "bottom": 2199.0,
+                "width": 158.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3465.0,
+            "top": 2138.0,
+            "right": 3553.0,
+            "bottom": 2195.0,
+            "width": 88.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3465.0,
+                "top": 2139.0,
+                "right": 3543.0,
+                "bottom": 2195.0,
+                "width": 78.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SIDE STAY LH A319/A320",
+          "bounding_box": {
+            "left": 180.0,
+            "top": 2229.0,
+            "right": 770.0,
+            "bottom": 2287.0,
+            "width": 590.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "SIDE",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 181.0,
+                "top": 2232.0,
+                "right": 277.0,
+                "bottom": 2287.0,
+                "width": 96.0,
+                "height": 55.0
+              }
+            },
+            {
+              "text": "STAY",
+              "confidence": 0.989,
+              "bounding_box": {
+                "left": 289.0,
+                "top": 2231.0,
+                "right": 410.0,
+                "bottom": 2287.0,
+                "width": 121.0,
+                "height": 56.0
+              }
+            },
+            {
+              "text": "LH",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 420.0,
+                "top": 2231.0,
+                "right": 478.0,
+                "bottom": 2287.0,
+                "width": 58.0,
+                "height": 56.0
+              }
+            },
+            {
+              "text": "A319/A320",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 497.0,
+                "top": 2229.0,
+                "right": 760.0,
+                "bottom": 2287.0,
+                "width": 263.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "201166013-015 B1098-010",
+          "bounding_box": {
+            "left": 1298.0,
+            "top": 2228.0,
+            "right": 1947.0,
+            "bottom": 2289.0,
+            "width": 649.0,
+            "height": 61.0
+          },
+          "words": [
+            {
+              "text": "201166013-015",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1301.0,
+                "top": 2229.0,
+                "right": 1666.0,
+                "bottom": 2288.0,
+                "width": 365.0,
+                "height": 59.0
+              }
+            },
+            {
+              "text": "B1098-010",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 1677.0,
+                "top": 2229.0,
+                "right": 1935.0,
+                "bottom": 2290.0,
+                "width": 258.0,
+                "height": 61.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2192.0,
+            "top": 2229.0,
+            "right": 2412.0,
+            "bottom": 2287.0,
+            "width": 220.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 2192.0,
+                "top": 2230.0,
+                "right": 2412.0,
+                "bottom": 2287.0,
+                "width": 220.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2648.0,
+            "top": 2234.0,
+            "right": 2787.0,
+            "bottom": 2288.0,
+            "width": 139.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 2648.0,
+                "top": 2234.0,
+                "right": 2788.0,
+                "bottom": 2288.0,
+                "width": 140.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3011.0,
+            "top": 2232.0,
+            "right": 3175.0,
+            "bottom": 2286.0,
+            "width": 164.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.984,
+              "bounding_box": {
+                "left": 3012.0,
+                "top": 2233.0,
+                "right": 3166.0,
+                "bottom": 2284.0,
+                "width": 154.0,
+                "height": 51.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3460.0,
+            "top": 2240.0,
+            "right": 3555.0,
+            "bottom": 2286.0,
+            "width": 95.0,
+            "height": 46.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3462.0,
+                "top": 2240.0,
+                "right": 3538.0,
+                "bottom": 2286.0,
+                "width": 76.0,
+                "height": 46.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "SIDE STAY RH A319/A320",
+          "bounding_box": {
+            "left": 170.0,
+            "top": 2323.0,
+            "right": 771.0,
+            "bottom": 2379.0,
+            "width": 601.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "SIDE",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 170.0,
+                "top": 2325.0,
+                "right": 277.0,
+                "bottom": 2380.0,
+                "width": 107.0,
+                "height": 55.0
+              }
+            },
+            {
+              "text": "STAY",
+              "confidence": 0.99,
+              "bounding_box": {
+                "left": 286.0,
+                "top": 2324.0,
+                "right": 409.0,
+                "bottom": 2380.0,
+                "width": 123.0,
+                "height": 56.0
+              }
+            },
+            {
+              "text": "RH",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 418.0,
+                "top": 2324.0,
+                "right": 483.0,
+                "bottom": 2380.0,
+                "width": 65.0,
+                "height": 56.0
+              }
+            },
+            {
+              "text": "A319/A320",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 500.0,
+                "top": 2324.0,
+                "right": 763.0,
+                "bottom": 2379.0,
+                "width": 263.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "201166014-015 B1096-010",
+          "bounding_box": {
+            "left": 1305.0,
+            "top": 2319.0,
+            "right": 1949.0,
+            "bottom": 2382.0,
+            "width": 644.0,
+            "height": 63.0
+          },
+          "words": [
+            {
+              "text": "201166014-015",
+              "confidence": 0.978,
+              "bounding_box": {
+                "left": 1305.0,
+                "top": 2319.0,
+                "right": 1668.0,
+                "bottom": 2382.0,
+                "width": 363.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "B1096-010",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 1681.0,
+                "top": 2319.0,
+                "right": 1936.0,
+                "bottom": 2383.0,
+                "width": 255.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2195.0,
+            "top": 2323.0,
+            "right": 2416.0,
+            "bottom": 2378.0,
+            "width": 221.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2196.0,
+                "top": 2325.0,
+                "right": 2414.0,
+                "bottom": 2378.0,
+                "width": 218.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2650.0,
+            "top": 2323.0,
+            "right": 2802.0,
+            "bottom": 2380.0,
+            "width": 152.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2650.0,
+                "top": 2323.0,
+                "right": 2792.0,
+                "bottom": 2380.0,
+                "width": 142.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3012.0,
+            "top": 2324.0,
+            "right": 3173.0,
+            "bottom": 2380.0,
+            "width": 161.0,
+            "height": 56.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3012.0,
+                "top": 2326.0,
+                "right": 3168.0,
+                "bottom": 2380.0,
+                "width": 156.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3460.0,
+            "top": 2326.0,
+            "right": 3545.0,
+            "bottom": 2380.0,
+            "width": 85.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.96,
+              "bounding_box": {
+                "left": 3460.0,
+                "top": 2326.0,
+                "right": 3540.0,
+                "bottom": 2380.0,
+                "width": 80.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "LEG & DRESSING RH A319/A32",
+          "bounding_box": {
+            "left": 170.0,
+            "top": 2412.0,
+            "right": 905.0,
+            "bottom": 2471.0,
+            "width": 735.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "LEG",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 171.0,
+                "top": 2412.0,
+                "right": 253.0,
+                "bottom": 2472.0,
+                "width": 82.0,
+                "height": 60.0
+              }
+            },
+            {
+              "text": "&",
+              "confidence": 0.974,
+              "bounding_box": {
+                "left": 271.0,
+                "top": 2413.0,
+                "right": 310.0,
+                "bottom": 2472.0,
+                "width": 39.0,
+                "height": 59.0
+              }
+            },
+            {
+              "text": "DRESSING",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 320.0,
+                "top": 2413.0,
+                "right": 566.0,
+                "bottom": 2471.0,
+                "width": 246.0,
+                "height": 58.0
+              }
+            },
+            {
+              "text": "RH",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 580.0,
+                "top": 2413.0,
+                "right": 646.0,
+                "bottom": 2470.0,
+                "width": 66.0,
+                "height": 57.0
+              }
+            },
+            {
+              "text": "A319/A32",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 659.0,
+                "top": 2413.0,
+                "right": 898.0,
+                "bottom": 2470.0,
+                "width": 239.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "201582002-040 M-DG-1900",
+          "bounding_box": {
+            "left": 1305.0,
+            "top": 2410.0,
+            "right": 1956.0,
+            "bottom": 2470.0,
+            "width": 651.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "201582002-040",
+              "confidence": 0.968,
+              "bounding_box": {
+                "left": 1305.0,
+                "top": 2412.0,
+                "right": 1670.0,
+                "bottom": 2470.0,
+                "width": 365.0,
+                "height": 58.0
+              }
+            },
+            {
+              "text": "M-DG-1900",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1679.0,
+                "top": 2411.0,
+                "right": 1952.0,
+                "bottom": 2470.0,
+                "width": 273.0,
+                "height": 59.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2195.0,
+            "top": 2410.0,
+            "right": 2415.0,
+            "bottom": 2474.0,
+            "width": 220.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 2195.0,
+                "top": 2411.0,
+                "right": 2412.0,
+                "bottom": 2475.0,
+                "width": 217.0,
+                "height": 64.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2650.0,
+            "top": 2413.0,
+            "right": 2795.0,
+            "bottom": 2471.0,
+            "width": 145.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2650.0,
+                "top": 2413.0,
+                "right": 2791.0,
+                "bottom": 2471.0,
+                "width": 141.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3011.0,
+            "top": 2414.0,
+            "right": 3174.0,
+            "bottom": 2471.0,
+            "width": 163.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3012.0,
+                "top": 2415.0,
+                "right": 3167.0,
+                "bottom": 2472.0,
+                "width": 155.0,
+                "height": 57.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3460.0,
+            "top": 2409.0,
+            "right": 3553.0,
+            "bottom": 2468.0,
+            "width": 93.0,
+            "height": 59.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 3460.0,
+                "top": 2409.0,
+                "right": 3547.0,
+                "bottom": 2469.0,
+                "width": 87.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "NLG LEG A320FAM",
+          "bounding_box": {
+            "left": 173.0,
+            "top": 2505.0,
+            "right": 617.0,
+            "bottom": 2562.0,
+            "width": 444.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "NLG",
+              "confidence": 0.995,
+              "bounding_box": {
+                "left": 174.0,
+                "top": 2505.0,
+                "right": 263.0,
+                "bottom": 2562.0,
+                "width": 89.0,
+                "height": 57.0
+              }
+            },
+            {
+              "text": "LEG",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 280.0,
+                "top": 2508.0,
+                "right": 367.0,
+                "bottom": 2562.0,
+                "width": 87.0,
+                "height": 54.0
+              }
+            },
+            {
+              "text": "A320FAM",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 384.0,
+                "top": 2509.0,
+                "right": 597.0,
+                "bottom": 2562.0,
+                "width": 213.0,
+                "height": 53.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "D23589520-14 |B1342",
+          "bounding_box": {
+            "left": 1306.0,
+            "top": 2503.0,
+            "right": 1838.0,
+            "bottom": 2560.0,
+            "width": 532.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "D23589520-14",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1307.0,
+                "top": 2506.0,
+                "right": 1648.0,
+                "bottom": 2560.0,
+                "width": 341.0,
+                "height": 54.0
+              }
+            },
+            {
+              "text": "|B1342",
+              "confidence": 0.479,
+              "bounding_box": {
+                "left": 1657.0,
+                "top": 2504.0,
+                "right": 1836.0,
+                "bottom": 2560.0,
+                "width": 179.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2186.0,
+            "top": 2504.0,
+            "right": 2416.0,
+            "bottom": 2561.0,
+            "width": 230.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 2189.0,
+                "top": 2504.0,
+                "right": 2411.0,
+                "bottom": 2562.0,
+                "width": 222.0,
+                "height": 58.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2643.0,
+            "top": 2506.0,
+            "right": 2790.0,
+            "bottom": 2559.0,
+            "width": 147.0,
+            "height": 53.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 2645.0,
+                "top": 2506.0,
+                "right": 2788.0,
+                "bottom": 2560.0,
+                "width": 143.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3009.0,
+            "top": 2509.0,
+            "right": 3168.0,
+            "bottom": 2560.0,
+            "width": 159.0,
+            "height": 51.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.981,
+              "bounding_box": {
+                "left": 3010.0,
+                "top": 2509.0,
+                "right": 3166.0,
+                "bottom": 2560.0,
+                "width": 156.0,
+                "height": 51.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3464.0,
+            "top": 2509.0,
+            "right": 3553.0,
+            "bottom": 2563.0,
+            "width": 89.0,
+            "height": 54.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3464.0,
+                "top": 2510.0,
+                "right": 3540.0,
+                "bottom": 2562.0,
+                "width": 76.0,
+                "height": 52.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "FORESTAY A320FAM",
+          "bounding_box": {
+            "left": 173.0,
+            "top": 2595.0,
+            "right": 659.0,
+            "bottom": 2653.0,
+            "width": 486.0,
+            "height": 58.0
+          },
+          "words": [
+            {
+              "text": "FORESTAY",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 174.0,
+                "top": 2596.0,
+                "right": 413.0,
+                "bottom": 2652.0,
+                "width": 239.0,
+                "height": 56.0
+              }
+            },
+            {
+              "text": "A320FAM",
+              "confidence": 0.996,
+              "bounding_box": {
+                "left": 424.0,
+                "top": 2598.0,
+                "right": 631.0,
+                "bottom": 2654.0,
+                "width": 207.0,
+                "height": 56.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "D23596000-3",
+          "bounding_box": {
+            "left": 1303.0,
+            "top": 2594.0,
+            "right": 1629.0,
+            "bottom": 2651.0,
+            "width": 326.0,
+            "height": 57.0
+          },
+          "words": [
+            {
+              "text": "D23596000-3",
+              "confidence": 0.991,
+              "bounding_box": {
+                "left": 1303.0,
+                "top": 2595.0,
+                "right": 1623.0,
+                "bottom": 2650.0,
+                "width": 320.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "B1343",
+          "bounding_box": {
+            "left": 1677.0,
+            "top": 2594.0,
+            "right": 1841.0,
+            "bottom": 2654.0,
+            "width": 164.0,
+            "height": 60.0
+          },
+          "words": [
+            {
+              "text": "B1343",
+              "confidence": 0.998,
+              "bounding_box": {
+                "left": 1679.0,
+                "top": 2594.0,
+                "right": 1838.0,
+                "bottom": 2654.0,
+                "width": 159.0,
+                "height": 60.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "47262:10",
+          "bounding_box": {
+            "left": 2191.0,
+            "top": 2595.0,
+            "right": 2417.0,
+            "bottom": 2659.0,
+            "width": 226.0,
+            "height": 64.0
+          },
+          "words": [
+            {
+              "text": "47262:10",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2192.0,
+                "top": 2598.0,
+                "right": 2415.0,
+                "bottom": 2660.0,
+                "width": 223.0,
+                "height": 62.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "27226",
+          "bounding_box": {
+            "left": 2641.0,
+            "top": 2598.0,
+            "right": 2791.0,
+            "bottom": 2653.0,
+            "width": 150.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "27226",
+              "confidence": 0.994,
+              "bounding_box": {
+                "left": 2643.0,
+                "top": 2598.0,
+                "right": 2788.0,
+                "bottom": 2653.0,
+                "width": 145.0,
+                "height": 55.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "218:36",
+          "bounding_box": {
+            "left": 3000.0,
+            "top": 2596.0,
+            "right": 3175.0,
+            "bottom": 2651.0,
+            "width": 175.0,
+            "height": 55.0
+          },
+          "words": [
+            {
+              "text": "218:36",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 3006.0,
+                "top": 2597.0,
+                "right": 3169.0,
+                "bottom": 2651.0,
+                "width": 163.0,
+                "height": 54.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "165",
+          "bounding_box": {
+            "left": 3457.0,
+            "top": 2601.0,
+            "right": 3550.0,
+            "bottom": 2647.0,
+            "width": 93.0,
+            "height": 46.0
+          },
+          "words": [
+            {
+              "text": "165",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 3459.0,
+                "top": 2601.0,
+                "right": 3541.0,
+                "bottom": 2647.0,
+                "width": 82.0,
+                "height": 46.0
+              }
+            }
+          ]
+        },
+        {
+          "text": "produced byAMOS www.swiss-as.com",
+          "bounding_box": {
+            "left": 2637.0,
+            "top": 5070.0,
+            "right": 3590.0,
+            "bottom": 5135.0,
+            "width": 953.0,
+            "height": 65.0
+          },
+          "words": [
+            {
+              "text": "produced",
+              "confidence": 0.992,
+              "bounding_box": {
+                "left": 2638.0,
+                "top": 5073.0,
+                "right": 2865.0,
+                "bottom": 5136.0,
+                "width": 227.0,
+                "height": 63.0
+              }
+            },
+            {
+              "text": "byAMOS",
+              "confidence": 0.997,
+              "bounding_box": {
+                "left": 2876.0,
+                "top": 5071.0,
+                "right": 3110.0,
+                "bottom": 5132.0,
+                "width": 234.0,
+                "height": 61.0
+              }
+            },
+            {
+              "text": "www.swiss-as.com",
+              "confidence": 0.993,
+              "bounding_box": {
+                "left": 3132.0,
+                "top": 5071.0,
+                "right": 3565.0,
+                "bottom": 5129.0,
+                "width": 433.0,
+                "height": 58.0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "all_text": "Aircraft Lessor Report\n02.Sep.2025\nPage 2 / 2\n01.Aug.2025 to 31.Aug.2025\n11:33\n415261\nAircraft\nRegistration\nC-Chk exp.\nD-Chk exp.\nMSN\nTAH\nTAC\nDelta Hrs\nDelta Cyc\nAKNV\n06.02.2026\n18.11.2029\n02632\n45585:00\n37133\n218:36\n165\nTitle Engines\nInstalled in\nPos.\nPN\nSN\nTotal Hrs\nTotal Cyc\nDelta Hrs\nDelta Cyc\nAKNV\n1\nCFM56-5B6P\n779710\n60580:19\n45014\n218:36\n165\nAKNV\n2\nCFM56-5B6P\n779660\n59697:00\n44103\n218:36\n165\nInstalled Engines (at 31.Aug.2025)\nPos.\nPN\nSN\nTotal Hrs\nTotal Cyc\nDelta Hrs\nDelta Cyc\n1\nCFM56-5B6P\n779710\n60580:19\n45014\n218:36\n165\n2\nCFM56-5B6P\n779660\n59697:00\n44103\n218:36\n165\nTitle APU\nInstalled in\nPos.\nShop Visit\nPN\nSN\nTotal Hrs\nTotal Cyc\nDelta Hrs\nDelta Cyc\nEUL\n4005KM\n01.08.2014\n3800708-1\nP-3067\n24259.0\n58632\n110.0\n274\nInstalled APU (at 31.Aug.2025)\nPos.\nShop Visit\nPN\nSN\nTotal Hrs\nTotal Cyc\nDelta Hrs\nDelta Cyc\n4005KM\n28.11.2014\n3800708-1\nP-4431\n16421.0\n44851\n120.0\n293\nInstalled Landing Gear (at 31.Aug.2025)\nDescription\nShop Visit\nPN\nSN\nTotal Hrs\nTotal Cyc\nDelta Hrs\nDelta Cyc\nLEG & DRESSING LH A319/A320\n201582001-040 M-DG-1899\n47262:10\n27226\n218:36\n165\nSIDE STAY LH A319/A320\n201166013-015 B1098-010\n47262:10\n27226\n218:36\n165\nSIDE STAY RH A319/A320\n201166014-015 B1096-010\n47262:10\n27226\n218:36\n165\nLEG & DRESSING RH A319/A32\n201582002-040 M-DG-1900\n47262:10\n27226\n218:36\n165\nNLG LEG A320FAM\nD23589520-14 |B1342\n47262:10\n27226\n218:36\n165\nFORESTAY A320FAM\nD23596000-3\nB1343\n47262:10\n27226\n218:36\n165\nproduced byAMOS www.swiss-as.com\n",
+  "text_blocks": [
+    {
+      "text": "Aircraft",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 1033.0,
+        "top": 159.0,
+        "right": 1463.0,
+        "bottom": 276.0,
+        "width": 430.0,
+        "height": 117.0
+      }
+    },
+    {
+      "text": "Lessor",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1485.0,
+        "top": 159.0,
+        "right": 1853.0,
+        "bottom": 283.0,
+        "width": 368.0,
+        "height": 124.0
+      }
+    },
+    {
+      "text": "Report",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1875.0,
+        "top": 160.0,
+        "right": 2269.0,
+        "bottom": 288.0,
+        "width": 394.0,
+        "height": 128.0
+      }
+    },
+    {
+      "text": "02.Sep.2025",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 2671.0,
+        "top": 201.0,
+        "right": 3027.0,
+        "bottom": 269.0,
+        "width": 356.0,
+        "height": 68.0
+      }
+    },
+    {
+      "text": "Page",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 3173.0,
+        "top": 198.0,
+        "right": 3353.0,
+        "bottom": 282.0,
+        "width": 180.0,
+        "height": 84.0
+      }
+    },
+    {
+      "text": "2",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3369.0,
+        "top": 198.0,
+        "right": 3408.0,
+        "bottom": 282.0,
+        "width": 39.0,
+        "height": 84.0
+      }
+    },
+    {
+      "text": "/",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 3424.0,
+        "top": 198.0,
+        "right": 3458.0,
+        "bottom": 284.0,
+        "width": 34.0,
+        "height": 86.0
+      }
+    },
+    {
+      "text": "2",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 3473.0,
+        "top": 199.0,
+        "right": 3523.0,
+        "bottom": 286.0,
+        "width": 50.0,
+        "height": 87.0
+      }
+    },
+    {
+      "text": "01.Aug.2025",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 894.0,
+        "top": 325.0,
+        "right": 1559.0,
+        "bottom": 443.0,
+        "width": 665.0,
+        "height": 118.0
+      }
+    },
+    {
+      "text": "to",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1583.0,
+        "top": 325.0,
+        "right": 1702.0,
+        "bottom": 443.0,
+        "width": 119.0,
+        "height": 118.0
+      }
+    },
+    {
+      "text": "31.Aug.2025",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1727.0,
+        "top": 325.0,
+        "right": 2400.0,
+        "bottom": 443.0,
+        "width": 673.0,
+        "height": 118.0
+      }
+    },
+    {
+      "text": "11:33",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2763.0,
+        "top": 333.0,
+        "right": 2937.0,
+        "bottom": 400.0,
+        "width": 174.0,
+        "height": 67.0
+      }
+    },
+    {
+      "text": "415261",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3231.0,
+        "top": 329.0,
+        "right": 3475.0,
+        "bottom": 402.0,
+        "width": 244.0,
+        "height": 73.0
+      }
+    },
+    {
+      "text": "Aircraft",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1737.0,
+        "top": 514.0,
+        "right": 1975.0,
+        "bottom": 573.0,
+        "width": 238.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Registration",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 339.0,
+        "top": 594.0,
+        "right": 709.0,
+        "bottom": 655.0,
+        "width": 370.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "C-Chk",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 939.0,
+        "top": 588.0,
+        "right": 1111.0,
+        "bottom": 657.0,
+        "width": 172.0,
+        "height": 69.0
+      }
+    },
+    {
+      "text": "exp.",
+      "confidence": 0.988,
+      "bounding_box": {
+        "left": 1128.0,
+        "top": 594.0,
+        "right": 1262.0,
+        "bottom": 657.0,
+        "width": 134.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "D-Chk",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1312.0,
+        "top": 590.0,
+        "right": 1493.0,
+        "bottom": 660.0,
+        "width": 181.0,
+        "height": 70.0
+      }
+    },
+    {
+      "text": "exp.",
+      "confidence": 0.988,
+      "bounding_box": {
+        "left": 1506.0,
+        "top": 594.0,
+        "right": 1643.0,
+        "bottom": 663.0,
+        "width": 137.0,
+        "height": 69.0
+      }
+    },
+    {
+      "text": "MSN",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1785.0,
+        "top": 593.0,
+        "right": 1907.0,
+        "bottom": 651.0,
+        "width": 122.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "TAH",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2174.0,
+        "top": 588.0,
+        "right": 2286.0,
+        "bottom": 653.0,
+        "width": 112.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "TAC",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2557.0,
+        "top": 591.0,
+        "right": 2669.0,
+        "bottom": 648.0,
+        "width": 112.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2851.0,
+        "top": 594.0,
+        "right": 3013.0,
+        "bottom": 658.0,
+        "width": 162.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3028.0,
+        "top": 594.0,
+        "right": 3139.0,
+        "bottom": 658.0,
+        "width": 111.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 3232.0,
+        "top": 594.0,
+        "right": 3392.0,
+        "bottom": 657.0,
+        "width": 160.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3404.0,
+        "top": 594.0,
+        "right": 3517.0,
+        "bottom": 661.0,
+        "width": 113.0,
+        "height": 67.0
+      }
+    },
+    {
+      "text": "AKNV",
+      "confidence": 0.847,
+      "bounding_box": {
+        "left": 464.0,
+        "top": 686.0,
+        "right": 586.0,
+        "bottom": 733.0,
+        "width": 122.0,
+        "height": 47.0
+      }
+    },
+    {
+      "text": "06.02.2026",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 937.0,
+        "top": 683.0,
+        "right": 1248.0,
+        "bottom": 744.0,
+        "width": 311.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "18.11.2029",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1325.0,
+        "top": 686.0,
+        "right": 1626.0,
+        "bottom": 749.0,
+        "width": 301.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "02632",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1688.0,
+        "top": 683.0,
+        "right": 1831.0,
+        "bottom": 739.0,
+        "width": 143.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "45585:00",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 2199.0,
+        "top": 689.0,
+        "right": 2408.0,
+        "bottom": 743.0,
+        "width": 209.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "37133",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 2648.0,
+        "top": 685.0,
+        "right": 2791.0,
+        "bottom": 740.0,
+        "width": 143.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.984,
+      "bounding_box": {
+        "left": 3007.0,
+        "top": 686.0,
+        "right": 3168.0,
+        "bottom": 741.0,
+        "width": 161.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3462.0,
+        "top": 690.0,
+        "right": 3538.0,
+        "bottom": 735.0,
+        "width": 76.0,
+        "height": 45.0
+      }
+    },
+    {
+      "text": "Title",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1668.0,
+        "top": 769.0,
+        "right": 1795.0,
+        "bottom": 833.0,
+        "width": 127.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Engines",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1807.0,
+        "top": 771.0,
+        "right": 2052.0,
+        "bottom": 839.0,
+        "width": 245.0,
+        "height": 68.0
+      }
+    },
+    {
+      "text": "Installed",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 354.0,
+        "top": 852.0,
+        "right": 620.0,
+        "bottom": 914.0,
+        "width": 266.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "in",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 635.0,
+        "top": 855.0,
+        "right": 693.0,
+        "bottom": 914.0,
+        "width": 58.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Pos.",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1034.0,
+        "top": 858.0,
+        "right": 1154.0,
+        "bottom": 913.0,
+        "width": 120.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "PN",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1423.0,
+        "top": 848.0,
+        "right": 1499.0,
+        "bottom": 908.0,
+        "width": 76.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "SN",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1808.0,
+        "top": 855.0,
+        "right": 1878.0,
+        "bottom": 911.0,
+        "width": 70.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2103.0,
+        "top": 852.0,
+        "right": 2252.0,
+        "bottom": 913.0,
+        "width": 149.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2264.0,
+        "top": 852.0,
+        "right": 2376.0,
+        "bottom": 917.0,
+        "width": 112.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2484.0,
+        "top": 850.0,
+        "right": 2633.0,
+        "bottom": 913.0,
+        "width": 149.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 852.0,
+        "right": 2757.0,
+        "bottom": 917.0,
+        "width": 112.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2852.0,
+        "top": 851.0,
+        "right": 3013.0,
+        "bottom": 914.0,
+        "width": 161.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3024.0,
+        "top": 853.0,
+        "right": 3136.0,
+        "bottom": 916.0,
+        "width": 112.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 3228.0,
+        "top": 850.0,
+        "right": 3392.0,
+        "bottom": 915.0,
+        "width": 164.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3408.0,
+        "top": 852.0,
+        "right": 3520.0,
+        "bottom": 917.0,
+        "width": 112.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "AKNV",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 465.0,
+        "top": 939.0,
+        "right": 590.0,
+        "bottom": 987.0,
+        "width": 125.0,
+        "height": 48.0
+      }
+    },
+    {
+      "text": "1",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1088.0,
+        "top": 935.0,
+        "right": 1126.0,
+        "bottom": 1000.0,
+        "width": 38.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "CFM56-5B6P",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1305.0,
+        "top": 939.0,
+        "right": 1603.0,
+        "bottom": 991.0,
+        "width": 298.0,
+        "height": 52.0
+      }
+    },
+    {
+      "text": "779710",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1689.0,
+        "top": 940.0,
+        "right": 1858.0,
+        "bottom": 995.0,
+        "width": 169.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "60580:19",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 2199.0,
+        "top": 942.0,
+        "right": 2411.0,
+        "bottom": 991.0,
+        "width": 212.0,
+        "height": 49.0
+      }
+    },
+    {
+      "text": "45014",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 2649.0,
+        "top": 942.0,
+        "right": 2790.0,
+        "bottom": 994.0,
+        "width": 141.0,
+        "height": 52.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3010.0,
+        "top": 941.0,
+        "right": 3166.0,
+        "bottom": 994.0,
+        "width": 156.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 3459.0,
+        "top": 938.0,
+        "right": 3543.0,
+        "bottom": 993.0,
+        "width": 84.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "AKNV",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 467.0,
+        "top": 1022.0,
+        "right": 592.0,
+        "bottom": 1077.0,
+        "width": 125.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "2",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1086.0,
+        "top": 1029.0,
+        "right": 1121.0,
+        "bottom": 1085.0,
+        "width": 35.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "CFM56-5B6P",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 1301.0,
+        "top": 1018.0,
+        "right": 1605.0,
+        "bottom": 1082.0,
+        "width": 304.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "779660",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1686.0,
+        "top": 1021.0,
+        "right": 1859.0,
+        "bottom": 1081.0,
+        "width": 173.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "59697:00",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 2190.0,
+        "top": 1026.0,
+        "right": 2414.0,
+        "bottom": 1082.0,
+        "width": 224.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "44103",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2644.0,
+        "top": 1026.0,
+        "right": 2788.0,
+        "bottom": 1076.0,
+        "width": 144.0,
+        "height": 50.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3008.0,
+        "top": 1025.0,
+        "right": 3168.0,
+        "bottom": 1080.0,
+        "width": 160.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3454.0,
+        "top": 1024.0,
+        "right": 3541.0,
+        "bottom": 1079.0,
+        "width": 87.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "Installed",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1342.0,
+        "top": 1107.0,
+        "right": 1612.0,
+        "bottom": 1171.0,
+        "width": 270.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Engines",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1628.0,
+        "top": 1107.0,
+        "right": 1866.0,
+        "bottom": 1170.0,
+        "width": 238.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "(at",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1878.0,
+        "top": 1107.0,
+        "right": 1965.0,
+        "bottom": 1170.0,
+        "width": 87.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "31.Aug.2025)",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 1977.0,
+        "top": 1105.0,
+        "right": 2369.0,
+        "bottom": 1170.0,
+        "width": 392.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Pos.",
+      "confidence": 0.964,
+      "bounding_box": {
+        "left": 660.0,
+        "top": 1197.0,
+        "right": 783.0,
+        "bottom": 1254.0,
+        "width": 123.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "PN",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 1428.0,
+        "top": 1192.0,
+        "right": 1500.0,
+        "bottom": 1251.0,
+        "width": 72.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "SN",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1812.0,
+        "top": 1194.0,
+        "right": 1878.0,
+        "bottom": 1248.0,
+        "width": 66.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2101.0,
+        "top": 1192.0,
+        "right": 2256.0,
+        "bottom": 1258.0,
+        "width": 155.0,
+        "height": 66.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2265.0,
+        "top": 1192.0,
+        "right": 2375.0,
+        "bottom": 1256.0,
+        "width": 110.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2476.0,
+        "top": 1191.0,
+        "right": 2631.0,
+        "bottom": 1256.0,
+        "width": 155.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2643.0,
+        "top": 1192.0,
+        "right": 2756.0,
+        "bottom": 1258.0,
+        "width": 113.0,
+        "height": 66.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 2849.0,
+        "top": 1195.0,
+        "right": 3009.0,
+        "bottom": 1254.0,
+        "width": 160.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3025.0,
+        "top": 1195.0,
+        "right": 3133.0,
+        "bottom": 1254.0,
+        "width": 108.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 3231.0,
+        "top": 1196.0,
+        "right": 3390.0,
+        "bottom": 1255.0,
+        "width": 159.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3406.0,
+        "top": 1196.0,
+        "right": 3516.0,
+        "bottom": 1255.0,
+        "width": 110.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "1",
+      "confidence": 0.986,
+      "bounding_box": {
+        "left": 702.0,
+        "top": 1283.0,
+        "right": 742.0,
+        "bottom": 1346.0,
+        "width": 40.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "CFM56-5B6P",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1307.0,
+        "top": 1282.0,
+        "right": 1604.0,
+        "bottom": 1340.0,
+        "width": 297.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "779710",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 1690.0,
+        "top": 1285.0,
+        "right": 1859.0,
+        "bottom": 1343.0,
+        "width": 169.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "60580:19",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2189.0,
+        "top": 1284.0,
+        "right": 2412.0,
+        "bottom": 1340.0,
+        "width": 223.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "45014",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2644.0,
+        "top": 1287.0,
+        "right": 2791.0,
+        "bottom": 1342.0,
+        "width": 147.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 3006.0,
+        "top": 1285.0,
+        "right": 3170.0,
+        "bottom": 1342.0,
+        "width": 164.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3460.0,
+        "top": 1286.0,
+        "right": 3543.0,
+        "bottom": 1341.0,
+        "width": 83.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "2",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 700.0,
+        "top": 1378.0,
+        "right": 738.0,
+        "bottom": 1442.0,
+        "width": 38.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "CFM56-5B6P",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 1311.0,
+        "top": 1372.0,
+        "right": 1603.0,
+        "bottom": 1433.0,
+        "width": 292.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "779660",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1684.0,
+        "top": 1375.0,
+        "right": 1854.0,
+        "bottom": 1434.0,
+        "width": 170.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "59697:00",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 2191.0,
+        "top": 1375.0,
+        "right": 2415.0,
+        "bottom": 1433.0,
+        "width": 224.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "44103",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 1376.0,
+        "right": 2785.0,
+        "bottom": 1430.0,
+        "width": 140.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3004.0,
+        "top": 1375.0,
+        "right": 3168.0,
+        "bottom": 1431.0,
+        "width": 164.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3455.0,
+        "top": 1375.0,
+        "right": 3541.0,
+        "bottom": 1426.0,
+        "width": 86.0,
+        "height": 51.0
+      }
+    },
+    {
+      "text": "Title",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1723.0,
+        "top": 1460.0,
+        "right": 1850.0,
+        "bottom": 1527.0,
+        "width": 127.0,
+        "height": 67.0
+      }
+    },
+    {
+      "text": "APU",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1863.0,
+        "top": 1460.0,
+        "right": 1984.0,
+        "bottom": 1529.0,
+        "width": 121.0,
+        "height": 69.0
+      }
+    },
+    {
+      "text": "Installed",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 170.0,
+        "top": 1545.0,
+        "right": 431.0,
+        "bottom": 1609.0,
+        "width": 261.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "in",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 448.0,
+        "top": 1545.0,
+        "right": 505.0,
+        "bottom": 1610.0,
+        "width": 57.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Pos.",
+      "confidence": 0.986,
+      "bounding_box": {
+        "left": 656.0,
+        "top": 1551.0,
+        "right": 783.0,
+        "bottom": 1602.0,
+        "width": 127.0,
+        "height": 51.0
+      }
+    },
+    {
+      "text": "Shop",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 942.0,
+        "top": 1544.0,
+        "right": 1095.0,
+        "bottom": 1609.0,
+        "width": 153.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Visit",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1114.0,
+        "top": 1544.0,
+        "right": 1259.0,
+        "bottom": 1612.0,
+        "width": 145.0,
+        "height": 68.0
+      }
+    },
+    {
+      "text": "PN",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1426.0,
+        "top": 1545.0,
+        "right": 1499.0,
+        "bottom": 1604.0,
+        "width": 73.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "SN",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1809.0,
+        "top": 1546.0,
+        "right": 1881.0,
+        "bottom": 1604.0,
+        "width": 72.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2100.0,
+        "top": 1546.0,
+        "right": 2253.0,
+        "bottom": 1606.0,
+        "width": 153.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2264.0,
+        "top": 1547.0,
+        "right": 2371.0,
+        "bottom": 1610.0,
+        "width": 107.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2481.0,
+        "top": 1544.0,
+        "right": 2634.0,
+        "bottom": 1609.0,
+        "width": 153.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 1549.0,
+        "right": 2753.0,
+        "bottom": 1609.0,
+        "width": 108.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2851.0,
+        "top": 1546.0,
+        "right": 3008.0,
+        "bottom": 1606.0,
+        "width": 157.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3025.0,
+        "top": 1549.0,
+        "right": 3131.0,
+        "bottom": 1607.0,
+        "width": 106.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 3231.0,
+        "top": 1544.0,
+        "right": 3393.0,
+        "bottom": 1608.0,
+        "width": 162.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3409.0,
+        "top": 1548.0,
+        "right": 3518.0,
+        "bottom": 1611.0,
+        "width": 109.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "EUL",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 292.0,
+        "top": 1630.0,
+        "right": 391.0,
+        "bottom": 1683.0,
+        "width": 99.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "4005KM",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 620.0,
+        "top": 1633.0,
+        "right": 797.0,
+        "bottom": 1686.0,
+        "width": 177.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "01.08.2014",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 958.0,
+        "top": 1625.0,
+        "right": 1229.0,
+        "bottom": 1687.0,
+        "width": 271.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "3800708-1",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1302.0,
+        "top": 1629.0,
+        "right": 1549.0,
+        "bottom": 1688.0,
+        "width": 247.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "P-3067",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1683.0,
+        "top": 1628.0,
+        "right": 1843.0,
+        "bottom": 1685.0,
+        "width": 160.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "24259.0",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 2226.0,
+        "top": 1628.0,
+        "right": 2410.0,
+        "bottom": 1692.0,
+        "width": 184.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "58632",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 1631.0,
+        "right": 2784.0,
+        "bottom": 1682.0,
+        "width": 139.0,
+        "height": 51.0
+      }
+    },
+    {
+      "text": "110.0",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3041.0,
+        "top": 1628.0,
+        "right": 3163.0,
+        "bottom": 1684.0,
+        "width": 122.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "274",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 3457.0,
+        "top": 1628.0,
+        "right": 3544.0,
+        "bottom": 1683.0,
+        "width": 87.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "Installed",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1394.0,
+        "top": 1710.0,
+        "right": 1661.0,
+        "bottom": 1772.0,
+        "width": 267.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "APU",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1677.0,
+        "top": 1709.0,
+        "right": 1796.0,
+        "bottom": 1772.0,
+        "width": 119.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "(at",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1822.0,
+        "top": 1709.0,
+        "right": 1909.0,
+        "bottom": 1772.0,
+        "width": 87.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "31.Aug.2025)",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 1920.0,
+        "top": 1709.0,
+        "right": 2306.0,
+        "bottom": 1772.0,
+        "width": 386.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Pos.",
+      "confidence": 0.818,
+      "bounding_box": {
+        "left": 467.0,
+        "top": 1792.0,
+        "right": 582.0,
+        "bottom": 1850.0,
+        "width": 115.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Shop",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 944.0,
+        "top": 1794.0,
+        "right": 1093.0,
+        "bottom": 1852.0,
+        "width": 149.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Visit",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1111.0,
+        "top": 1791.0,
+        "right": 1249.0,
+        "bottom": 1852.0,
+        "width": 138.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "PN",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1425.0,
+        "top": 1790.0,
+        "right": 1500.0,
+        "bottom": 1852.0,
+        "width": 75.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "SN",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1810.0,
+        "top": 1790.0,
+        "right": 1881.0,
+        "bottom": 1852.0,
+        "width": 71.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2100.0,
+        "top": 1791.0,
+        "right": 2253.0,
+        "bottom": 1854.0,
+        "width": 153.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2264.0,
+        "top": 1791.0,
+        "right": 2375.0,
+        "bottom": 1855.0,
+        "width": 111.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2477.0,
+        "top": 1793.0,
+        "right": 2634.0,
+        "bottom": 1854.0,
+        "width": 157.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 1795.0,
+        "right": 2756.0,
+        "bottom": 1854.0,
+        "width": 111.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2849.0,
+        "top": 1795.0,
+        "right": 3011.0,
+        "bottom": 1853.0,
+        "width": 162.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3026.0,
+        "top": 1794.0,
+        "right": 3129.0,
+        "bottom": 1853.0,
+        "width": 103.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 3235.0,
+        "top": 1796.0,
+        "right": 3389.0,
+        "bottom": 1854.0,
+        "width": 154.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3409.0,
+        "top": 1796.0,
+        "right": 3518.0,
+        "bottom": 1858.0,
+        "width": 109.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "4005KM",
+      "confidence": 0.958,
+      "bounding_box": {
+        "left": 431.0,
+        "top": 1881.0,
+        "right": 609.0,
+        "bottom": 1934.0,
+        "width": 178.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "28.11.2014",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 962.0,
+        "top": 1879.0,
+        "right": 1224.0,
+        "bottom": 1936.0,
+        "width": 262.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "3800708-1",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1307.0,
+        "top": 1879.0,
+        "right": 1554.0,
+        "bottom": 1932.0,
+        "width": 247.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "P-4431",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1680.0,
+        "top": 1880.0,
+        "right": 1852.0,
+        "bottom": 1933.0,
+        "width": 172.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "16421.0",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 2224.0,
+        "top": 1880.0,
+        "right": 2415.0,
+        "bottom": 1936.0,
+        "width": 191.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "44851",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 2652.0,
+        "top": 1881.0,
+        "right": 2784.0,
+        "bottom": 1933.0,
+        "width": 132.0,
+        "height": 52.0
+      }
+    },
+    {
+      "text": "120.0",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 3041.0,
+        "top": 1878.0,
+        "right": 3164.0,
+        "bottom": 1927.0,
+        "width": 123.0,
+        "height": 49.0
+      }
+    },
+    {
+      "text": "293",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3453.0,
+        "top": 1881.0,
+        "right": 3540.0,
+        "bottom": 1934.0,
+        "width": 87.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "Installed",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1258.0,
+        "top": 1961.0,
+        "right": 1524.0,
+        "bottom": 2024.0,
+        "width": 266.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Landing",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 1541.0,
+        "top": 1960.0,
+        "right": 1788.0,
+        "bottom": 2025.0,
+        "width": 247.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Gear",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 1804.0,
+        "top": 1960.0,
+        "right": 1952.0,
+        "bottom": 2025.0,
+        "width": 148.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "(at",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1963.0,
+        "top": 1960.0,
+        "right": 2049.0,
+        "bottom": 2025.0,
+        "width": 86.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "31.Aug.2025)",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 2059.0,
+        "top": 1960.0,
+        "right": 2444.0,
+        "bottom": 2025.0,
+        "width": 385.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Description",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 357.0,
+        "top": 2049.0,
+        "right": 699.0,
+        "bottom": 2113.0,
+        "width": 342.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "Shop",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 946.0,
+        "top": 2046.0,
+        "right": 1096.0,
+        "bottom": 2112.0,
+        "width": 150.0,
+        "height": 66.0
+      }
+    },
+    {
+      "text": "Visit",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1108.0,
+        "top": 2046.0,
+        "right": 1256.0,
+        "bottom": 2113.0,
+        "width": 148.0,
+        "height": 67.0
+      }
+    },
+    {
+      "text": "PN",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1426.0,
+        "top": 2046.0,
+        "right": 1500.0,
+        "bottom": 2103.0,
+        "width": 74.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "SN",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1811.0,
+        "top": 2052.0,
+        "right": 1879.0,
+        "bottom": 2106.0,
+        "width": 68.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2096.0,
+        "top": 2049.0,
+        "right": 2254.0,
+        "bottom": 2111.0,
+        "width": 158.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2264.0,
+        "top": 2049.0,
+        "right": 2378.0,
+        "bottom": 2112.0,
+        "width": 114.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Total",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2478.0,
+        "top": 2047.0,
+        "right": 2632.0,
+        "bottom": 2112.0,
+        "width": 154.0,
+        "height": 65.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2642.0,
+        "top": 2047.0,
+        "right": 2756.0,
+        "bottom": 2113.0,
+        "width": 114.0,
+        "height": 66.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 2852.0,
+        "top": 2049.0,
+        "right": 3010.0,
+        "bottom": 2110.0,
+        "width": 158.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "Hrs",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3024.0,
+        "top": 2052.0,
+        "right": 3135.0,
+        "bottom": 2112.0,
+        "width": 111.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "Delta",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 3228.0,
+        "top": 2048.0,
+        "right": 3390.0,
+        "bottom": 2111.0,
+        "width": 162.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "Cyc",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3406.0,
+        "top": 2049.0,
+        "right": 3516.0,
+        "bottom": 2113.0,
+        "width": 110.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "LEG",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 177.0,
+        "top": 2141.0,
+        "right": 253.0,
+        "bottom": 2198.0,
+        "width": 76.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "&",
+      "confidence": 0.981,
+      "bounding_box": {
+        "left": 270.0,
+        "top": 2140.0,
+        "right": 308.0,
+        "bottom": 2197.0,
+        "width": 38.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "DRESSING",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 320.0,
+        "top": 2137.0,
+        "right": 567.0,
+        "bottom": 2197.0,
+        "width": 247.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "LH",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 578.0,
+        "top": 2137.0,
+        "right": 641.0,
+        "bottom": 2197.0,
+        "width": 63.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "A319/A320",
+      "confidence": 0.838,
+      "bounding_box": {
+        "left": 656.0,
+        "top": 2136.0,
+        "right": 917.0,
+        "bottom": 2200.0,
+        "width": 261.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "201582001-040",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1300.0,
+        "top": 2138.0,
+        "right": 1669.0,
+        "bottom": 2197.0,
+        "width": 369.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "M-DG-1899",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 1680.0,
+        "top": 2138.0,
+        "right": 1953.0,
+        "bottom": 2197.0,
+        "width": 273.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2193.0,
+        "top": 2139.0,
+        "right": 2411.0,
+        "bottom": 2200.0,
+        "width": 218.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 2648.0,
+        "top": 2141.0,
+        "right": 2783.0,
+        "bottom": 2199.0,
+        "width": 135.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3010.0,
+        "top": 2142.0,
+        "right": 3168.0,
+        "bottom": 2199.0,
+        "width": 158.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3465.0,
+        "top": 2139.0,
+        "right": 3543.0,
+        "bottom": 2195.0,
+        "width": 78.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "SIDE",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 181.0,
+        "top": 2232.0,
+        "right": 277.0,
+        "bottom": 2287.0,
+        "width": 96.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "STAY",
+      "confidence": 0.989,
+      "bounding_box": {
+        "left": 289.0,
+        "top": 2231.0,
+        "right": 410.0,
+        "bottom": 2287.0,
+        "width": 121.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "LH",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 420.0,
+        "top": 2231.0,
+        "right": 478.0,
+        "bottom": 2287.0,
+        "width": 58.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "A319/A320",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 497.0,
+        "top": 2229.0,
+        "right": 760.0,
+        "bottom": 2287.0,
+        "width": 263.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "201166013-015",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1301.0,
+        "top": 2229.0,
+        "right": 1666.0,
+        "bottom": 2288.0,
+        "width": 365.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "B1098-010",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 1677.0,
+        "top": 2229.0,
+        "right": 1935.0,
+        "bottom": 2290.0,
+        "width": 258.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 2192.0,
+        "top": 2230.0,
+        "right": 2412.0,
+        "bottom": 2287.0,
+        "width": 220.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 2648.0,
+        "top": 2234.0,
+        "right": 2788.0,
+        "bottom": 2288.0,
+        "width": 140.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.984,
+      "bounding_box": {
+        "left": 3012.0,
+        "top": 2233.0,
+        "right": 3166.0,
+        "bottom": 2284.0,
+        "width": 154.0,
+        "height": 51.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3462.0,
+        "top": 2240.0,
+        "right": 3538.0,
+        "bottom": 2286.0,
+        "width": 76.0,
+        "height": 46.0
+      }
+    },
+    {
+      "text": "SIDE",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 170.0,
+        "top": 2325.0,
+        "right": 277.0,
+        "bottom": 2380.0,
+        "width": 107.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "STAY",
+      "confidence": 0.99,
+      "bounding_box": {
+        "left": 286.0,
+        "top": 2324.0,
+        "right": 409.0,
+        "bottom": 2380.0,
+        "width": 123.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "RH",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 418.0,
+        "top": 2324.0,
+        "right": 483.0,
+        "bottom": 2380.0,
+        "width": 65.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "A319/A320",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 500.0,
+        "top": 2324.0,
+        "right": 763.0,
+        "bottom": 2379.0,
+        "width": 263.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "201166014-015",
+      "confidence": 0.978,
+      "bounding_box": {
+        "left": 1305.0,
+        "top": 2319.0,
+        "right": 1668.0,
+        "bottom": 2382.0,
+        "width": 363.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "B1096-010",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 1681.0,
+        "top": 2319.0,
+        "right": 1936.0,
+        "bottom": 2383.0,
+        "width": 255.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2196.0,
+        "top": 2325.0,
+        "right": 2414.0,
+        "bottom": 2378.0,
+        "width": 218.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2650.0,
+        "top": 2323.0,
+        "right": 2792.0,
+        "bottom": 2380.0,
+        "width": 142.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3012.0,
+        "top": 2326.0,
+        "right": 3168.0,
+        "bottom": 2380.0,
+        "width": 156.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.96,
+      "bounding_box": {
+        "left": 3460.0,
+        "top": 2326.0,
+        "right": 3540.0,
+        "bottom": 2380.0,
+        "width": 80.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "LEG",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 171.0,
+        "top": 2412.0,
+        "right": 253.0,
+        "bottom": 2472.0,
+        "width": 82.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "&",
+      "confidence": 0.974,
+      "bounding_box": {
+        "left": 271.0,
+        "top": 2413.0,
+        "right": 310.0,
+        "bottom": 2472.0,
+        "width": 39.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "DRESSING",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 320.0,
+        "top": 2413.0,
+        "right": 566.0,
+        "bottom": 2471.0,
+        "width": 246.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "RH",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 580.0,
+        "top": 2413.0,
+        "right": 646.0,
+        "bottom": 2470.0,
+        "width": 66.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "A319/A32",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 659.0,
+        "top": 2413.0,
+        "right": 898.0,
+        "bottom": 2470.0,
+        "width": 239.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "201582002-040",
+      "confidence": 0.968,
+      "bounding_box": {
+        "left": 1305.0,
+        "top": 2412.0,
+        "right": 1670.0,
+        "bottom": 2470.0,
+        "width": 365.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "M-DG-1900",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1679.0,
+        "top": 2411.0,
+        "right": 1952.0,
+        "bottom": 2470.0,
+        "width": 273.0,
+        "height": 59.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 2195.0,
+        "top": 2411.0,
+        "right": 2412.0,
+        "bottom": 2475.0,
+        "width": 217.0,
+        "height": 64.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2650.0,
+        "top": 2413.0,
+        "right": 2791.0,
+        "bottom": 2471.0,
+        "width": 141.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3012.0,
+        "top": 2415.0,
+        "right": 3167.0,
+        "bottom": 2472.0,
+        "width": 155.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 3460.0,
+        "top": 2409.0,
+        "right": 3547.0,
+        "bottom": 2469.0,
+        "width": 87.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "NLG",
+      "confidence": 0.995,
+      "bounding_box": {
+        "left": 174.0,
+        "top": 2505.0,
+        "right": 263.0,
+        "bottom": 2562.0,
+        "width": 89.0,
+        "height": 57.0
+      }
+    },
+    {
+      "text": "LEG",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 280.0,
+        "top": 2508.0,
+        "right": 367.0,
+        "bottom": 2562.0,
+        "width": 87.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "A320FAM",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 384.0,
+        "top": 2509.0,
+        "right": 597.0,
+        "bottom": 2562.0,
+        "width": 213.0,
+        "height": 53.0
+      }
+    },
+    {
+      "text": "D23589520-14",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1307.0,
+        "top": 2506.0,
+        "right": 1648.0,
+        "bottom": 2560.0,
+        "width": 341.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "|B1342",
+      "confidence": 0.479,
+      "bounding_box": {
+        "left": 1657.0,
+        "top": 2504.0,
+        "right": 1836.0,
+        "bottom": 2560.0,
+        "width": 179.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 2189.0,
+        "top": 2504.0,
+        "right": 2411.0,
+        "bottom": 2562.0,
+        "width": 222.0,
+        "height": 58.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 2645.0,
+        "top": 2506.0,
+        "right": 2788.0,
+        "bottom": 2560.0,
+        "width": 143.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.981,
+      "bounding_box": {
+        "left": 3010.0,
+        "top": 2509.0,
+        "right": 3166.0,
+        "bottom": 2560.0,
+        "width": 156.0,
+        "height": 51.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3464.0,
+        "top": 2510.0,
+        "right": 3540.0,
+        "bottom": 2562.0,
+        "width": 76.0,
+        "height": 52.0
+      }
+    },
+    {
+      "text": "FORESTAY",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 174.0,
+        "top": 2596.0,
+        "right": 413.0,
+        "bottom": 2652.0,
+        "width": 239.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "A320FAM",
+      "confidence": 0.996,
+      "bounding_box": {
+        "left": 424.0,
+        "top": 2598.0,
+        "right": 631.0,
+        "bottom": 2654.0,
+        "width": 207.0,
+        "height": 56.0
+      }
+    },
+    {
+      "text": "D23596000-3",
+      "confidence": 0.991,
+      "bounding_box": {
+        "left": 1303.0,
+        "top": 2595.0,
+        "right": 1623.0,
+        "bottom": 2650.0,
+        "width": 320.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "B1343",
+      "confidence": 0.998,
+      "bounding_box": {
+        "left": 1679.0,
+        "top": 2594.0,
+        "right": 1838.0,
+        "bottom": 2654.0,
+        "width": 159.0,
+        "height": 60.0
+      }
+    },
+    {
+      "text": "47262:10",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2192.0,
+        "top": 2598.0,
+        "right": 2415.0,
+        "bottom": 2660.0,
+        "width": 223.0,
+        "height": 62.0
+      }
+    },
+    {
+      "text": "27226",
+      "confidence": 0.994,
+      "bounding_box": {
+        "left": 2643.0,
+        "top": 2598.0,
+        "right": 2788.0,
+        "bottom": 2653.0,
+        "width": 145.0,
+        "height": 55.0
+      }
+    },
+    {
+      "text": "218:36",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 3006.0,
+        "top": 2597.0,
+        "right": 3169.0,
+        "bottom": 2651.0,
+        "width": 163.0,
+        "height": 54.0
+      }
+    },
+    {
+      "text": "165",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 3459.0,
+        "top": 2601.0,
+        "right": 3541.0,
+        "bottom": 2647.0,
+        "width": 82.0,
+        "height": 46.0
+      }
+    },
+    {
+      "text": "produced",
+      "confidence": 0.992,
+      "bounding_box": {
+        "left": 2638.0,
+        "top": 5073.0,
+        "right": 2865.0,
+        "bottom": 5136.0,
+        "width": 227.0,
+        "height": 63.0
+      }
+    },
+    {
+      "text": "byAMOS",
+      "confidence": 0.997,
+      "bounding_box": {
+        "left": 2876.0,
+        "top": 5071.0,
+        "right": 3110.0,
+        "bottom": 5132.0,
+        "width": 234.0,
+        "height": 61.0
+      }
+    },
+    {
+      "text": "www.swiss-as.com",
+      "confidence": 0.993,
+      "bounding_box": {
+        "left": 3132.0,
+        "top": 5071.0,
+        "right": 3565.0,
+        "bottom": 5129.0,
+        "width": 433.0,
+        "height": 58.0
+      }
+    }
+  ]
+}

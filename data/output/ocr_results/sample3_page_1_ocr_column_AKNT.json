@@ -1,0 +1,85 @@
+{
+  "found": true,
+  "serial_number": "AKNT",
+  "column_data": [
+    {
+      "text": "Registration",
+      "field_type": "header",
+      "bounding_box": {
+        "left": 339.0,
+        "top": 596.0,
+        "right": 710.0,
+        "bottom": 662.0,
+        "width": 371.0,
+        "height": 66.0
+      },
+      "ocr_confidence": 0.993,
+      "y_position": 596
+    },
+    {
+      "text": "AKNT",
+      "field_type": "registration",
+      "bounding_box": {
+        "left": 469.0,
+        "top": 690.0,
+        "right": 590.0,
+        "bottom": 743.0,
+        "width": 121.0,
+        "height": 53.0
+      },
+      "ocr_confidence": 0.99,
+      "y_position": 690
+    },
+    {
+      "text": "AKNT",
+      "field_type": "registration",
+      "bounding_box": {
+        "left": 461.0,
+        "top": 946.0,
+        "right": 596.0,
+        "bottom": 997.0,
+        "width": 135.0,
+        "height": 51.0
+      },
+      "ocr_confidence": 0.981,
+      "y_position": 946
+    },
+    {
+      "text": "AKNT",
+      "field_type": "registration",
+      "bounding_box": {
+        "left": 465.0,
+        "top": 1033.0,
+        "right": 590.0,
+        "bottom": 1080.0,
+        "width": 125.0,
+        "height": 47.0
+      },
+      "ocr_confidence": 0.993,
+      "y_position": 1033
+    },
+    {
+      "text": "AKNT",
+      "field_type": "registration",
+      "bounding_box": {
+        "left": 282.0,
+        "top": 1644.0,
+        "right": 404.0,
+        "bottom": 1686.0,
+        "width": 122.0,
+        "height": 42.0
+      },
+      "ocr_confidence": 0.991,
+      "y_position": 1644
+    }
+  ],
+  "column_bounding_box": {
+    "left": 282.0,
+    "top": 596.0,
+    "right": 710.0,
+    "bottom": 1686.0,
+    "width": 428.0,
+    "height": 1090.0
+  },
+  "total_items": 5
+}
