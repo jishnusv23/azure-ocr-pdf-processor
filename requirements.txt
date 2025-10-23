@@ -17,5 +17,6 @@ python-dotenv==1.0.0
 requests==2.31.0
 
 
-
+# LLM Integration (OpenRouter)
+openai==1.12.0
 
