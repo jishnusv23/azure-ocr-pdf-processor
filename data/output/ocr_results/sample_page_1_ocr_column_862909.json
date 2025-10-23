@@ -1,24 +1,30 @@
 {
   "found": true,
   "serial_number": "862909",
+  "serial_number_block_id": 56,
+  "column_x_position": 1715,
+  "total_items": 8,
   "column_data": [
     {
-      "text": "NO.1",
+      "block_id": 47,
+      "text": "POSITION NO.1",
       "field_type": "header",
+      "y_position": 1840,
       "bounding_box": {
-        "left": 1885.0,
-        "top": 1842.0,
-        "right": 2025.0,
-        "bottom": 1909.0,
-        "width": 140.0,
-        "height": 67.0
+        "left": 1593.0,
+        "top": 1840.0,
+        "right": 1860.0,
+        "bottom": 1904.0,
+        "width": 267.0,
+        "height": 64.0
       },
-      "ocr_confidence": 0.989,
-      "y_position": 1842
+      "ocr_confidence": 0.994
     },
     {
+      "block_id": 56,
       "text": "862909",
       "field_type": "serial_number",
+      "y_position": 2002,
       "bounding_box": {
         "left": 1715.0,
         "top": 2002.0,
@@ -27,12 +33,13 @@
         "width": 185.0,
         "height": 52.0
       },
-      "ocr_confidence": 0.994,
-      "y_position": 2002
+      "ocr_confidence": 0.994
     },
     {
+      "block_id": 63,
       "text": "862909",
       "field_type": "serial_number",
+      "y_position": 2149,
       "bounding_box": {
         "left": 1716.0,
         "top": 2149.0,
@@ -41,12 +48,13 @@
         "width": 183.0,
         "height": 56.0
       },
-      "ocr_confidence": 0.994,
-      "y_position": 2149
+      "ocr_confidence": 0.994
     },
     {
+      "block_id": 71,
       "text": "A-7575",
       "field_type": "location",
+      "y_position": 2293,
       "bounding_box": {
         "left": 1710.0,
         "top": 2293.0,
@@ -55,12 +63,13 @@
         "width": 189.0,
         "height": 60.0
       },
-      "ocr_confidence": 0.994,
-      "y_position": 2293
+      "ocr_confidence": 0.994
     },
     {
+      "block_id": 82,
       "text": "16300",
       "field_type": "tsn",
+      "y_position": 2447,
       "bounding_box": {
         "left": 1732.0,
         "top": 2447.0,
@@ -69,12 +78,13 @@
         "width": 151.0,
         "height": 52.0
       },
-      "ocr_confidence": 0.981,
-      "y_position": 2447
+      "ocr_confidence": 0.981
     },
     {
+      "block_id": 93,
       "text": "8200",
       "field_type": "csn",
+      "y_position": 2589,
       "bounding_box": {
         "left": 1746.0,
         "top": 2589.0,
@@ -83,12 +93,13 @@
         "width": 114.0,
         "height": 53.0
       },
-      "ocr_confidence": 0.961,
-      "y_position": 2589
+      "ocr_confidence": 0.961
     },
     {
+      "block_id": 104,
       "text": "197.25",
       "field_type": "monthly_hours",
+      "y_position": 2735,
       "bounding_box": {
         "left": 1723.0,
         "top": 2735.0,
@@ -97,12 +108,13 @@
         "width": 171.0,
         "height": 58.0
       },
-      "ocr_confidence": 0.993,
-      "y_position": 2735
+      "ocr_confidence": 0.993
     },
     {
+      "block_id": 114,
       "text": "230",
       "field_type": "monthly_cycles",
+      "y_position": 2879,
       "bounding_box": {
         "left": 1766.0,
         "top": 2879.0,
@@ -111,17 +123,98 @@
         "width": 87.0,
         "height": 54.0
       },
-      "ocr_confidence": 0.998,
-      "y_position": 2879
+      "ocr_confidence": 0.998
     }
   ],
   "column_bounding_box": {
-    "left": 1710.0,
-    "top": 1842.0,
-    "right": 2025.0,
-    "bottom": 2933.0,
-    "width": 315.0,
-    "height": 1091.0
+    "left": 1665,
+    "top": 1840,
+    "width": 100,
+    "height": 1039
   },
-  "total_items": 8
+  "structured_fields": {
+    "header": {
+      "value": "POSITION NO.1",
+      "bounding_box": {
+        "left": 1593.0,
+        "top": 1840.0,
+        "right": 1860.0,
+        "bottom": 1904.0,
+        "width": 267.0,
+        "height": 64.0
+      }
+    },
+    "serial_number": {
+      "value": "862909",
+      "bounding_box": {
+        "left": 1716.0,
+        "top": 2149.0,
+        "right": 1899.0,
+        "bottom": 2205.0,
+        "width": 183.0,
+        "height": 56.0
+      }
+    },
+    "location": {
+      "value": "A-7575",
+      "standard_name": "Installation Location",
+      "bounding_box": {
+        "left": 1710.0,
+        "top": 2293.0,
+        "right": 1899.0,
+        "bottom": 2353.0,
+        "width": 189.0,
+        "height": 60.0
+      }
+    },
+    "tsn": {
+      "value": "16300",
+      "standard_name": "Time Since New (TSN)",
+      "bounding_box": {
+        "left": 1732.0,
+        "top": 2447.0,
+        "right": 1883.0,
+        "bottom": 2499.0,
+        "width": 151.0,
+        "height": 52.0
+      }
+    },
+    "csn": {
+      "value": "8200",
+      "standard_name": "Cycles Since New (CSN)",
+      "bounding_box": {
+        "left": 1746.0,
+        "top": 2589.0,
+        "right": 1860.0,
+        "bottom": 2642.0,
+        "width": 114.0,
+        "height": 53.0
+      }
+    },
+    "monthly_hours": {
+      "value": "197.25",
+      "standard_name": "Flight Hours This Month",
+      "bounding_box": {
+        "left": 1723.0,
+        "top": 2735.0,
+        "right": 1894.0,
+        "bottom": 2793.0,
+        "width": 171.0,
+        "height": 58.0
+      }
+    },
+    "monthly_cycles": {
+      "value": "230",
+      "standard_name": "Flight Cycles This Month",
+      "bounding_box": {
+        "left": 1766.0,
+        "top": 2879.0,
+        "right": 1853.0,
+        "bottom": 2933.0,
+        "width": 87.0,
+        "height": 54.0
+      }
+    }
+  },
+  "document_type": "Engine Status Report"
 }

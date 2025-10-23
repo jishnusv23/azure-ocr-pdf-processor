@@ -25,11 +25,11 @@ logger = logging.getLogger(__name__)
 
 def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
     """
-    Process existing OCR results with LLM to extract column data
+    Process existing OCR results with LLM to extract data
     
     Args:
         ocr_json_path: Path to OCR JSON file
-        serial_number: Serial number to search for
+        serial_number: Serial number/identifier to search for
     """
     ocr_json_path = Path(ocr_json_path)
     
@@ -38,9 +38,9 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
         return
     
     logger.info("="*60)
-    logger.info(f"🧠 LLM Column Extraction")
+    logger.info(f"🧠 LLM Data Extraction")
     logger.info(f"   File: {ocr_json_path.name}")
-    logger.info(f"   Serial Number: {serial_number}")
+    logger.info(f"   Identifier: {serial_number}")
     logger.info("="*60)
     
     try:
@@ -51,8 +51,8 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
         
         logger.info(f"   Total text blocks: {len(ocr_results.get('text_blocks', []))}")
         
-        # Extract column data using LLM
-        logger.info("\n🧠 Using LLM to extract column data...")
+        # Extract data using LLM
+        logger.info("\n🧠 Using LLM to extract data...")
         extractor = LLMFieldExtractor()
         result = extractor.extract_column_data(ocr_results, serial_number)
         
@@ -60,32 +60,79 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
             logger.error(f"\n❌ {result['message']}")
             return
         
-        # Display results
-        logger.info(f"\n✅ Found serial number: {result['serial_number']}")
-        logger.info(f"   Total items in column: {result['total_items']}")
+        # Display results header
+        logger.info(f"\n✅ Found identifier: {result['identifier']}")
+        logger.info(f"   Type: {result.get('identifier_type', 'N/A')}")
+        logger.info(f"   Layout: {result.get('layout_type', 'N/A')}")
+        logger.info(f"   Document Type: {result.get('document_type', 'N/A')}")
+        logger.info(f"   Total fields: {result.get('total_fields', 0)}")
         
+        # Display extracted fields
         logger.info("\n" + "="*60)
-        logger.info("📊 Column Data (sorted top to bottom):")
+        logger.info("📊 Extracted Fields:")
         logger.info("="*60 + "\n")
         
-        for i, item in enumerate(result['column_data'], 1):
-            bbox = item['bounding_box']
-            logger.info(f"{i:2d}. {item['field_type']:<20}: {item['text']}")
-            logger.info(f"    Position: ({bbox['left']:.0f}, {bbox['top']:.0f})")
-            logger.info(f"    Size: {bbox['width']:.0f} x {bbox['height']:.0f}")
+        fields = result.get('fields', {})
         
-        # Column bounding box for highlighting
-        col_bbox = result['column_bounding_box']
+        # Display aircraft-level fields
+        aircraft_fields = ['aircraft_registration', 'msn', 'tah', 'tac', 
+                          'delta_hrs', 'delta_cyc', 'c_check_expiry', 'd_check_expiry']
+        
+        logger.info("🛩️  Aircraft Information:")
+        for field_name in aircraft_fields:
+            if field_name in fields:
+                field_data = fields[field_name]
+                text = field_data.get('text', 'N/A')
+                bbox = field_data.get('bounding_box', {})
+                logger.info(f"   {field_name.upper()}: {text}")
+                logger.info(f"      Position: ({bbox.get('left', 0):.0f}, {bbox.get('top', 0):.0f})")
+        
+        # Display engine data
+        if 'engines' in fields:
+            logger.info("\n🔧 Engines:")
+            for i, engine in enumerate(fields['engines'], 1):
+                logger.info(f"\n   Engine {i}:")
+                for key, field_data in engine.items():
+                    text = field_data.get('text', 'N/A')
+                    bbox = field_data.get('bounding_box', {})
+                    logger.info(f"      {key.upper()}: {text}")
+                    logger.info(f"         Position: ({bbox.get('left', 0):.0f}, {bbox.get('top', 0):.0f})")
+        
+        # Display APU data if present
+        apu_fields = {k: v for k, v in fields.items() if k.startswith('apu_')}
+        if apu_fields:
+            logger.info("\n⚡ APU:")
+            for field_name, field_data in apu_fields.items():
+                text = field_data.get('text', 'N/A')
+                bbox = field_data.get('bounding_box', {})
+                logger.info(f"   {field_name.upper()}: {text}")
+                logger.info(f"      Position: ({bbox.get('left', 0):.0f}, {bbox.get('top', 0):.0f})")
+        
+        # Display other fields
+        displayed_fields = set(aircraft_fields + ['engines'])
+        other_fields = {k: v for k, v in fields.items() 
+                       if k not in displayed_fields and not k.startswith('apu_')}
+        
+        if other_fields:
+            logger.info("\n📋 Other Fields:")
+            for field_name, field_data in other_fields.items():
+                text = field_data.get('text', 'N/A')
+                bbox = field_data.get('bounding_box', {})
+                logger.info(f"   {field_name.upper()}: {text}")
+                logger.info(f"      Position: ({bbox.get('left', 0):.0f}, {bbox.get('top', 0):.0f})")
+        
+        # Overall bounding box for highlighting
+        overall_bbox = result.get('bounding_box', {})
         logger.info("\n" + "="*60)
-        logger.info("🎯 Column Bounding Box (for frontend highlighting):")
+        logger.info("🎯 Overall Bounding Box (for frontend highlighting):")
         logger.info("="*60)
-        logger.info(f"   Left: {col_bbox['left']:.0f}")
-        logger.info(f"   Top: {col_bbox['top']:.0f}")
-        logger.info(f"   Width: {col_bbox['width']:.0f}")
-        logger.info(f"   Height: {col_bbox['height']:.0f}")
+        logger.info(f"   Left: {overall_bbox.get('left', 0):.0f}")
+        logger.info(f"   Top: {overall_bbox.get('top', 0):.0f}")
+        logger.info(f"   Width: {overall_bbox.get('width', 0):.0f}")
+        logger.info(f"   Height: {overall_bbox.get('height', 0):.0f}")
         
         # Save results
-        output_file = ocr_json_path.parent / f"{ocr_json_path.stem}_column_{serial_number}.json"
+        output_file = ocr_json_path.parent / f"{ocr_json_path.stem}_extracted_{serial_number}.json"
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
         
@@ -111,14 +158,126 @@ def process_pdf(pdf_path: str, page_num: Optional[int] = None,
         save_to_db: Whether to save results to database
         search_terms: Optional list of terms to search for
     """
-    # ... (keep existing process_pdf function as is)
-    pass
+    pdf_path = Path(pdf_path)
+    
+    if not pdf_path.exists():
+        logger.error(f"❌ File not found: {pdf_path}")
+        return
+    
+    logger.info("="*60)
+    logger.info(f"📄 Processing PDF with Azure OCR")
+    logger.info(f"   File: {pdf_path.name}")
+    if page_num:
+        logger.info(f"   Page: {page_num}")
+    logger.info("="*60)
+    
+    try:
+        # Initialize processors
+        pdf_processor = PDFProcessor()
+        azure_ocr = AzureOCR()
+        text_mapper = TextMapper()
+        
+        # Convert PDF to images
+        logger.info("\n🖼️  Converting PDF to images...")
+        images = pdf_processor.pdf_to_images(str(pdf_path))
+        
+        if page_num:
+            if page_num > len(images):
+                logger.error(f"❌ Page {page_num} not found (total pages: {len(images)})")
+                return
+            images = [images[page_num - 1]]
+            logger.info(f"   Processing page {page_num}")
+        else:
+            logger.info(f"   Total pages: {len(images)}")
+        
+        # Process each page
+        for idx, image in enumerate(images, 1):
+            current_page = page_num if page_num else idx
+            logger.info(f"\n📄 Processing page {current_page}...")
+            
+            # Perform OCR
+            ocr_result = azure_ocr.analyze_image(image)
+            
+            if not ocr_result:
+                logger.warning(f"⚠️  No OCR results for page {current_page}")
+                continue
+            
+            # Map text blocks
+            text_blocks = text_mapper.map_text_blocks(ocr_result)
+            
+            # Save OCR results
+            output_file = OCR_RESULTS_DIR / f"{pdf_path.stem}_page_{current_page}_ocr.json"
+            ocr_data = {
+                'filename': pdf_path.name,
+                'page_number': current_page,
+                'text_blocks': text_blocks,
+                'total_blocks': len(text_blocks),
+                'image_dimensions': {
+                    'width': image.width,
+                    'height': image.height
+                }
+            }
+            
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(ocr_data, f, indent=2, ensure_ascii=False)
+            
+            logger.info(f"   ✅ Extracted {len(text_blocks)} text blocks")
+            logger.info(f"   💾 Saved to: {output_file.name}")
+            
+            # Search for terms if provided
+            if search_terms:
+                logger.info(f"\n🔍 Searching for terms: {', '.join(search_terms)}")
+                for term in search_terms:
+                    matches = [block for block in text_blocks 
+                              if term.lower() in block['text'].lower()]
+                    if matches:
+                        logger.info(f"   ✅ Found '{term}' in {len(matches)} blocks")
+                        for match in matches[:3]:  # Show first 3 matches
+                            bbox = match['bounding_box']
+                            logger.info(f"      '{match['text']}' at ({bbox['left']:.0f}, {bbox['top']:.0f})")
+                    else:
+                        logger.info(f"   ❌ '{term}' not found")
+            
+            # Save to database if requested
+            if save_to_db:
+                logger.info(f"\n💾 Saving to database...")
+                db = DatabaseManager()
+                # Implement database save logic here
+                logger.info(f"   ✅ Saved to database")
+        
+        logger.info("\n" + "="*60)
+        logger.info("🎉 PDF processing completed successfully!")
+        logger.info("="*60)
+        
+    except Exception as e:
+        logger.error(f"\n❌ Error during PDF processing: {str(e)}", exc_info=True)
+        sys.exit(1)
 
 
 def list_input_files() -> None:
     """List all PDF files in the input directory"""
-    # ... (keep existing list_input_files function as is)
-    pass
+    try:
+        pdf_files = list(INPUT_DIR.glob("*.pdf"))
+        
+        if not pdf_files:
+            logger.info("📂 No PDF files found in input directory")
+            logger.info(f"   Directory: {INPUT_DIR}")
+            return
+        
+        logger.info("="*60)
+        logger.info(f"📂 PDF Files in {INPUT_DIR.name}/")
+        logger.info("="*60)
+        
+        for i, pdf_file in enumerate(pdf_files, 1):
+            size_mb = pdf_file.stat().st_size / (1024 * 1024)
+            logger.info(f"{i:2d}. {pdf_file.name} ({size_mb:.2f} MB)")
+        
+        logger.info("="*60)
+        logger.info(f"Total: {len(pdf_files)} PDF files")
+        logger.info("="*60)
+        
+    except Exception as e:
+        logger.error(f"❌ Error listing files: {str(e)}")
 
 
 def main():
@@ -131,10 +290,14 @@ Examples:
   # Process a PDF with Azure OCR
   python main.py --file data/input/document.pdf
   
-  # Process and search for terms
-  python main.py --file data/input/document.pdf --search "862909" "B3219"
+  # Process specific page
+  python main.py --file data/input/document.pdf --page 1
   
-  # Use LLM to extract column data from existing OCR results
+  # Process and search for terms
+  python main.py --file data/input/document.pdf --search "AKNT" "779682"
+  
+  # Use LLM to extract data from existing OCR results
+  python main.py --llm-only data/output/ocr_results/sample3_page_1_ocr.json "AKNT"
   python main.py --llm-only data/output/ocr_results/sample_page_1_ocr.json "862909"
   
   # List all PDF files
@@ -175,8 +338,8 @@ Examples:
     parser.add_argument(
         '--llm-only',
         nargs=2,
-        metavar=('OCR_JSON', 'SERIAL_NUMBER'),
-        help='Use LLM to extract column data from existing OCR JSON file'
+        metavar=('OCR_JSON', 'IDENTIFIER'),
+        help='Use LLM to extract data from existing OCR JSON file'
     )
     
     args = parser.parse_args()

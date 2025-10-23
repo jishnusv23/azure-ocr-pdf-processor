@@ -1,24 +1,15 @@
 {
   "found": true,
   "serial_number": "AKNT",
+  "serial_number_block_id": 26,
+  "column_x_position": 469,
+  "total_items": 4,
   "column_data": [
     {
-      "text": "Registration",
-      "field_type": "header",
-      "bounding_box": {
-        "left": 339.0,
-        "top": 596.0,
-        "right": 710.0,
-        "bottom": 662.0,
-        "width": 371.0,
-        "height": 66.0
-      },
-      "ocr_confidence": 0.993,
-      "y_position": 596
-    },
-    {
+      "block_id": 26,
       "text": "AKNT",
       "field_type": "registration",
+      "y_position": 690,
       "bounding_box": {
         "left": 469.0,
         "top": 690.0,
@@ -27,12 +18,13 @@
         "width": 121.0,
         "height": 53.0
       },
-      "ocr_confidence": 0.99,
-      "y_position": 690
+      "ocr_confidence": 0.99
     },
     {
+      "block_id": 49,
       "text": "AKNT",
       "field_type": "registration",
+      "y_position": 946,
       "bounding_box": {
         "left": 461.0,
         "top": 946.0,
@@ -41,12 +33,13 @@
         "width": 135.0,
         "height": 51.0
       },
-      "ocr_confidence": 0.981,
-      "y_position": 946
+      "ocr_confidence": 0.981
     },
     {
+      "block_id": 57,
       "text": "AKNT",
       "field_type": "registration",
+      "y_position": 1033,
       "bounding_box": {
         "left": 465.0,
         "top": 1033.0,
@@ -55,12 +48,13 @@
         "width": 125.0,
         "height": 47.0
       },
-      "ocr_confidence": 0.993,
-      "y_position": 1033
+      "ocr_confidence": 0.993
     },
     {
+      "block_id": 111,
       "text": "AKNT",
       "field_type": "registration",
+      "y_position": 1644,
       "bounding_box": {
         "left": 282.0,
         "top": 1644.0,
@@ -69,17 +63,28 @@
         "width": 122.0,
         "height": 42.0
       },
-      "ocr_confidence": 0.991,
-      "y_position": 1644
+      "ocr_confidence": 0.991
     }
   ],
   "column_bounding_box": {
-    "left": 282.0,
-    "top": 596.0,
-    "right": 710.0,
-    "bottom": 1686.0,
-    "width": 428.0,
-    "height": 1090.0
+    "left": 419,
+    "top": 690,
+    "width": 100,
+    "height": 954
   },
-  "total_items": 5
+  "structured_fields": {
+    "registration": {
+      "value": "AKNT",
+      "standard_name": "Aircraft Registration",
+      "bounding_box": {
+        "left": 282.0,
+        "top": 1644.0,
+        "right": 404.0,
+        "bottom": 1686.0,
+        "width": 122.0,
+        "height": 42.0
+      }
+    }
+  },
+  "document_type": "Unknown Aviation Document"
 }
