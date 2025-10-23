@@ -175,31 +175,6 @@
       },
       "label_text": "POSITION"
     },
-    "operator": {
-      "standard_name": "Operator",
-      "value": "AIRLINES",
-      "confidence": "high",
-      "bounding_box": {
-        "left": 1426.0,
-        "top": 453.0,
-        "right": 1749.0,
-        "bottom": 531.0,
-        "width": 323.0,
-        "height": 78.0
-      },
-      "ocr_confidence": 0.993,
-      "label_block_id": 1,
-      "value_block_id": 1,
-      "label_bounding_box": {
-        "left": 1426.0,
-        "top": 453.0,
-        "right": 1749.0,
-        "bottom": 531.0,
-        "width": 323.0,
-        "height": 78.0
-      },
-      "label_text": "AIRLINES"
-    },
     "aircraft_msn": {
       "standard_name": "Aircraft MSN",
       "value": "9999",
@@ -226,6 +201,6 @@
       "label_text": "MSN:"
     }
   },
-  "total_fields_found": 9,
+  "total_fields_found": 8,
   "document_type": "Utilization Report"
 }

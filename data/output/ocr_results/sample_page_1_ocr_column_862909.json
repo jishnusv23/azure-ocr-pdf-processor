@@ -1,0 +1,127 @@
+{
+  "found": true,
+  "serial_number": "862909",
+  "column_data": [
+    {
+      "text": "NO.1",
+      "field_type": "header",
+      "bounding_box": {
+        "left": 1885.0,
+        "top": 1842.0,
+        "right": 2025.0,
+        "bottom": 1909.0,
+        "width": 140.0,
+        "height": 67.0
+      },
+      "ocr_confidence": 0.989,
+      "y_position": 1842
+    },
+    {
+      "text": "862909",
+      "field_type": "serial_number",
+      "bounding_box": {
+        "left": 1715.0,
+        "top": 2002.0,
+        "right": 1900.0,
+        "bottom": 2054.0,
+        "width": 185.0,
+        "height": 52.0
+      },
+      "ocr_confidence": 0.994,
+      "y_position": 2002
+    },
+    {
+      "text": "862909",
+      "field_type": "serial_number",
+      "bounding_box": {
+        "left": 1716.0,
+        "top": 2149.0,
+        "right": 1899.0,
+        "bottom": 2205.0,
+        "width": 183.0,
+        "height": 56.0
+      },
+      "ocr_confidence": 0.994,
+      "y_position": 2149
+    },
+    {
+      "text": "A-7575",
+      "field_type": "location",
+      "bounding_box": {
+        "left": 1710.0,
+        "top": 2293.0,
+        "right": 1899.0,
+        "bottom": 2353.0,
+        "width": 189.0,
+        "height": 60.0
+      },
+      "ocr_confidence": 0.994,
+      "y_position": 2293
+    },
+    {
+      "text": "16300",
+      "field_type": "tsn",
+      "bounding_box": {
+        "left": 1732.0,
+        "top": 2447.0,
+        "right": 1883.0,
+        "bottom": 2499.0,
+        "width": 151.0,
+        "height": 52.0
+      },
+      "ocr_confidence": 0.981,
+      "y_position": 2447
+    },
+    {
+      "text": "8200",
+      "field_type": "csn",
+      "bounding_box": {
+        "left": 1746.0,
+        "top": 2589.0,
+        "right": 1860.0,
+        "bottom": 2642.0,
+        "width": 114.0,
+        "height": 53.0
+      },
+      "ocr_confidence": 0.961,
+      "y_position": 2589
+    },
+    {
+      "text": "197.25",
+      "field_type": "monthly_hours",
+      "bounding_box": {
+        "left": 1723.0,
+        "top": 2735.0,
+        "right": 1894.0,
+        "bottom": 2793.0,
+        "width": 171.0,
+        "height": 58.0
+      },
+      "ocr_confidence": 0.993,
+      "y_position": 2735
+    },
+    {
+      "text": "230",
+      "field_type": "monthly_cycles",
+      "bounding_box": {
+        "left": 1766.0,
+        "top": 2879.0,
+        "right": 1853.0,
+        "bottom": 2933.0,
+        "width": 87.0,
+        "height": 54.0
+      },
+      "ocr_confidence": 0.998,
+      "y_position": 2879
+    }
+  ],
+  "column_bounding_box": {
+    "left": 1710.0,
+    "top": 1842.0,
+    "right": 2025.0,
+    "bottom": 2933.0,
+    "width": 315.0,
+    "height": 1091.0
+  },
+  "total_items": 8
+}
