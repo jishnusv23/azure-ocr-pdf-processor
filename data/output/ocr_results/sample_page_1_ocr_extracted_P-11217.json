@@ -2,11 +2,11 @@
   "found": true,
   "identifier": "P-11217",
   "identifier_type": "apu_sn",
-  "layout_type": "row_based",
+  "layout_type": "columnar",
   "fields": {
-    "sn_installed": {
+    "apu_sn": {
       "text": "P-11217",
-      "field_type": "apu_sn",
+      "field_type": null,
       "bounding_box": {
         "left": 2875.0,
         "top": 1999.0,
@@ -17,9 +17,9 @@
       },
       "ocr_confidence": 0.994
     },
-    "sn_original": {
+    "apu_sn_original": {
       "text": "P-11217",
-      "field_type": "apu_sn",
+      "field_type": null,
       "bounding_box": {
         "left": 2879.0,
         "top": 2145.0,
@@ -32,7 +32,7 @@
     },
     "original_location": {
       "text": "A-7575",
-      "field_type": "aircraft_registration",
+      "field_type": null,
       "bounding_box": {
         "left": 2900.0,
         "top": 2296.0,
@@ -45,7 +45,7 @@
     },
     "tsn": {
       "text": "4600",
-      "field_type": "apu_tsn",
+      "field_type": null,
       "bounding_box": {
         "left": 2926.0,
         "top": 2446.0,
@@ -58,7 +58,7 @@
     },
     "csn": {
       "text": "13100",
-      "field_type": "apu_csn",
+      "field_type": null,
       "bounding_box": {
         "left": 2915.0,
         "top": 2589.0,
@@ -71,7 +71,7 @@
     },
     "delta_hrs": {
       "text": "12",
-      "field_type": "delta_hrs",
+      "field_type": null,
       "bounding_box": {
         "left": 2958.0,
         "top": 2733.0,
@@ -84,7 +84,7 @@
     },
     "delta_cyc": {
       "text": "26",
-      "field_type": "delta_cyc",
+      "field_type": null,
       "bounding_box": {
         "left": 2957.0,
         "top": 2877.0,
@@ -98,10 +98,10 @@
   },
   "total_fields": 7,
   "bounding_box": {
-    "left": 2875,
-    "top": 1999,
-    "width": 239,
-    "height": 878
+    "left": 2875.0,
+    "top": 1999.0,
+    "width": 83.0,
+    "height": 1639.0
   },
-  "document_type": "Aviation Maintenance Document"
+  "document_type": "APU Status Report"
 }
