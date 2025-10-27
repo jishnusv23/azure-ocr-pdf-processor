@@ -13,6 +13,7 @@ from src.azure_ocr import AzureOCR
 from src.text_mapper import TextMapper
 from src.database import DatabaseManager
 from src.llm_field_extractor import LLMFieldExtractor
+from src.pdf_highlighter import highlight_extraction_in_pdf
 from config.config import INPUT_DIR, OCR_RESULTS_DIR, VISUALIZATIONS_DIR
 
 # Setup logging
@@ -23,13 +24,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
+def process_pdf_with_llm(ocr_json_path: str, serial_number: str, pdf_path: Optional[str] = None) -> None:
     """
     Process existing OCR results with LLM to extract data
     
     Args:
         ocr_json_path: Path to OCR JSON file
         serial_number: Serial number/identifier to search for
+        pdf_path: Optional path to original PDF for highlighting
     """
     ocr_json_path = Path(ocr_json_path)
     
@@ -41,6 +43,8 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
     logger.info(f"🧠 LLM Data Extraction")
     logger.info(f"   File: {ocr_json_path.name}")
     logger.info(f"   Identifier: {serial_number}")
+    if pdf_path:
+        logger.info(f"   PDF: {Path(pdf_path).name}")
     logger.info("="*60)
     
     try:
@@ -50,6 +54,30 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
             ocr_results = json.load(f)
         
         logger.info(f"   Total text blocks: {len(ocr_results.get('text_blocks', []))}")
+        
+        # Check if image_dimensions exist
+        if 'image_dimensions' not in ocr_results:
+            logger.warning("   ⚠️  No image_dimensions found in OCR results")
+            logger.warning("   This is needed for PDF highlighting. Checking OCR structure...")
+            
+            # Try to infer dimensions from bounding boxes
+            text_blocks = ocr_results.get('text_blocks', [])
+            if text_blocks:
+                max_x = max(block['bounding_box']['left'] + block['bounding_box']['width'] 
+                           for block in text_blocks)
+                max_y = max(block['bounding_box']['top'] + block['bounding_box']['height'] 
+                           for block in text_blocks)
+                
+                ocr_results['image_dimensions'] = {
+                    'width': max_x,
+                    'height': max_y
+                }
+                logger.info(f"   ✅ Inferred dimensions: {max_x:.0f} x {max_y:.0f}")
+            else:
+                logger.error("   ❌ Cannot infer dimensions - no text blocks found!")
+        else:
+            img_dims = ocr_results['image_dimensions']
+            logger.info(f"   Image dimensions: {img_dims['width']:.0f} x {img_dims['height']:.0f}")
         
         # Extract data using LLM
         logger.info("\n🧠 Using LLM to extract data...")
@@ -138,6 +166,37 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
         
         logger.info(f"\n💾 Saved to: {output_file}")
         
+        # Highlight in PDF if provided
+        if pdf_path:
+            pdf_path = Path(pdf_path)
+            if pdf_path.exists():
+                logger.info("\n" + "="*60)
+                logger.info("🎨 Highlighting in PDF...")
+                logger.info("="*60)
+                
+                # Check if we have image_dimensions
+                if 'image_dimensions' not in ocr_results:
+                    logger.error("\n❌ Cannot highlight PDF: image_dimensions missing from OCR results")
+                    logger.error("   Please re-run OCR processing to include image dimensions")
+                else:
+                    try:
+                        highlighted_pdf = highlight_extraction_in_pdf(
+                            pdf_path=str(pdf_path),
+                            extraction_result=result,
+                            method="rectangle",  # More visible
+                            ocr_results=ocr_results  # Pass OCR results with image_dimensions
+                        )
+                        
+                        logger.info(f"\n✅ Highlighted PDF created!")
+                        logger.info(f"   Location: {highlighted_pdf}")
+                    except Exception as e:
+                        logger.error(f"\n❌ Error highlighting PDF: {str(e)}")
+                        import traceback
+                        traceback.print_exc()
+            else:
+                logger.warning(f"\n⚠️  PDF file not found: {pdf_path}")
+                logger.warning(f"   Skipping PDF highlighting...")
+        
         logger.info("\n" + "="*60)
         logger.info("🎉 LLM extraction completed successfully!")
         logger.info("="*60)
@@ -145,7 +204,6 @@ def process_pdf_with_llm(ocr_json_path: str, serial_number: str) -> None:
     except Exception as e:
         logger.error(f"\n❌ Error during LLM processing: {str(e)}", exc_info=True)
         sys.exit(1)
-
 
 def process_pdf(pdf_path: str, page_num: Optional[int] = None, 
                 save_to_db: bool = False, search_terms: Optional[list] = None) -> None:
@@ -205,14 +263,14 @@ def process_pdf(pdf_path: str, page_num: Optional[int] = None,
             # Map text blocks
             text_blocks = text_mapper.map_text_blocks(ocr_result)
             
-            # Save OCR results
+            # Save OCR results WITH image_dimensions
             output_file = OCR_RESULTS_DIR / f"{pdf_path.stem}_page_{current_page}_ocr.json"
             ocr_data = {
                 'filename': pdf_path.name,
                 'page_number': current_page,
                 'text_blocks': text_blocks,
                 'total_blocks': len(text_blocks),
-                'image_dimensions': {
+                'image_dimensions': {  # IMPORTANT: Save image dimensions
                     'width': image.width,
                     'height': image.height
                 }
@@ -222,6 +280,7 @@ def process_pdf(pdf_path: str, page_num: Optional[int] = None,
                 json.dump(ocr_data, f, indent=2, ensure_ascii=False)
             
             logger.info(f"   ✅ Extracted {len(text_blocks)} text blocks")
+            logger.info(f"   📐 Image size: {image.width} x {image.height}")
             logger.info(f"   💾 Saved to: {output_file.name}")
             
             # Search for terms if provided
@@ -297,8 +356,10 @@ Examples:
   python main.py --file data/input/document.pdf --search "AKNT" "779682"
   
   # Use LLM to extract data from existing OCR results
-  python main.py --llm-only data/output/ocr_results/sample3_page_1_ocr.json "AKNT"
-  python main.py --llm-only data/output/ocr_results/sample_page_1_ocr.json "862909"
+  python main.py --llm-only data/output/ocr_results/sample_page_1_ocr.json "P-11217"
+  
+  # Use LLM to extract AND highlight in PDF
+  python main.py --llm-only data/output/ocr_results/sample_page_1_ocr.json "P-11217" --pdf sample.pdf
   
   # List all PDF files
   python main.py --list
@@ -342,12 +403,19 @@ Examples:
         help='Use LLM to extract data from existing OCR JSON file'
     )
     
+    parser.add_argument(
+        '--pdf',
+        type=str,
+        help='Path to PDF file for highlighting (use with --llm-only)'
+    )
+    
     args = parser.parse_args()
     
     # Handle LLM-only mode
     if args.llm_only:
         ocr_json_path, serial_number = args.llm_only
-        process_pdf_with_llm(ocr_json_path, serial_number)
+        pdf_path = args.pdf  # Get optional PDF path
+        process_pdf_with_llm(ocr_json_path, serial_number, pdf_path)
         return
     
     # Handle list command

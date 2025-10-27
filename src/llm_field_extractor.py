@@ -10,6 +10,7 @@ from typing import Dict, Any, List, Optional
 import logging
 from openai import OpenAI
 from dotenv import load_dotenv
+from src.pdf_highlighter import highlight_extraction_in_pdf
 
 # Load environment variables
 load_dotenv()
@@ -154,6 +155,8 @@ class LLMFieldExtractor:
 
 **AVIATION FIELD TYPES:**
 - **aircraft_registration**: Aircraft registration (e.g., "AKNT", "VT-ANB")
+- **sn**: APU Serial Number (appears in multiple rows: "S/N of Engine Installed", "S/N of Original Engine's")
+- **original_location**: Present Location of Original Engine (aircraft registration)
 - **msn**: Manufacturer Serial Number (e.g., "02607")
 - **tah**: Total Aircraft Hours (format: "HHHH:MM" or decimal)
 - **tac**: Total Aircraft Cycles (integer)
@@ -196,6 +199,18 @@ class LLMFieldExtractor:
       "block_id": 28,
       "text": "02607",
       "field_type": "msn"
+    }},
+     "sn_original": {{
+      "block_id": 64,
+      "text": "P-11217",
+      "field_type": "apu_sn",
+      "row_context": "S/N of Original Engine's"
+    }},
+     "original_location": {{
+      "block_id": 70,
+      "text": "A-7575",
+      "field_type": "aircraft_registration",
+      "row_context": "Present Location of Original Engine"
     }},
     "tah": {{
       "block_id": 29,
@@ -364,23 +379,28 @@ Return ONLY the JSON object, nothing else.
 if __name__ == "__main__":
     
     if len(sys.argv) < 3:
-        print("Usage: python src/llm_field_extractor.py <ocr_json_file> <identifier>")
+        print("Usage: python src/llm_field_extractor.py <ocr_json_file> <identifier> [pdf_file]")
         print("\nExamples:")
-        print('  python src/llm_field_extractor.py data/output/ocr_results/sample_page_1_ocr.json "862909"')
-        print('  python src/llm_field_extractor.py data/output/ocr_results/sample3_page_1_ocr.json "AKNT"')
-        print('  python src/llm_field_extractor.py data/output/ocr_results/sample3_page_1_ocr.json "779682"')
+        print('  # Extract data only')
+        print('  python src/llm_field_extractor.py sample_page_1_ocr.json "P-11217"')
+        print('\n  # Extract data AND highlight in PDF')
+        print('  python src/llm_field_extractor.py sample_page_1_ocr.json "P-11217" input.pdf')
         sys.exit(1)
     
     json_file_path = Path(sys.argv[1])
     identifier = sys.argv[2]
+    pdf_file_path = Path(sys.argv[3]) if len(sys.argv) > 3 else None
     
     if not json_file_path.exists():
         print(f"❌ File not found: {json_file_path}")
         sys.exit(1)
     
     print(f"\n🧪 Testing Data Extraction")
-    print(f"   File: {json_file_path.name}")
-    print(f"   Identifier: {identifier}\n")
+    print(f"   OCR File: {json_file_path.name}")
+    print(f"   Identifier: {identifier}")
+    if pdf_file_path:
+        print(f"   PDF File: {pdf_file_path.name}")
+    print()
     
     # Load OCR results
     with open(json_file_path, 'r', encoding='utf-8') as f:
@@ -426,12 +446,31 @@ if __name__ == "__main__":
         print(f"   Width: {bbox['width']:.0f}")
         print(f"   Height: {bbox['height']:.0f}\n")
         
-        # Save results
+        # Save JSON results
         output_file = json_file_path.parent / f"{json_file_path.stem}_extracted_{identifier}.json"
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
         
-        print(f"💾 Saved to: {output_file.name}\n")
+        print(f"💾 JSON saved to: {output_file.name}\n")
+        
+        # Highlight in PDF if provided
+        if pdf_file_path and pdf_file_path.exists():
+            print(f"{'='*70}")
+            print(f"🎨 Highlighting in PDF...")
+            print(f"{'='*70}\n")
+            
+            highlighted_pdf = highlight_extraction_in_pdf(
+                pdf_path=str(pdf_file_path),
+                extraction_result=result,
+                method="rectangle",  # More visible
+                ocr_results=ocr_results  # Add this line - pass OCR results for scaling
+            )
+            
+            print(f"\n✅ Highlighted PDF created: {Path(highlighted_pdf).name}")
+            print(f"   You can now open the PDF to see the highlights!\n")
+        elif pdf_file_path:
+            print(f"\n⚠️  PDF file not found: {pdf_file_path}")
+            print(f"   Skipping PDF highlighting...\n")
         
     except Exception as e:
         print(f"❌ Error: {str(e)}")
