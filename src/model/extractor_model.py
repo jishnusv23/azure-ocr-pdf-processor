@@ -77,10 +77,8 @@ class ComponentData(BaseModel):
     location_bbox: Optional[BoundingBox] = Field(default=None)
     
     attachment_status: Optional[AttachmentStatus] = Field(default=None)
-    attachment_status_bbox: Optional[BoundingBox] = Field(default=None)
-    
     derate: Optional[float] = Field(default=None)
-    derate_bbox: Optional[BoundingBox] = Field(default=None)
+    
     
     extraction_confidence: Optional[float] = Field(default=None, ge=0, le=1)
     component_bbox: Optional[BoundingBox] = Field(default=None)
