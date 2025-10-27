@@ -81,7 +81,7 @@ class ComponentData(BaseModel):
     
     
     extraction_confidence: Optional[float] = Field(default=None, ge=0, le=1)
-    component_bbox: Optional[BoundingBox] = Field(default=None)
+    
     
     # Helper methods make it easy to use
     def to_field_dict(self) -> Dict[str, Dict[str, Any]]:
