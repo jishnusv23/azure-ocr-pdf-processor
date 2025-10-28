@@ -62,6 +62,9 @@ class ComponentData(BaseModel):
     
     SerialNumber: Optional[str] = Field(default=None)
     SerialNumber_bbox: Optional[BoundingBox] = Field(default=None)
+
+    SerialNumber_Original: Optional[str] = Field(default=None)
+    SerialNumber_Original_bbox: Optional[BoundingBox] = Field(default=None)
     
     location: Optional[str] = Field(default=None)
     location_bbox: Optional[BoundingBox] = Field(default=None)

@@ -107,6 +107,8 @@ class ComponentTable(Base):
     extracted_data_id = Column(Integer, ForeignKey('extracted_data.id'), nullable=False)
     component_type = Column(String, nullable=False)
     
+    
+    
     tsn = Column(Float)
     tsn_bbox_json = Column(JSONB)
     
@@ -121,6 +123,9 @@ class ComponentTable(Base):
     
     serial_number = Column(String)
     serial_number_bbox_json = Column(JSONB)
+
+    serial_number_original = Column(String)
+    serial_number_original_bbox_json = Column(JSONB)
     
     location = Column(String)
     location_bbox_json = Column(JSONB)
@@ -368,6 +373,7 @@ class DatabaseManager:
                     monthly_hrs_data = comp_data.get('MonthlyUtil_Hrs')
                     monthly_cyc_data = comp_data.get('MonthlyUtil_Cyc')
                     serial_data = comp_data.get('SerialNumber')
+                    serial_original_data = comp_data.get('SerialNumber_Original')
                     location_data = comp_data.get('location')
                     derate_data = comp_data.get('derate')
                     
@@ -380,6 +386,7 @@ class DatabaseManager:
                         monthly_util_hrs=self._to_float(self._extract_value_from_field(monthly_hrs_data)),
                         monthly_util_cyc=self._to_int(self._extract_value_from_field(monthly_cyc_data)),
                         serial_number=self._to_str(self._extract_value_from_field(serial_data)),
+                        serial_number_original=self._to_str(self._extract_value_from_field(serial_original_data)),
                         location=self._to_str(self._extract_value_from_field(location_data)),
                         derate=self._to_float(self._extract_value_from_field(derate_data)),
                         # Extract bounding boxes as JSON
@@ -388,6 +395,7 @@ class DatabaseManager:
                         monthly_util_hrs_bbox_json=self._extract_bbox_from_field(monthly_hrs_data),
                         monthly_util_cyc_bbox_json=self._extract_bbox_from_field(monthly_cyc_data),
                         serial_number_bbox_json=self._extract_bbox_from_field(serial_data),
+                        serial_number_original_bbox_json=self._extract_bbox_from_field(serial_original_data),
                         location_bbox_json=self._extract_bbox_from_field(location_data),
                         extraction_confidence=comp_data.get('extraction_confidence')
                     )
@@ -489,12 +497,138 @@ class DatabaseManager:
                 for row in results
             ]
     
+ 
+
     def search_by_identifier(self, identifier: str) -> List[Dict[str, Any]]:
-        """Search for extraction results by identifier"""
+        """
+        Search for extraction results by identifier
+        Searches in:
+        1. Identifiers table (MSN, registration numbers, etc.)
+        2. Component serial numbers in components table
+        
+        Returns unique results with full extraction_json containing bounding boxes
+        """
         with self.get_session() as session:
+            results = []
+            
+            # PART 1: Search in Identifiers table (MSN, registration, etc.)
+            try:
+                identifier_results = session.query(
+                    Document.filename,
+                    OCRResult.page_number,
+                    OCRResult.ocr_json,
+                    Identifier.identifier,
+                    Identifier.identifier_type,
+                    ExtractedData.document_type,
+                    ExtractedData.extraction_json,
+                    ExtractedData.id.label('extracted_data_id')
+                ).join(
+                    ExtractedData, ExtractedData.identifier_id == Identifier.id
+                ).join(
+                    OCRResult, Identifier.ocr_result_id == OCRResult.id
+                ).join(
+                    Document, OCRResult.document_id == Document.id
+                ).filter(
+                    Identifier.identifier.like(f'%{identifier}%')
+                ).distinct().all()
+                
+                for row in identifier_results:
+                    results.append({
+                        'filename': row.filename,
+                        'page_number': row.page_number,
+                        'identifier': row.identifier,
+                        'identifier_type': row.identifier_type,
+                        'document_type': row.document_type,
+                        'extraction_json': json.loads(row.extraction_json),
+                        'ocr_json': json.loads(row.ocr_json),
+                        'extracted_data_id': row.extracted_data_id,
+                        'search_source': 'identifier'
+                    })
+            except Exception as e:
+                logger.warning(f"Error searching identifiers: {e}")
+            
+            # PART 2: Search in component serial numbers
+            try:
+                component_results = session.query(
+                    Document.filename,
+                    OCRResult.page_number,
+                    OCRResult.ocr_json,
+                    ComponentTable.serial_number,
+                    ComponentTable.component_type,
+                    ExtractedData.document_type,
+                    ExtractedData.extraction_json,
+                    ExtractedData.id.label('extracted_data_id')
+                ).join(
+                    ExtractedData, ComponentTable.extracted_data_id == ExtractedData.id
+                ).join(
+                    Identifier, ExtractedData.identifier_id == Identifier.id
+                ).join(
+                    OCRResult, Identifier.ocr_result_id == OCRResult.id
+                ).join(
+                    Document, OCRResult.document_id == Document.id
+                ).filter(
+                    ComponentTable.serial_number.like(f'%{identifier}%')
+                ).distinct().all()
+                
+                for row in component_results:
+                    # Get the full extraction_json and filter to just this component
+                    full_extraction = json.loads(row.extraction_json)
+                    
+                    # Create a filtered extraction with only the matching component
+                    # This ensures we only highlight the component that matches
+                    filtered_extraction = {
+                        'document_type': full_extraction.get('document_type'),
+                        'layout_type': full_extraction.get('layout_type'),
+                        'fields': {
+                            row.component_type: full_extraction.get('fields', {}).get(row.component_type, {})
+                        }
+                    }
+                    
+                    results.append({
+                        'filename': row.filename,
+                        'page_number': row.page_number,
+                        'identifier': row.serial_number,
+                        'identifier_type': 'component_sn',
+                        'document_type': row.document_type,
+                        'extraction_json': filtered_extraction,  # Only the matching component
+                        'ocr_json': json.loads(row.ocr_json),
+                        'extracted_data_id': row.extracted_data_id,
+                        'search_source': 'component',
+                        'component_type': row.component_type
+                    })
+            except Exception as e:
+                logger.warning(f"Error searching components: {e}")
+            
+            # Remove duplicates based on extracted_data_id and component_type
+            seen = set()
+            unique_results = []
+            for result in results:
+                # Create unique key based on extracted_data_id and component (if exists)
+                key = (
+                    result['extracted_data_id'], 
+                    result.get('component_type', ''),
+                    result.get('search_source', '')
+                )
+                if key not in seen:
+                    seen.add(key)
+                    unique_results.append(result)
+            
+            logger.info(f"   Found {len(unique_results)} unique result(s) for identifier '{identifier}'")
+            
+            return unique_results
+
+
+    def search_by_identifier_with_full_components(self, identifier: str) -> List[Dict[str, Any]]:
+        """
+        Alternative search that returns ALL components for the matching identifier
+        (Not filtered to just the matching component)
+        """
+        with self.get_session() as session:
+            # Search in Identifiers table
             results = session.query(
                 Document.filename,
                 OCRResult.page_number,
+                OCRResult.ocr_json,
                 Identifier.identifier,
                 Identifier.identifier_type,
                 ExtractedData.document_type,
@@ -507,7 +641,7 @@ class DatabaseManager:
                 Document, OCRResult.document_id == Document.id
             ).filter(
                 Identifier.identifier.like(f'%{identifier}%')
-            ).all()
+            ).distinct().all()
             
             return [
                 {
@@ -516,10 +650,59 @@ class DatabaseManager:
                     'identifier': row.identifier,
                     'identifier_type': row.identifier_type,
                     'document_type': row.document_type,
-                    'extraction_json': json.loads(row.extraction_json)
+                    'extraction_json': json.loads(row.extraction_json),
+                    'ocr_json': json.loads(row.ocr_json)
                 }
                 for row in results
             ]
+            
+    def get_document_by_filename(self, filename: str) -> Optional[Dict[str, Any]]:
+        """Get document info by filename"""
+        with self.get_session() as session:
+            try:
+                doc = session.query(Document).filter(
+                    Document.filename == filename
+                ).first()
+                
+                if doc:
+                    return {
+                        'id': doc.id,
+                        'filename': doc.filename,
+                        'file_path': doc.file_path,
+                        'total_pages': doc.total_pages,
+                        'processed_date': doc.processed_date
+                    }
+                return None
+                
+            except Exception as e:
+                logger.error(f"Error getting document: {e}")
+                return None
+    
+    def get_ocr_by_document_and_page(self, document_id: int, page_number: int) -> Optional[Dict[str, Any]]:
+        """Get OCR result for specific document and page"""
+        with self.get_session() as session:
+            try:
+                ocr = session.query(OCRResult).filter(
+                    OCRResult.document_id == document_id,
+                    OCRResult.page_number == page_number
+                ).first()
+                
+                if ocr:
+                    return {
+                        'id': ocr.id,
+                        'document_id': ocr.document_id,
+                        'page_number': ocr.page_number,
+                        'total_blocks': ocr.total_blocks,
+                        'image_width': ocr.image_width,
+                        'image_height': ocr.image_height,
+                        'ocr_json': ocr.ocr_json,
+                        'processed_date': ocr.processed_date
+                    }
+                return None
+                
+            except Exception as e:
+                logger.error(f"Error getting OCR result: {e}")
+                return None
     
     def get_components_by_identifier(self, identifier: str) -> List[Dict[str, Any]]:
         """Get component data for a specific identifier"""

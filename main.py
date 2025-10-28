@@ -1,19 +1,22 @@
 """
 Main script for processing PDFs with Azure OCR and automatic LLM extraction
-WORKFLOW: PDF → Azure OCR (bounding boxes) → LLM (structured extraction) → Database
+WORKFLOW: PDF → Azure OCR → LLM Extraction → Database
+NEW: Query and highlight specific identifier data in PDF
 """
 import argparse
 import sys
 from pathlib import Path
 import logging
 from typing import Optional
+import json
 
 from src.pdf_processor import PDFProcessor
 from src.azure_ocr import AzureOCR
 from src.text_mapper import TextMapper
 from src.database import DatabaseManager
 from src.llm_field_extractor import LLMFieldExtractor
-from config.config import DATABASE_URL
+from src.pdf_highlighter import highlight_extraction_in_pdf
+from config.config import DATABASE_URL, OUTPUT_DIR
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,7 +45,7 @@ def process_pdf_full_pipeline(pdf_path: str, page_num: Optional[int] = None) -> 
     if page_num:
         logger.info(f"   Page: {page_num}")
     logger.info("="*80)
-    
+    standalone_extraction.py
     # Initialize database
     db = None
     try:
@@ -188,6 +191,120 @@ def process_pdf_full_pipeline(pdf_path: str, page_num: Optional[int] = None) -> 
             db.close()
 
 
+def highlight_identifier(identifier: str, output_dir: str = None) -> None:
+    """
+    Query database for identifier and create highlighted PDF
+    
+    Args:
+        identifier: The identifier to search for (e.g., "P-11217", "A-7575")
+        output_dir: Directory to save highlighted PDF (default: OUTPUT_DIR from config)
+    """
+    try:
+        db = DatabaseManager(DATABASE_URL)
+        
+        logger.info("="*80)
+        logger.info(f"🔍 HIGHLIGHT MODE: Searching for '{identifier}'")
+        logger.info("="*80)
+        
+        # Search for identifier
+        results = db.search_by_identifier(identifier)
+        
+        if not results:
+            logger.error(f"   ❌ No results found for '{identifier}'")
+            logger.info("\n💡 TIP: Use --query-all to see all available identifiers")
+            return
+        
+        logger.info(f"   ✅ Found {len(results)} result(s)")
+        
+        # If duplicates, use the most recent one
+        if len(results) > 1:
+            logger.warning(f"   ⚠️  Found {len(results)} duplicate entries, using the most recent one")
+            result = results[-1]  # Use the last (most recent) one
+        else:
+            result = results[0]
+        
+        filename = result['filename']
+        page_number = result['page_number']
+        extraction_json = result['extraction_json']
+        
+        logger.info(f"\n📄 Processing:")
+        logger.info(f"   File: {filename}")
+        logger.info(f"   Page: {page_number}")
+        logger.info(f"   Identifier: {result['identifier']} ({result['identifier_type']})")
+        logger.info(f"   Document Type: {result['document_type']}")
+        logger.info("")
+        
+        # Get the original PDF path from database
+        pdf_info = db.get_document_by_filename(filename)
+        if not pdf_info:
+            logger.error(f"   ❌ Could not find PDF info for {filename}")
+            return
+        
+        pdf_path = Path(pdf_info['file_path'])
+        if not pdf_path.exists():
+            logger.error(f"   ❌ PDF file not found: {pdf_path}")
+            return
+        
+        # Get OCR results for proper coordinate scaling
+        ocr_data = db.get_ocr_by_document_and_page(pdf_info['id'], page_number)
+        if not ocr_data:
+            logger.error(f"   ❌ No OCR data found for page {page_number}")
+            return
+        
+        ocr_results = json.loads(ocr_data['ocr_json'])
+        
+        # Prepare image_size for highlighter (it expects this format)
+        ocr_results['image_size'] = {
+            'width': ocr_data['image_width'],
+            'height': ocr_data['image_height']
+        }
+        
+        # CRITICAL FIX: Restructure extraction_json to have proper nested structure
+        # The fields need to be in the format the highlighter expects
+        fields = extraction_json.get('fields', {})
+        logger.info(f"🔍 Debug: Found {len(fields)} top-level fields")
+        logger.info(f"   Fields: {list(fields.keys())[:5]}...")  # Show first 5 field names
+        
+        # Set output directory
+        if not output_dir:
+            output_dir = OUTPUT_DIR
+        else:
+            output_dir = Path(output_dir)
+        
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Generate output filename
+        output_filename = f"{pdf_path.stem}_{identifier}_highlighted.pdf"
+        output_path = output_dir / output_filename
+        
+        logger.info("\n🎨 Generating highlighted PDF...")
+        logger.info(f"   Method: Yellow rectangles with borders")
+        logger.info(f"   Output: {output_path}")
+        logger.info("")
+        
+        # Highlight the PDF
+        highlighted_pdf = highlight_extraction_in_pdf(
+            pdf_path=str(pdf_path),
+            extraction_result=extraction_json,
+            output_path=str(output_path),
+            method="rectangle",
+            ocr_results=ocr_results
+        )
+        
+        logger.info("="*80)
+        logger.info("✅ SUCCESS!")
+        logger.info("="*80)
+        logger.info(f"📄 Highlighted PDF created: {highlighted_pdf}")
+        logger.info(f"🎯 Showing data for: {result['identifier']}")
+        logger.info(f"📊 Fields highlighted: {extraction_json.get('total_fields', 0)}")
+        logger.info("="*80)
+        
+        db.close()
+        
+    except Exception as e:
+        logger.error(f"❌ Error highlighting identifier: {str(e)}", exc_info=True)
+
+
 def query_database(identifier: Optional[str] = None) -> None:
     """Query database for extraction results"""
     try:
@@ -227,6 +344,55 @@ def query_database(identifier: Optional[str] = None) -> None:
         
     except Exception as e:
         logger.error(f"❌ Error querying database: {str(e)}")
+
+
+def clean_database() -> None:
+    """Clean all data from database tables"""
+    try:
+        db = DatabaseManager(DATABASE_URL)
+        
+        logger.info("="*80)
+        logger.info("🗑️  DATABASE CLEANUP")
+        logger.info("="*80)
+        logger.info("⚠️  WARNING: This will delete ALL data from the database!")
+        
+        confirm = input("Are you sure? Type 'yes' to confirm: ")
+        
+        if confirm.lower() != 'yes':
+            logger.info("❌ Cleanup cancelled")
+            return
+        
+        with db.get_session() as session:
+            from src.database import (Document, OCRResult, Identifier, 
+                                     ExtractedData, ComponentTable, 
+                                     StandaloneAssetTable, FlightInfoTable)
+            
+            # Delete in reverse order of dependencies
+            deleted_components = session.query(ComponentTable).delete()
+            deleted_standalone = session.query(StandaloneAssetTable).delete()
+            deleted_flight = session.query(FlightInfoTable).delete()
+            deleted_extracted = session.query(ExtractedData).delete()
+            deleted_identifiers = session.query(Identifier).delete()
+            deleted_ocr = session.query(OCRResult).delete()
+            deleted_documents = session.query(Document).delete()
+            
+            session.commit()
+            
+            logger.info(f"✅ Deleted {deleted_components} component records")
+            logger.info(f"✅ Deleted {deleted_standalone} standalone asset records")
+            logger.info(f"✅ Deleted {deleted_flight} flight info records")
+            logger.info(f"✅ Deleted {deleted_extracted} extraction records")
+            logger.info(f"✅ Deleted {deleted_identifiers} identifiers")
+            logger.info(f"✅ Deleted {deleted_ocr} OCR results")
+            logger.info(f"✅ Deleted {deleted_documents} documents")
+            logger.info("="*80)
+            logger.info("✅ Database cleaned successfully!")
+            logger.info("="*80)
+        
+        db.close()
+        
+    except Exception as e:
+        logger.error(f"❌ Error cleaning database: {str(e)}")
 
 
 def list_input_files() -> None:
@@ -273,6 +439,11 @@ Examples:
   python main.py --query "P-11217"
   python main.py --query-all
   
+  # Highlight specific identifier in PDF
+  python main.py --highlight "P-11217"
+  python main.py --highlight "A-7575"
+  python main.py --highlight "862909"
+  
   # List all PDF files
   python main.py --list
         """
@@ -308,7 +479,24 @@ Examples:
         help='Show all identifiers in database'
     )
     
+    parser.add_argument(
+        '--highlight', '-H',
+        type=str,
+        help='Highlight specific identifier in PDF (creates new PDF with highlights)'
+    )
+    
+    parser.add_argument(
+        '--output-dir', '-o',
+        type=str,
+        help='Output directory for highlighted PDFs (default: data/output)'
+    )
+    
     args = parser.parse_args()
+    
+    # Handle highlight mode (NEW FEATURE)
+    if args.highlight:
+        highlight_identifier(args.highlight, args.output_dir)
+        return
     
     # Handle database queries
     if args.query:
