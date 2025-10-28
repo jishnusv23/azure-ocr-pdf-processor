@@ -1,276 +1,173 @@
 """
-Text Position Mapper - Maps search terms to their positions in OCR results
+Text Mapper - Maps OCR results to simplified text blocks
 """
-import json
-from typing import List, Dict, Any, Tuple, Optional
-from pathlib import Path
 import logging
+from typing import List, Dict, Any
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class TextMapper:
-    """Maps text search terms to their positions in OCR data"""
+    """Maps Azure OCR results to simplified text blocks"""
     
-    def __init__(self, ocr_results: Dict[str, Any]):
+    def __init__(self):
+        """Initialize Text Mapper"""
+        logger.info("✅ Text Mapper initialized")
+    
+    def map_text_blocks(self, ocr_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Initialize with OCR results
+        Convert OCR results to simplified text blocks
         
         Args:
-            ocr_results: Dictionary containing OCR data with text and positions
+            ocr_results: OCR results from Azure Computer Vision
+            
+        Returns:
+            List of simplified text blocks with text and bounding boxes
         """
-        self.ocr_results = ocr_results
-        self.text_blocks = ocr_results.get('text_blocks', [])
-        self.all_text = ocr_results.get('all_text', '')
+        text_blocks = ocr_results.get('text_blocks', [])
         
-        logger.info(f"✅ TextMapper initialized with {len(self.text_blocks)} text blocks")
+        if not text_blocks:
+            logger.warning("⚠️  No text blocks found in OCR results")
+            return []
+        
+        logger.info(f"📋 Mapping {len(text_blocks)} text blocks")
+        
+        # Text blocks are already in the correct format from Azure OCR
+        return text_blocks
     
-    def search_text(self, search_term: str, case_sensitive: bool = False) -> List[Dict[str, Any]]:
+    def filter_blocks_by_area(self, text_blocks: List[Dict[str, Any]], 
+                             min_x: float, min_y: float, 
+                             max_x: float, max_y: float) -> List[Dict[str, Any]]:
         """
-        Search for a text term in OCR results
+        Filter text blocks by bounding area
         
         Args:
+            text_blocks: List of text blocks
+            min_x, min_y: Top-left corner of filter area
+            max_x, max_y: Bottom-right corner of filter area
+            
+        Returns:
+            Filtered list of text blocks
+        """
+        filtered = []
+        
+        for block in text_blocks:
+            bbox = block.get('bounding_box', {})
+            block_left = bbox.get('left', 0)
+            block_top = bbox.get('top', 0)
+            block_right = bbox.get('right', 0)
+            block_bottom = bbox.get('bottom', 0)
+            
+            # Check if block overlaps with filter area
+            if (block_left >= min_x and block_right <= max_x and
+                block_top >= min_y and block_bottom <= max_y):
+                filtered.append(block)
+        
+        logger.info(f"🔍 Filtered {len(filtered)} blocks in area "
+                   f"({min_x:.0f},{min_y:.0f}) to ({max_x:.0f},{max_y:.0f})")
+        
+        return filtered
+    
+    def search_text(self, text_blocks: List[Dict[str, Any]], 
+                   search_term: str, 
+                   case_sensitive: bool = False) -> List[Dict[str, Any]]:
+        """
+        Search for text in blocks
+        
+        Args:
+            text_blocks: List of text blocks
             search_term: Text to search for
             case_sensitive: Whether to perform case-sensitive search
             
         Returns:
-            List of dictionaries containing matched text and positions
+            List of blocks containing the search term
         """
         matches = []
         
-        search_lower = search_term if case_sensitive else search_term.lower()
-        
-        for block in self.text_blocks:
-            text = block['text']
-            text_compare = text if case_sensitive else text.lower()
+        for block in text_blocks:
+            text = block.get('text', '')
             
-            if search_lower in text_compare:
-                match = {
-                    'text': text,
-                    'search_term': search_term,
-                    'bounding_box': block['bounding_box'],
-                    'confidence': block.get('confidence', None)
-                }
-                matches.append(match)
+            if case_sensitive:
+                if search_term in text:
+                    matches.append(block)
+            else:
+                if search_term.lower() in text.lower():
+                    matches.append(block)
         
-        logger.info(f"🔍 Found {len(matches)} matches for '{search_term}'")
+        logger.info(f"🔍 Found {len(matches)} blocks containing '{search_term}'")
+        
         return matches
     
-    def search_multiple(self, search_terms: List[str], case_sensitive: bool = False) -> Dict[str, List[Dict[str, Any]]]:
+    def group_blocks_by_line(self, text_blocks: List[Dict[str, Any]], 
+                           y_tolerance: float = 5.0) -> List[List[Dict[str, Any]]]:
         """
-        Search for multiple terms
+        Group text blocks into lines based on vertical position
         
         Args:
-            search_terms: List of terms to search
-            case_sensitive: Whether to perform case-sensitive search
+            text_blocks: List of text blocks
+            y_tolerance: Maximum vertical distance to consider blocks on same line
             
         Returns:
-            Dictionary mapping each search term to its matches
+            List of lines, where each line is a list of blocks
         """
-        results = {}
-        
-        for term in search_terms:
-            results[term] = self.search_text(term, case_sensitive)
-        
-        total_matches = sum(len(matches) for matches in results.values())
-        logger.info(f"🔍 Searched {len(search_terms)} terms, found {total_matches} total matches")
-        
-        return results
-    
-    def get_text_at_position(self, x: float, y: float, tolerance: float = 10) -> Optional[Dict[str, Any]]:
-        """
-        Get text at a specific position
-        
-        Args:
-            x: X coordinate
-            y: Y coordinate
-            tolerance: Tolerance in pixels
-            
-        Returns:
-            Text block at that position or None
-        """
-        for block in self.text_blocks:
-            bbox = block['bounding_box']
-            
-            if (bbox['left'] - tolerance <= x <= bbox['right'] + tolerance and
-                bbox['top'] - tolerance <= y <= bbox['bottom'] + tolerance):
-                return block
-        
-        return None
-    
-    def detect_columns(self, x_tolerance: float = 20) -> List[List[Dict[str, Any]]]:
-        """
-        Detect columns in the document based on X positions
-        
-        Args:
-            x_tolerance: Tolerance for grouping text blocks into columns
-            
-        Returns:
-            List of columns, each containing text blocks
-        """
-        if not self.text_blocks:
+        if not text_blocks:
             return []
         
-        # Sort by X position
-        sorted_blocks = sorted(self.text_blocks, key=lambda b: b['bounding_box']['left'])
+        # Sort blocks by vertical position (top)
+        sorted_blocks = sorted(text_blocks, 
+                              key=lambda b: b.get('bounding_box', {}).get('top', 0))
         
-        columns = []
-        current_column = [sorted_blocks[0]]
-        current_x = sorted_blocks[0]['bounding_box']['left']
+        lines = []
+        current_line = [sorted_blocks[0]]
+        current_y = sorted_blocks[0].get('bounding_box', {}).get('top', 0)
         
         for block in sorted_blocks[1:]:
-            block_x = block['bounding_box']['left']
+            block_y = block.get('bounding_box', {}).get('top', 0)
             
-            if abs(block_x - current_x) <= x_tolerance:
-                # Same column
-                current_column.append(block)
+            if abs(block_y - current_y) <= y_tolerance:
+                # Same line
+                current_line.append(block)
             else:
-                # New column
-                columns.append(current_column)
-                current_column = [block]
-                current_x = block_x
+                # New line
+                # Sort current line by horizontal position
+                current_line.sort(key=lambda b: b.get('bounding_box', {}).get('left', 0))
+                lines.append(current_line)
+                
+                current_line = [block]
+                current_y = block_y
         
-        # Add last column
-        if current_column:
-            columns.append(current_column)
+        # Add last line
+        if current_line:
+            current_line.sort(key=lambda b: b.get('bounding_box', {}).get('left', 0))
+            lines.append(current_line)
         
-        logger.info(f"📊 Detected {len(columns)} columns")
-        return columns
+        logger.info(f"📏 Grouped {len(text_blocks)} blocks into {len(lines)} lines")
+        
+        return lines
     
-    def detect_tables(self, y_gap_threshold: float = 30) -> List[Dict[str, Any]]:
+    def get_text_by_line(self, text_blocks: List[Dict[str, Any]], 
+                        y_tolerance: float = 5.0) -> List[str]:
         """
-        Detect tables based on Y position gaps
+        Get text grouped by lines
         
         Args:
-            y_gap_threshold: Minimum gap to separate tables
+            text_blocks: List of text blocks
+            y_tolerance: Maximum vertical distance to consider blocks on same line
             
         Returns:
-            List of detected tables with their boundaries
+            List of strings, one per line
         """
-        if not self.text_blocks:
-            return []
+        lines = self.group_blocks_by_line(text_blocks, y_tolerance)
         
-        # Sort by Y position (top to bottom)
-        sorted_blocks = sorted(self.text_blocks, key=lambda b: b['bounding_box']['top'])
+        line_texts = []
+        for line in lines:
+            line_text = ' '.join(block.get('text', '') for block in line)
+            line_texts.append(line_text)
         
-        tables = []
-        current_table_blocks = [sorted_blocks[0]]
-        
-        for i in range(1, len(sorted_blocks)):
-            prev_block = sorted_blocks[i - 1]
-            curr_block = sorted_blocks[i]
-            
-            prev_bottom = prev_block['bounding_box']['bottom']
-            curr_top = curr_block['bounding_box']['top']
-            
-            gap = curr_top - prev_bottom
-            
-            if gap > y_gap_threshold:
-                # End current table
-                table = self._create_table_structure(current_table_blocks)
-                tables.append(table)
-                current_table_blocks = [curr_block]
-            else:
-                current_table_blocks.append(curr_block)
-        
-        # Add last table
-        if current_table_blocks:
-            table = self._create_table_structure(current_table_blocks)
-            tables.append(table)
-        
-        logger.info(f"📊 Detected {len(tables)} tables")
-        return tables
-    
-    def _create_table_structure(self, blocks: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Create table structure from blocks"""
-        if not blocks:
-            return {}
-        
-        # Calculate table boundaries
-        min_x = min(b['bounding_box']['left'] for b in blocks)
-        max_x = max(b['bounding_box']['right'] for b in blocks)
-        min_y = min(b['bounding_box']['top'] for b in blocks)
-        max_y = max(b['bounding_box']['bottom'] for b in blocks)
-        
-        return {
-            'bounding_box': {
-                'left': min_x,
-                'top': min_y,
-                'right': max_x,
-                'bottom': max_y,
-                'width': max_x - min_x,
-                'height': max_y - min_y
-            },
-            'blocks': blocks,
-            'block_count': len(blocks)
-        }
-    
-    def highlight_search_results(self, search_results: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Any]:
-        """
-        Create highlight data for frontend visualization
-        
-        Args:
-            search_results: Results from search_multiple()
-            
-        Returns:
-            Dictionary with highlight positions for each search term
-        """
-        highlights = {
-            'search_terms': [],
-            'highlights': []
-        }
-        
-        for term, matches in search_results.items():
-            highlights['search_terms'].append(term)
-            
-            for match in matches:
-                highlight = {
-                    'text': match['text'],
-                    'search_term': term,
-                    'position': match['bounding_box'],
-                    'confidence': match.get('confidence')
-                }
-                highlights['highlights'].append(highlight)
-        
-        return highlights
+        return line_texts
 
 
 if __name__ == "__main__":
-    # Test the text mapper
-    from config.config import OCR_RESULTS_DIR
-    
-    # Find first OCR result file
-    ocr_files = list(OCR_RESULTS_DIR.glob("*.json"))
-    
-    if ocr_files:
-        test_file = ocr_files[0]
-        logger.info(f"\n🧪 Testing with: {test_file.name}")
-        
-        # Load OCR results
-        with open(test_file, 'r', encoding='utf-8') as f:
-            ocr_results = json.load(f)
-        
-        # Initialize mapper
-        mapper = TextMapper(ocr_results)
-        
-        # Test search
-        test_terms = ['862909', 'B3219', 'MDG1234']
-        results = mapper.search_multiple(test_terms)
-        
-        print(f"\n📊 Search Results:")
-        for term, matches in results.items():
-            print(f"   '{term}': {len(matches)} matches")
-            for match in matches[:2]:  # Show first 2 matches
-                bbox = match['bounding_box']
-                print(f"      - Position: ({bbox['left']:.0f}, {bbox['top']:.0f})")
-        
-        # Detect columns
-        columns = mapper.detect_columns()
-        print(f"\n📊 Detected {len(columns)} columns")
-        
-        # Detect tables
-        tables = mapper.detect_tables()
-        print(f"📊 Detected {len(tables)} tables")
-    else:
-        logger.warning(f"⚠️  No OCR result files found in: {OCR_RESULTS_DIR}")
+    # Test text mapper
+    print("✅ Text Mapper module loaded successfully")

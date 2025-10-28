@@ -1,66 +1,72 @@
 """
-LLM-based intelligent field extraction for aviation documents
-Uses OpenRouter API with Instructor for structured output
+Enhanced LLM-based field extraction using Azure OCR bounding boxes
+Returns structured data using Pydantic models (ComponentData, ExtractedComponentData)
 """
 import json
 import os
-import sys
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Literal
+from typing import Dict, Any, List, Optional
 import logging
 from openai import OpenAI
 from dotenv import load_dotenv
 import instructor
 from pydantic import BaseModel, Field
-from src.pdf_highlighter import highlight_extraction_in_pdf
-from src.type.index import ExtractionResult
 
+# Import your extraction models
+from src.model.extractor_model import (
+    ComponentData, 
+    BoundingBox, 
+    ExtractedComponentData,
+    StandaloneAssetsData,
+    FlightInfo
+)
 
 load_dotenv()
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+class IdentifierLocation(BaseModel):
+    """Location of an identifier in the document"""
+    identifier: str = Field(description="The identifier text (e.g., serial number, registration)")
+    identifier_type: str = Field(description="Type: aircraft_registration, engine_sn, apu_sn, msn, component_sn")
+    block_id: int = Field(description="Block index in OCR results")
+    confidence: float = Field(description="Confidence in identification (0-1)", ge=0, le=1)
 
+
+class IdentifierDiscovery(BaseModel):
+    """Result of identifier discovery"""
+    found_identifiers: List[IdentifierLocation] = Field(
+        description="All identifiers found in the document"
+    )
+    document_type: str = Field(
+        description="Document type: component_data, standalone_assets, flight_info"
+    )
 
 
 class LLMFieldExtractor:
-    """Uses LLM via OpenRouter with Instructor for structured extraction"""
+    """LLM Field Extractor using Azure OCR bounding boxes and Pydantic models"""
     
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
-        """Initialize LLM Field Extractor with Instructor"""
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
         self.model = model or os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
         
         if not self.api_key:
             raise ValueError("❌ OPENROUTER_API_KEY not set in .env file")
         
-        # Initialize OpenAI client
         base_client = OpenAI(
             api_key=self.api_key,
             base_url="https://openrouter.ai/api/v1"
         )
-        
-        # Patch with Instructor
         self.client = instructor.from_openai(base_client)
-        
-        logger.info(f"✅ LLM Field Extractor initialized with Instructor (Model: {self.model})")
+        logger.info(f"✅ LLM Field Extractor initialized (Model: {self.model})")
     
-    def extract_column_data(self, ocr_results: Dict[str, Any], serial_number: str) -> Dict[str, Any]:
+    def discover_identifiers(self, ocr_results: Dict[str, Any]) -> tuple[List[Dict[str, Any]], str]:
         """
-        Extract data for a specific identifier using Instructor for structured output
-        
-        Args:
-            ocr_results: OCR results from Azure Computer Vision
-            serial_number: Identifier to search for
-            
-        Returns:
-            Dictionary with extracted data and bounding boxes
+        AUTO-DISCOVER all identifiers and determine document type
+        Returns (identifiers, document_type)
         """
-        logger.info(f"🔍 Searching for identifier: {serial_number}")
+        logger.info("🔍 Auto-discovering identifiers and document type...")
         
-        # Prepare text blocks
         text_blocks = ocr_results.get('text_blocks', [])
         simplified_blocks = []
         
@@ -69,266 +75,345 @@ class LLMFieldExtractor:
                 "id": i,
                 "text": block['text'],
                 "x": round(block['bounding_box']['left']),
-                "y": round(block['bounding_box']['top']),
-                "width": round(block['bounding_box']['width']),
-                "height": round(block['bounding_box']['height'])
+                "y": round(block['bounding_box']['top'])
             })
         
-        # Build prompt
-        prompt = f"""You are analyzing an aviation maintenance document. Find the identifier "{serial_number}" and extract ALL related data.
+        prompt = f"""Analyze this aviation document and identify ALL key identifiers and document type.
 
-**DOCUMENT LAYOUT TYPES:**
-1. **Columnar Layout**: Data organized in vertical columns
-2. **Row-based Layout**: Data organized in horizontal rows/sections
+**OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
+{json.dumps(simplified_blocks[:100], indent=2)}
 
-**OCR TEXT BLOCKS:**
-{json.dumps(simplified_blocks, indent=2)}
+**DOCUMENT TYPES:**
+1. **component_data**: Contains TSN, CSN, MonthlyUtil for Airframe/Engines/APU/Landing Gear
+2. **standalone_assets**: Contains Month, MSN, ComponentSerialNumber, FlightRegistrationNumber
+3. **flight_info**: Contains Month, MSN, AirCraftType, RegistrationNumber
+
+**IDENTIFIER TYPES:**
+- aircraft_registration (e.g., VT-ABC, N12345, P-11217)
+- engine_sn (Engine serial numbers)
+- apu_sn (APU serial numbers)
+- msn (Manufacturer Serial Number)
+- component_sn (Any component serial number)
 
 **TASK:**
-1. Find all occurrences of "{serial_number}"
-2. Determine layout type (columnar vs row-based)
-3. For **COLUMNAR**: Extract data in same vertical column (±50px X)
-4. For **ROW-BASED**: Extract data in same section (±150px Y)
-5. Map each value to its field type
+1. Determine the document type based on the fields present
+2. Find ALL identifiers in the document
+3. For each identifier, provide the block_id where it appears
 
-**FIELD TYPES:**
-- apu_sn, apu_tsn, apu_csn (APU data)
-- engine_sn, engine_tsn, engine_csn (Engine data)
-- aircraft_registration, msn (Aircraft data)
-- delta_hrs, delta_cyc (Period data)
-
-Extract ALL fields in the same column/section as the identifier.
+Return ALL identifiers with high confidence only (>0.8).
 """
         
         try:
-            # Call Instructor-patched client
             result = self.client.chat.completions.create(
                 model=self.model,
-                response_model=ExtractionResult,
+                response_model=IdentifierDiscovery,
                 messages=[
-                    {
-                        "role": "system",
-                        "content": "You are an expert aviation document analyzer. Extract structured data for aircraft, engines, and APUs."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
+                    {"role": "system", "content": "You are an expert at analyzing aviation maintenance documents."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0,
+                max_tokens=2048
+            )
+            
+            identifiers = []
+            for id_loc in result.found_identifiers:
+                identifiers.append({
+                    'identifier': id_loc.identifier,
+                    'type': id_loc.identifier_type,
+                    'block_id': id_loc.block_id,
+                    'confidence': id_loc.confidence
+                })
+            
+            doc_type = result.document_type
+            
+            logger.info(f"✅ Document Type: {doc_type}")
+            logger.info(f"✅ Found {len(identifiers)} identifiers")
+            for idf in identifiers:
+                logger.info(f"   - {idf['identifier']} ({idf['type']}, conf: {idf['confidence']:.2f})")
+            
+            return identifiers, doc_type
+            
+        except Exception as e:
+            logger.error(f"❌ Error discovering identifiers: {str(e)}")
+            return [], "unknown"
+    
+    def extract_all_data(self, ocr_results: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Extract structured data for ALL discovered identifiers using Pydantic models
+        Returns list of extraction results
+        """
+        # Discover all identifiers and document type
+        identifiers, doc_type = self.discover_identifiers(ocr_results)
+        
+        if not identifiers:
+            logger.warning("⚠️ No identifiers found in document")
+            return []
+        
+        # Extract data for each identifier
+        all_results = []
+        
+        for idf in identifiers:
+            logger.info(f"\n{'='*60}")
+            logger.info(f"🔍 Extracting data for: {idf['identifier']} ({idf['type']})")
+            logger.info(f"{'='*60}")
+            
+            try:
+                result = self.extract_structured_data(
+                    ocr_results, 
+                    idf['identifier'], 
+                    doc_type
+                )
+                
+                if result['found']:
+                    # Add identifier metadata
+                    result['identifier_metadata'] = {
+                        'type': idf['type'],
+                        'confidence': idf['confidence'],
+                        'block_id': idf['block_id']
                     }
+                    result['document_type'] = doc_type
+                    all_results.append(result)
+                    logger.info(f"✅ Extracted {result.get('total_fields', 0)} fields")
+                else:
+                    logger.warning(f"⚠️ Could not extract data for {idf['identifier']}")
+                    
+            except Exception as e:
+                logger.error(f"❌ Error extracting {idf['identifier']}: {str(e)}")
+                continue
+        
+        logger.info(f"\n{'='*60}")
+        logger.info(f"🎉 Total extractions: {len(all_results)}")
+        logger.info(f"{'='*60}")
+        
+        return all_results
+    
+    def extract_structured_data(self, ocr_results: Dict[str, Any], 
+                               identifier: str, doc_type: str) -> Dict[str, Any]:
+        """
+        Extract data using appropriate Pydantic model based on document type
+        Uses Azure OCR bounding boxes for precise field location
+        """
+        text_blocks = ocr_results.get('text_blocks', [])
+        
+        # Create simplified blocks with bounding box info
+        simplified_blocks = []
+        for i, block in enumerate(text_blocks[:300]):
+            simplified_blocks.append({
+                "id": i,
+                "text": block['text'],
+                "bbox": {
+                    "left": round(block['bounding_box']['left']),
+                    "top": round(block['bounding_box']['top']),
+                    "width": round(block['bounding_box']['width']),
+                    "height": round(block['bounding_box']['height'])
+                }
+            })
+        
+        # Select appropriate extraction based on doc_type
+        if doc_type == "component_data":
+            return self._extract_component_data(simplified_blocks, identifier, text_blocks)
+        elif doc_type == "standalone_assets":
+            return self._extract_standalone_assets(simplified_blocks, identifier, text_blocks)
+        elif doc_type == "flight_info":
+            return self._extract_flight_info(simplified_blocks, identifier, text_blocks)
+        else:
+            # Fallback: try component data
+            return self._extract_component_data(simplified_blocks, identifier, text_blocks)
+    
+    def _extract_component_data(self, simplified_blocks: List[Dict], 
+                               identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
+        """Extract using ExtractedComponentData model"""
+        
+        prompt = f"""Extract component data for identifier "{identifier}" using the provided bounding boxes.
+
+**OCR BLOCKS (from Azure OCR):**
+{json.dumps(simplified_blocks[:150], indent=2)}
+
+**TASK:**
+Find "{identifier}" and extract ALL component data in the same column/section.
+
+**COMPONENTS TO EXTRACT:**
+- Airframe: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location
+- Engine1: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate
+- Engine2: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate
+- APU: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location
+- LandingGearLeft: TSN, CSN, SerialNumber, location
+- LandingGearRight: TSN, CSN, SerialNumber, location
+- LandingGearNose: TSN, CSN, SerialNumber, location
+
+For each field, provide:
+1. Value (extracted text)
+2. block_id (the OCR block ID)
+
+Return structured data with bounding boxes from Azure OCR.
+"""
+        
+        try:
+            result = self.client.chat.completions.create(
+                model=self.model,
+                response_model=ExtractedComponentData,
+                messages=[
+                    {"role": "system", "content": "Extract component data using Azure OCR bounding boxes."},
+                    {"role": "user", "content": prompt}
                 ],
                 temperature=0,
                 max_tokens=4096
             )
             
-            logger.info(f"✅ LLM response received (structured with Instructor)")
-            
-            # Check if identifier was found
-            if not result.identifier_found:
-                return {
-                    'found': False,
-                    'message': f"Identifier '{serial_number}' not found in document",
-                    'search_term': serial_number
-                }
-            
-            # Convert to dictionary and enrich with bounding boxes
+            # Convert Pydantic model to dict and enrich with bounding boxes
             extracted_dict = result.model_dump()
-            enriched_data = self._enrich_extracted_data(extracted_dict, ocr_results)
+            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
             
-            logger.info(f"✅ Extracted {len(enriched_data.get('fields', {}))} fields")
-            
-            return enriched_data
+            return {
+                'found': True,
+                'identifier': identifier,
+                'identifier_type': 'component_data',
+                'layout_type': 'columnar',
+                'fields': enriched_data,
+                'total_fields': self._count_fields(enriched_data),
+                'document_type': 'component_data'
+            }
             
         except Exception as e:
-            logger.error(f"❌ Error calling LLM: {str(e)}")
-            raise
+            logger.error(f"❌ Error extracting component data: {str(e)}")
+            return {'found': False, 'message': str(e)}
     
-    def _enrich_extracted_data(self, extracted_data: Dict[str, Any], 
-                                ocr_results: Dict[str, Any]) -> Dict[str, Any]:
-        """Add bounding box coordinates from OCR results to extracted fields"""
+    def _extract_standalone_assets(self, simplified_blocks: List[Dict],
+                                   identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
+        """Extract using StandaloneAssetsData model"""
         
-        text_blocks = ocr_results.get('text_blocks', [])
-        extracted_fields = extracted_data.get('extracted_fields', {})
-        
-        enriched_fields = {}
-        
-        # Process flat fields
-        for field_key, field_data in extracted_fields.items():
-            if isinstance(field_data, dict) and 'block_id' in field_data:
-                block_id = field_data['block_id']
-                if block_id < len(text_blocks):
-                    ocr_block = text_blocks[block_id]
-                    enriched_fields[field_key] = {
-                        'text': field_data.get('text'),
-                        'field_type': field_data.get('field_type'),
-                        'bounding_box': ocr_block['bounding_box'],
-                        'ocr_confidence': ocr_block.get('confidence', 'N/A')
-                    }
-        
-        # Process engines array
-        enriched_engines = []
-        engines = extracted_data.get('engines', [])
-        
-        if engines:
-            for engine in engines:
-                enriched_engine = {}
-                engine_dict = engine if isinstance(engine, dict) else engine.model_dump()
-                
-                for key, field_data in engine_dict.items():
-                    if field_data and isinstance(field_data, dict) and 'block_id' in field_data:
-                        block_id = field_data['block_id']
-                        if block_id < len(text_blocks):
-                            ocr_block = text_blocks[block_id]
-                            enriched_engine[key] = {
-                                'text': field_data.get('text'),
-                                'field_type': field_data.get('field_type'),
-                                'bounding_box': ocr_block['bounding_box'],
-                                'ocr_confidence': ocr_block.get('confidence', 'N/A')
-                            }
-                
-                if enriched_engine:
-                    enriched_engines.append(enriched_engine)
-        
-        if enriched_engines:
-            enriched_fields['engines'] = enriched_engines
-        
-        # Calculate overall bounding box
-        bbox_data = extracted_data.get('bounding_box', {})
-        if bbox_data:
-            bbox_dict = bbox_data if isinstance(bbox_data, dict) else bbox_data.model_dump()
-            overall_bbox = {
-                'left': bbox_dict.get('min_x', 0),
-                'top': bbox_dict.get('min_y', 0),
-                'width': bbox_dict.get('max_x', 0) - bbox_dict.get('min_x', 0),
-                'height': bbox_dict.get('max_y', 0) - bbox_dict.get('min_y', 0)
-            }
-        else:
-            overall_bbox = {'left': 0, 'top': 0, 'width': 0, 'height': 0}
-        
-        return {
-            'found': True,
-            'identifier': extracted_data.get('identifier'),
-            'identifier_type': extracted_data.get('identifier_type'),
-            'layout_type': extracted_data.get('layout_type', 'unknown'),
-            'fields': enriched_fields,
-            'total_fields': len(enriched_fields),
-            'bounding_box': overall_bbox,
-            'document_type': self._detect_document_type(enriched_fields)
-        }
-    
-    def _detect_document_type(self, fields: Dict[str, Any]) -> str:
-        """Detect the type of aviation document based on extracted fields"""
-        
-        has_aircraft_data = 'aircraft_registration' in fields or 'msn' in fields
-        has_tah_tac = 'tah' in fields or 'tac' in fields
-        has_engines = 'engines' in fields
-        has_apu = any(k.startswith('apu_') for k in fields.keys())
-        
-        if has_aircraft_data and has_engines and has_tah_tac:
-            return "Aircraft Lessor Report / Fleet Status"
-        elif has_apu:
-            return "APU Status Report"
-        elif has_engines:
-            return "Engine Status Report"
-        elif has_aircraft_data:
-            return "Aircraft Status Report"
-        else:
-            return "Aviation Maintenance Document"
+        prompt = f"""Extract standalone asset data for "{identifier}".
 
+**OCR BLOCKS:**
+{json.dumps(simplified_blocks[:100], indent=2)}
 
-if __name__ == "__main__":
-    
-    if len(sys.argv) < 3:
-        print("Usage: python src/llm_field_extractor.py <ocr_json_file> <identifier> [pdf_file]")
-        print("\nExamples:")
-        print('  python src/llm_field_extractor.py sample_page_1_ocr.json "P-11217"')
-        print('  python src/llm_field_extractor.py sample_page_1_ocr.json "P-11217" input.pdf')
-        sys.exit(1)
-    
-    json_file_path = Path(sys.argv[1])
-    identifier = sys.argv[2]
-    pdf_file_path = Path(sys.argv[3]) if len(sys.argv) > 3 else None
-    
-    if not json_file_path.exists():
-        print(f"❌ File not found: {json_file_path}")
-        sys.exit(1)
-    
-    print(f"\n🧪 Testing Data Extraction with Instructor")
-    print(f"   OCR File: {json_file_path.name}")
-    print(f"   Identifier: {identifier}")
-    if pdf_file_path:
-        print(f"   PDF File: {pdf_file_path.name}")
-    print()
-    
-    # Load OCR results
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        ocr_results = json.load(f)
-    
-    # Extract data using LLM with Instructor
-    try:
-        extractor = LLMFieldExtractor()
-        result = extractor.extract_column_data(ocr_results, identifier)
+**FIELDS TO EXTRACT:**
+- Month
+- MSN
+- ComponentSerialNumber
+- FlightRegistrationNumber
+
+Provide block_id for each field.
+"""
         
-        if not result['found']:
-            print(f"❌ {result['message']}")
-            sys.exit(1)
-        
-        # Print results
-        print(f"✅ Found identifier: {result['identifier']}")
-        print(f"   Type: {result['identifier_type']}")
-        print(f"   Layout: {result['layout_type']}")
-        print(f"   Document Type: {result['document_type']}")
-        print(f"   Total fields: {result['total_fields']}\n")
-        
-        print(f"{'='*70}")
-        print(f"Extracted Fields:")
-        print(f"{'='*70}\n")
-        
-        for field_key, field_data in result['fields'].items():
-            if field_key == 'engines':
-                print(f"\n🔧 Engines:")
-                for i, engine in enumerate(field_data, 1):
-                    print(f"   Engine {i}:")
-                    for key, data in engine.items():
-                        print(f"      {key}: {data['text']}")
-            else:
-                print(f"  {field_key}: {field_data.get('text')}")
-        
-        # Bounding box
-        bbox = result['bounding_box']
-        print(f"\n{'='*70}")
-        print(f"Overall Bounding Box:")
-        print(f"{'='*70}")
-        print(f"   Left: {bbox['left']:.0f}")
-        print(f"   Top: {bbox['top']:.0f}")
-        print(f"   Width: {bbox['width']:.0f}")
-        print(f"   Height: {bbox['height']:.0f}\n")
-        
-        # Save JSON results
-        output_file = json_file_path.parent / f"{json_file_path.stem}_extracted_{identifier}.json"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
-        
-        print(f"💾 JSON saved to: {output_file.name}\n")
-        
-        # Highlight in PDF if provided
-        if pdf_file_path and pdf_file_path.exists():
-            print(f"{'='*70}")
-            print(f"🎨 Highlighting in PDF...")
-            print(f"{'='*70}\n")
-            
-            highlighted_pdf = highlight_extraction_in_pdf(
-                pdf_path=str(pdf_file_path),
-                extraction_result=result,
-                method="rectangle",
-                ocr_results=ocr_results
+        try:
+            result = self.client.chat.completions.create(
+                model=self.model,
+                response_model=StandaloneAssetsData,
+                messages=[
+                    {"role": "system", "content": "Extract standalone asset data."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0,
+                max_tokens=2048
             )
             
-            print(f"\n✅ Highlighted PDF created: {Path(highlighted_pdf).name}")
-            print(f"   Location: {highlighted_pdf}\n")
-        elif pdf_file_path:
-            print(f"\n⚠️  PDF file not found: {pdf_file_path}")
-            print(f"   Skipping PDF highlighting...\n")
+            extracted_dict = result.model_dump()
+            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
+            
+            return {
+                'found': True,
+                'identifier': identifier,
+                'identifier_type': 'standalone_assets',
+                'fields': enriched_data,
+                'total_fields': len(enriched_data),
+                'document_type': 'standalone_assets'
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error extracting standalone assets: {str(e)}")
+            return {'found': False, 'message': str(e)}
+    
+    def _extract_flight_info(self, simplified_blocks: List[Dict],
+                            identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
+        """Extract using FlightInfo model"""
         
-    except Exception as e:
-        print(f"❌ Error: {str(e)}")
-        import traceback
-        traceback.print_exc()
+        prompt = f"""Extract flight information for "{identifier}".
+
+**OCR BLOCKS:**
+{json.dumps(simplified_blocks[:100], indent=2)}
+
+**FIELDS TO EXTRACT:**
+- Month
+- MSN
+- AirCraftType
+- RegistrationNumber
+
+Provide block_id for each field.
+"""
+        
+        try:
+            result = self.client.chat.completions.create(
+                model=self.model,
+                response_model=FlightInfo,
+                messages=[
+                    {"role": "system", "content": "Extract flight information."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0,
+                max_tokens=2048
+            )
+            
+            extracted_dict = result.model_dump()
+            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
+            
+            return {
+                'found': True,
+                'identifier': identifier,
+                'identifier_type': 'flight_info',
+                'fields': enriched_data,
+                'total_fields': len(enriched_data),
+                'document_type': 'flight_info'
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error extracting flight info: {str(e)}")
+            return {'found': False, 'message': str(e)}
+    
+    def _enrich_with_bounding_boxes(self, extracted_dict: Dict[str, Any], 
+                                    text_blocks: List[Dict]) -> Dict[str, Any]:
+        """Add Azure OCR bounding boxes to extracted data"""
+        enriched = {}
+        
+        for key, value in extracted_dict.items():
+            if value is None:
+                continue
+            
+            # Handle nested ComponentData objects
+            if isinstance(value, dict):
+                component_enriched = {}
+                for field_name, field_value in value.items():
+                    if field_value is not None and not field_name.endswith('_bbox'):
+                        # Check if there's a corresponding bbox field
+                        bbox_key = f"{field_name}_bbox"
+                        if bbox_key in value and value[bbox_key]:
+                            bbox_data = value[bbox_key]
+                            # Convert BoundingBox model to dict if needed
+                            if hasattr(bbox_data, 'dict'):
+                                bbox_dict = bbox_data.dict()
+                            else:
+                                bbox_dict = bbox_data
+                            
+                            component_enriched[field_name] = {
+                                'value': field_value,
+                                'bounding_box': bbox_dict
+                            }
+                        else:
+                            component_enriched[field_name] = {'value': field_value}
+                
+                if component_enriched:
+                    enriched[key] = component_enriched
+            else:
+                enriched[key] = {'value': value}
+        
+        return enriched
+    
+    def _count_fields(self, data: Dict[str, Any]) -> int:
+        """Count total extracted fields"""
+        count = 0
+        for value in data.values():
+            if isinstance(value, dict):
+                count += len([v for v in value.values() if v is not None])
+            elif value is not None:
+                count += 1
+        return count

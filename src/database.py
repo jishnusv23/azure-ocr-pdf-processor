@@ -1,9 +1,10 @@
 """
-Database operations for storing OCR results
+Database operations for storing OCR results using Pydantic models
 """
-from sqlalchemy import create_engine, Column, Integer, String, Float, Text, DateTime, JSON
+from sqlalchemy import create_engine, Column, Integer, String, Float, Text, DateTime, JSON, ForeignKey, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 import logging
@@ -11,297 +12,508 @@ import json
 
 from config.config import DATABASE_URL
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
 
-class PDFDocument(Base):
-    """PDF Document model"""
-    __tablename__ = 'pdf_documents'
+class Document(Base):
+    """Documents (PDF files)"""
+    __tablename__ = 'documents'
     
-    id = Column(Integer, primary_key=True)
-    filename = Column(String(255), nullable=False)
-    file_path = Column(String(500), nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    filename = Column(String, nullable=False)
+    file_path = Column(String, nullable=False)
     total_pages = Column(Integer)
-    file_size_mb = Column(Float)
-    processed_at = Column(DateTime, default=datetime.utcnow)
-    pdf_metadata = Column(JSON)  # ✅ CHANGED: from 'metadata' to 'pdf_metadata'
+    processed_date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    ocr_results = relationship("OCRResult", back_populates="document", cascade="all, delete-orphan")
+    
+    __table_args__ = (
+        UniqueConstraint('filename', 'file_path', name='uq_document_filename_path'),
+    )
 
 
 class OCRResult(Base):
-    """OCR Result model"""
+    """OCR Results (per page)"""
     __tablename__ = 'ocr_results'
     
-    id = Column(Integer, primary_key=True)
-    document_id = Column(Integer, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    document_id = Column(Integer, ForeignKey('documents.id'), nullable=False)
     page_number = Column(Integer, nullable=False)
-    image_width = Column(Integer)
-    image_height = Column(Integer)
-    total_text_blocks = Column(Integer)
-    all_text = Column(Text)
-    ocr_data = Column(JSON)
-    processed_at = Column(DateTime, default=datetime.utcnow)
-
-
-class TextBlock(Base):
-    """Individual text block model"""
-    __tablename__ = 'text_blocks'
+    total_blocks = Column(Integer)
+    image_width = Column(Float)
+    image_height = Column(Float)
+    ocr_json = Column(Text, nullable=False)
+    processed_date = Column(DateTime, default=datetime.utcnow)
     
-    id = Column(Integer, primary_key=True)
-    ocr_result_id = Column(Integer, nullable=False)
-    text = Column(Text, nullable=False)
+    # Relationships
+    document = relationship("Document", back_populates="ocr_results")
+    identifiers = relationship("Identifier", back_populates="ocr_result", cascade="all, delete-orphan")
+    
+    __table_args__ = (
+        UniqueConstraint('document_id', 'page_number', name='uq_ocr_document_page'),
+    )
+
+
+class Identifier(Base):
+    """Identifiers (discovered serial numbers, registrations, etc.)"""
+    __tablename__ = 'identifiers'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ocr_result_id = Column(Integer, ForeignKey('ocr_results.id'), nullable=False)
+    identifier = Column(String, nullable=False)
+    identifier_type = Column(String, nullable=False)
     confidence = Column(Float)
-    left = Column(Float)
-    top = Column(Float)
-    right = Column(Float)
-    bottom = Column(Float)
-    width = Column(Float)
-    height = Column(Float)
+    block_id = Column(Integer)
+    created_date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    ocr_result = relationship("OCRResult", back_populates="identifiers")
+    extracted_data = relationship("ExtractedData", back_populates="identifier", cascade="all, delete-orphan")
+    
+    __table_args__ = (
+        UniqueConstraint('ocr_result_id', 'identifier', name='uq_identifier_ocr_identifier'),
+    )
+
+
+class ExtractedData(Base):
+    """Extracted Data (LLM extraction results)"""
+    __tablename__ = 'extracted_data'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    identifier_id = Column(Integer, ForeignKey('identifiers.id'), nullable=False)
+    document_type = Column(String)  # 'standalone_assets' or 'flight_info'
+    layout_type = Column(String)
+    extraction_json = Column(Text, nullable=False)
+    total_fields = Column(Integer)
+    created_date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    identifier = relationship("Identifier", back_populates="extracted_data")
+    components = relationship("ComponentTable", back_populates="extracted_data", cascade="all, delete-orphan")
+    standalone_assets = relationship("StandaloneAssetTable", back_populates="extracted_data", cascade="all, delete-orphan")
+    flight_info = relationship("FlightInfoTable", back_populates="extracted_data", uselist=False, cascade="all, delete-orphan")
+
+
+class ComponentTable(Base):
+    __tablename__ = 'components'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    extracted_data_id = Column(Integer, ForeignKey('extracted_data.id'), nullable=False)
+    component_type = Column(String, nullable=False)
+    
+    tsn = Column(Float)
+    tsn_bbox_json = Column(JSONB)
+    
+    csn = Column(Integer)
+    csn_bbox_json = Column(JSONB)
+    
+    monthly_util_hrs = Column(Float)
+    monthly_util_hrs_bbox_json = Column(JSONB)
+    
+    monthly_util_cyc = Column(Integer)
+    monthly_util_cyc_bbox_json = Column(JSONB)
+    
+    serial_number = Column(JSONB)
+    serial_number_bbox_json = Column(JSONB)
+    
+    location = Column(JSONB)
+    location_bbox_json = Column(JSONB)
+    
+    derate = Column(Float)
+    extraction_confidence = Column(Float)
+    created_date = Column(DateTime, default=datetime.utcnow)
+    
+    extracted_data = relationship("ExtractedData", back_populates="components")
+
+class StandaloneAssetTable(Base):
+    """Standalone Assets Data"""
+    __tablename__ = 'standalone_assets'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    extracted_data_id = Column(Integer, ForeignKey('extracted_data.id'), nullable=False)
+    
+    month = Column(String)
+    msn = Column(String)
+    flight_registration_number = Column(String)
+    component_serial_number = Column(String, nullable=False)
+    
+    created_date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    extracted_data = relationship("ExtractedData", back_populates="standalone_assets")
+
+
+class FlightInfoTable(Base):
+    """Flight Information Data"""
+    __tablename__ = 'flight_information'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    extracted_data_id = Column(Integer, ForeignKey('extracted_data.id'), nullable=False)
+    
+    month = Column(String)
+    msn = Column(String)
+    aircraft_type = Column(String)
+    registration_number = Column(String)
+    
+    created_date = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    extracted_data = relationship("ExtractedData", back_populates="flight_info")
 
 
 class DatabaseManager:
-    """Manages database operations"""
+    """Manages database operations for OCR and extraction results using SQLAlchemy and Pydantic"""
     
-    def __init__(self, database_url: Optional[str] = None):
-        """
-        Initialize database connection
-        
-        Args:
-            database_url: Database connection URL (uses config if not provided)
-        """
-        self.database_url = database_url or DATABASE_URL
-        
-        if not self.database_url:
-            logger.warning("⚠️  Database URL not configured. Database operations disabled.")
-            self.engine = None
-            self.Session = None
-            return
-        
-        try:
-            self.engine = create_engine(self.database_url, echo=False)
-            self.Session = sessionmaker(bind=self.engine)
-            logger.info("✅ Database connection established")
-        except Exception as e:
-            logger.error(f"❌ Failed to connect to database: {str(e)}")
-            self.engine = None
-            self.Session = None
+    def __init__(self, database_url: str = DATABASE_URL):
+        """Initialize database connection"""
+        self.engine = create_engine(database_url)
+        self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+        self.initialize_database()
     
-    def create_tables(self):
-        """Create all tables in the database"""
-        if not self.engine:
-            logger.error("❌ Database not configured")
-            return
-        
-        try:
-            Base.metadata.create_all(self.engine)
-            logger.info("✅ Database tables created successfully")
-        except Exception as e:
-            logger.error(f"❌ Error creating tables: {str(e)}")
-            raise
+    def initialize_database(self):
+        """Create tables if they don't exist"""
+        Base.metadata.create_all(bind=self.engine)
+        logger.info(f"✅ Database initialized: {self.engine.url}")
     
-    def save_document(self, filename: str, file_path: str, total_pages: int, 
-                     file_size_mb: float, pdf_metadata: Dict[str, Any] = None) -> int:  # ✅ CHANGED parameter name
-        """
-        Save PDF document information
-        
-        Returns:
-            Document ID
-        """
-        if not self.Session:
-            logger.error("❌ Database not configured")
-            return -1
-        
-        session = self.Session()
-        
-        try:
-            document = PDFDocument(
-                filename=filename,
-                file_path=file_path,
-                total_pages=total_pages,
-                file_size_mb=file_size_mb,
-                pdf_metadata=pdf_metadata or {}  # ✅ CHANGED: use 'pdf_metadata'
-            )
-            
-            session.add(document)
-            session.commit()
-            doc_id = document.id
-            
-            logger.info(f"💾 Saved document: {filename} (ID: {doc_id})")
-            return doc_id
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"❌ Error saving document: {str(e)}")
-            raise
-        finally:
-            session.close()
+    def get_session(self):
+        """Get database session"""
+        return self.SessionLocal()
+    
+    def save_document(self, filename: str, file_path: str, total_pages: int) -> int:
+        """Save document metadata"""
+        with self.get_session() as session:
+            try:
+                existing_doc = session.query(Document).filter(
+                    Document.filename == filename,
+                    Document.file_path == file_path
+                ).first()
+                
+                if existing_doc:
+                    return existing_doc.id
+                
+                document = Document(
+                    filename=filename,
+                    file_path=file_path,
+                    total_pages=total_pages
+                )
+                session.add(document)
+                session.commit()
+                session.refresh(document)
+                return document.id
+                
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Error saving document: {e}")
+                raise
     
     def save_ocr_result(self, document_id: int, page_number: int, 
-                       ocr_data: Dict[str, Any]) -> int:
-        """
-        Save OCR results for a page
-        
-        Returns:
-            OCR result ID
-        """
-        if not self.Session:
-            logger.error("❌ Database not configured")
-            return -1
-        
-        session = self.Session()
-        
-        try:
-            image_size = ocr_data.get('image_size', {})
-            
-            ocr_result = OCRResult(
-                document_id=document_id,
-                page_number=page_number,
-                image_width=image_size.get('width'),
-                image_height=image_size.get('height'),
-                total_text_blocks=len(ocr_data.get('text_blocks', [])),
-                all_text=ocr_data.get('all_text', ''),
-                ocr_data=ocr_data
-            )
-            
-            session.add(ocr_result)
-            session.commit()
-            result_id = ocr_result.id
-            
-            logger.info(f"💾 Saved OCR result for page {page_number} (ID: {result_id})")
-            
-            # Save individual text blocks
-            self._save_text_blocks(session, result_id, ocr_data.get('text_blocks', []))
-            
-            return result_id
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"❌ Error saving OCR result: {str(e)}")
-            raise
-        finally:
-            session.close()
-    
-    def _save_text_blocks(self, session, ocr_result_id: int, text_blocks: List[Dict[str, Any]]):
-        """Save individual text blocks"""
-        try:
-            for block in text_blocks:
-                bbox = block.get('bounding_box', {})
+                       ocr_results: Dict[str, Any]) -> int:
+        """Save OCR results for a page"""
+        with self.get_session() as session:
+            try:
+                existing_ocr = session.query(OCRResult).filter(
+                    OCRResult.document_id == document_id,
+                    OCRResult.page_number == page_number
+                ).first()
                 
-                text_block = TextBlock(
+                img_dims = ocr_results.get('image_dimensions', {})
+                
+                if existing_ocr:
+                    existing_ocr.total_blocks = len(ocr_results.get('text_blocks', []))
+                    existing_ocr.image_width = img_dims.get('width')
+                    existing_ocr.image_height = img_dims.get('height')
+                    existing_ocr.ocr_json = json.dumps(ocr_results)
+                    session.commit()
+                    return existing_ocr.id
+                else:
+                    ocr_result = OCRResult(
+                        document_id=document_id,
+                        page_number=page_number,
+                        total_blocks=len(ocr_results.get('text_blocks', [])),
+                        image_width=img_dims.get('width'),
+                        image_height=img_dims.get('height'),
+                        ocr_json=json.dumps(ocr_results)
+                    )
+                    session.add(ocr_result)
+                    session.commit()
+                    session.refresh(ocr_result)
+                    return ocr_result.id
+                    
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Error saving OCR result: {e}")
+                raise
+    
+    def save_identifier(self, ocr_result_id: int, identifier: str, 
+                       identifier_type: str, confidence: float, block_id: int) -> int:
+        """Save discovered identifier"""
+        with self.get_session() as session:
+            try:
+                existing_identifier = session.query(Identifier).filter(
+                    Identifier.ocr_result_id == ocr_result_id,
+                    Identifier.identifier == identifier
+                ).first()
+                
+                if existing_identifier:
+                    return existing_identifier.id
+                
+                identifier_obj = Identifier(
                     ocr_result_id=ocr_result_id,
-                    text=block.get('text', ''),
-                    confidence=block.get('confidence'),
-                    left=bbox.get('left'),
-                    top=bbox.get('top'),
-                    right=bbox.get('right'),
-                    bottom=bbox.get('bottom'),
-                    width=bbox.get('width'),
-                    height=bbox.get('height')
+                    identifier=identifier,
+                    identifier_type=identifier_type,
+                    confidence=confidence,
+                    block_id=block_id
                 )
+                session.add(identifier_obj)
+                session.commit()
+                session.refresh(identifier_obj)
+                return identifier_obj.id
                 
-                session.add(text_block)
-            
-            session.commit()
-            logger.info(f"💾 Saved {len(text_blocks)} text blocks")
-            
-        except Exception as e:
-            logger.error(f"❌ Error saving text blocks: {str(e)}")
-            raise
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Error saving identifier: {e}")
+                raise
     
-    def search_text(self, search_term: str, document_id: Optional[int] = None) -> List[Dict[str, Any]]:
-        """
-        Search for text in stored OCR results
-        
-        Args:
-            search_term: Text to search for
-            document_id: Optional document ID to limit search
-            
-        Returns:
-            List of matching text blocks with positions
-        """
-        if not self.Session:
-            logger.error("❌ Database not configured")
-            return []
-        
-        session = self.Session()
-        
-        try:
-            query = session.query(TextBlock)
-            
-            if document_id:
-                query = query.join(OCRResult).filter(OCRResult.document_id == document_id)
-            
-            query = query.filter(TextBlock.text.ilike(f'%{search_term}%'))
-            
-            results = []
-            for block in query.all():
-                results.append({
-                    'text': block.text,
-                    'confidence': block.confidence,
-                    'bounding_box': {
-                        'left': block.left,
-                        'top': block.top,
-                        'right': block.right,
-                        'bottom': block.bottom,
-                        'width': block.width,
-                        'height': block.height
-                    }
-                })
-            
-            logger.info(f"🔍 Found {len(results)} matches for '{search_term}'")
-            return results
-            
-        except Exception as e:
-            logger.error(f"❌ Error searching text: {str(e)}")
-            return []
-        finally:
-            session.close()
+    def save_extraction_result(self, identifier_id: int, 
+                               extraction_result: Dict[str, Any]) -> int:
+        """Save LLM extraction results with Pydantic model support"""
+        with self.get_session() as session:
+            try:
+                # Save main extraction data
+                extracted_data = ExtractedData(
+                    identifier_id=identifier_id,
+                    document_type=extraction_result.get('document_type'),
+                    layout_type=extraction_result.get('layout_type'),
+                    extraction_json=json.dumps(extraction_result),
+                    total_fields=extraction_result.get('total_fields', 0)
+                )
+                session.add(extracted_data)
+                session.commit()
+                session.refresh(extracted_data)
+                
+                # Parse extraction result based on document type
+                doc_type = extraction_result.get('document_type', '').lower()
+                
+                if 'component' in doc_type or 'standalone' in doc_type:
+                    # Try to parse as ExtractedComponentData
+                    self._save_component_data(session, extracted_data.id, extraction_result)
+                    
+                    # Try to parse as StandaloneAssetsData
+                    self._save_standalone_assets(session, extracted_data.id, extraction_result)
+                
+                elif 'flight' in doc_type:
+                    # Try to parse as FlightInfo
+                    self._save_flight_info(session, extracted_data.id, extraction_result)
+                
+                session.commit()
+                return extracted_data.id
+                
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Error saving extraction result: {e}")
+                raise
     
-    def get_document_ocr_results(self, document_id: int) -> List[Dict[str, Any]]:
-        """Get all OCR results for a document"""
-        if not self.Session:
-            logger.error("❌ Database not configured")
-            return []
-        
-        session = self.Session()
-        
+    def _save_component_data(self, session, extracted_data_id: int, extraction_result: Dict[str, Any]):
+        """Save component data from ExtractedComponentData model"""
         try:
-            results = session.query(OCRResult).filter(
-                OCRResult.document_id == document_id
-            ).order_by(OCRResult.page_number).all()
+            # Check if extraction_result contains component data
+            fields = extraction_result.get('fields', {})
+            
+            # Component types from ExtractedComponentData
+            component_types = ['Airframe', 'Engine1', 'Engine2', 'APU', 
+                             'LandingGearLeft', 'LandingGearRight', 'LandingGearNose']
+            
+            for comp_type in component_types:
+                comp_data = fields.get(comp_type)
+                if comp_data and isinstance(comp_data, dict):
+                    # Extract ComponentData fields
+                    component = ComponentTable(
+                        extracted_data_id=extracted_data_id,
+                        component_type=comp_type,
+                        tsn=self._get_field_value(comp_data, 'TSN'),
+                        tsn_bbox_json=self._get_bbox_json(comp_data, 'TSN_bbox'),
+                        csn=self._get_field_value(comp_data, 'CSN', as_int=True),
+                        csn_bbox_json=self._get_bbox_json(comp_data, 'CSN_bbox'),
+                        monthly_util_hrs=self._get_field_value(comp_data, 'MonthlyUtil_Hrs'),
+                        monthly_util_hrs_bbox_json=self._get_bbox_json(comp_data, 'MonthlyUtil_Hrs_bbox'),
+                        monthly_util_cyc=self._get_field_value(comp_data, 'MonthlyUtil_Cyc', as_int=True),
+                        monthly_util_cyc_bbox_json=self._get_bbox_json(comp_data, 'MonthlyUtil_Cyc_bbox'),
+                        serial_number=comp_data.get('SerialNumber'),
+                        serial_number_bbox_json=self._get_bbox_json(comp_data, 'SerialNumber_bbox'),
+                        location=comp_data.get('location'),
+                        location_bbox_json=self._get_bbox_json(comp_data, 'location_bbox'),
+                        derate=self._get_field_value(comp_data, 'derate'),
+                        extraction_confidence=comp_data.get('extraction_confidence')
+                    )
+                    session.add(component)
+                    
+        except Exception as e:
+            logger.warning(f"Could not parse component data: {e}")
+    
+    def _save_standalone_assets(self, session, extracted_data_id: int, extraction_result: Dict[str, Any]):
+        """Save standalone assets data from StandaloneAssetsData model"""
+        try:
+            fields = extraction_result.get('fields', {})
+            
+            # Check if we have standalone asset fields
+            if any(k in fields for k in ['Month', 'MSN', 'ComponentSerialNumber', 'FlightRegistrationNumber']):
+                standalone_asset = StandaloneAssetTable(
+                    extracted_data_id=extracted_data_id,
+                    month=fields.get('Month'),
+                    msn=fields.get('MSN'),
+                    flight_registration_number=fields.get('FlightRegistrationNumber'),
+                    component_serial_number=fields.get('ComponentSerialNumber', '')
+                )
+                session.add(standalone_asset)
+                
+        except Exception as e:
+            logger.warning(f"Could not parse standalone assets data: {e}")
+    
+    def _save_flight_info(self, session, extracted_data_id: int, extraction_result: Dict[str, Any]):
+        """Save flight info from FlightInfo model"""
+        try:
+            fields = extraction_result.get('fields', {})
+            
+            # Check if we have flight info fields
+            if any(k in fields for k in ['Month', 'MSN', 'AirCraftType', 'RegistrationNumber']):
+                flight_info = FlightInfoTable(
+                    extracted_data_id=extracted_data_id,
+                    month=fields.get('Month'),
+                    msn=fields.get('MSN'),
+                    aircraft_type=fields.get('AirCraftType'),
+                    registration_number=fields.get('RegistrationNumber')
+                )
+                session.add(flight_info)
+                
+        except Exception as e:
+            logger.warning(f"Could not parse flight info data: {e}")
+    
+    def _get_field_value(self, data: Dict[str, Any], field_name: str, as_int: bool = False) -> Optional[float]:
+        """Extract field value safely"""
+        value = data.get(field_name)
+        if value is None:
+            return None
+        try:
+            if as_int:
+                return int(float(str(value).replace(',', '')))
+            return float(str(value).replace(',', ''))
+        except (ValueError, AttributeError):
+            return None
+    
+    def _get_bbox_json(self, data: Dict[str, Any], field_name: str) -> Optional[str]:
+        """Extract bounding box as JSON string"""
+        bbox = data.get(field_name)
+        if bbox:
+            try:
+                if isinstance(bbox, dict):
+                    return json.dumps(bbox)
+                elif hasattr(bbox, 'dict'):
+                    return json.dumps(bbox.dict())
+            except Exception:
+                pass
+        return None
+    
+    def get_all_identifiers(self) -> List[Dict[str, Any]]:
+        """Get all identifiers from database"""
+        with self.get_session() as session:
+            results = session.query(
+                Identifier.id,
+                Identifier.identifier,
+                Identifier.identifier_type,
+                Identifier.confidence,
+                Document.filename,
+                OCRResult.page_number
+            ).join(
+                OCRResult, Identifier.ocr_result_id == OCRResult.id
+            ).join(
+                Document, OCRResult.document_id == Document.id
+            ).order_by(
+                Document.filename,
+                OCRResult.page_number
+            ).all()
             
             return [
                 {
-                    'page_number': r.page_number,
-                    'total_text_blocks': r.total_text_blocks,
-                    'ocr_data': r.ocr_data
+                    'id': row.id,
+                    'identifier': row.identifier,
+                    'identifier_type': row.identifier_type,
+                    'confidence': row.confidence,
+                    'filename': row.filename,
+                    'page_number': row.page_number
                 }
-                for r in results
+                for row in results
             ]
-            
-        finally:
-            session.close()
-
-
-if __name__ == "__main__":
-    # Test database operations
-    db = DatabaseManager()
     
-    if db.engine:
-        # Create tables
-        db.create_tables()
-        
-        # Test saving a document
-        doc_id = db.save_document(
-            filename="test.pdf",
-            file_path="/path/to/test.pdf",
-            total_pages=2,
-            file_size_mb=1.5,
-            pdf_metadata={"test": "data"}  # ✅ CHANGED parameter name
-        )
-        
-        print(f"✅ Created document with ID: {doc_id}")
-    else:
-        print("⚠️  Database not configured. Skipping tests.")
+    def search_by_identifier(self, identifier: str) -> List[Dict[str, Any]]:
+        """Search for extraction results by identifier"""
+        with self.get_session() as session:
+            results = session.query(
+                Document.filename,
+                OCRResult.page_number,
+                Identifier.identifier,
+                Identifier.identifier_type,
+                ExtractedData.document_type,
+                ExtractedData.extraction_json
+            ).join(
+                ExtractedData, ExtractedData.identifier_id == Identifier.id
+            ).join(
+                OCRResult, Identifier.ocr_result_id == OCRResult.id
+            ).join(
+                Document, OCRResult.document_id == Document.id
+            ).filter(
+                Identifier.identifier.like(f'%{identifier}%')
+            ).all()
+            
+            return [
+                {
+                    'filename': row.filename,
+                    'page_number': row.page_number,
+                    'identifier': row.identifier,
+                    'identifier_type': row.identifier_type,
+                    'document_type': row.document_type,
+                    'extraction_json': json.loads(row.extraction_json)
+                }
+                for row in results
+            ]
+    
+    def get_components_by_identifier(self, identifier: str) -> List[Dict[str, Any]]:
+        """Get component data for a specific identifier"""
+        with self.get_session() as session:
+            results = session.query(ComponentTable).join(
+                ExtractedData, ComponentTable.extracted_data_id == ExtractedData.id
+            ).join(
+                Identifier, ExtractedData.identifier_id == Identifier.id
+            ).filter(
+                Identifier.identifier.like(f'%{identifier}%')
+            ).all()
+            
+            return [
+                {
+                    'component_type': comp.component_type,
+                    'tsn': comp.tsn,
+                    'csn': comp.csn,
+                    'monthly_util_hrs': comp.monthly_util_hrs,
+                    'monthly_util_cyc': comp.monthly_util_cyc,
+                    'serial_number': comp.serial_number,
+                    'location': comp.location,
+                    'derate': comp.derate,
+                    'extraction_confidence': comp.extraction_confidence
+                }
+                for comp in results
+            ]
+    
+    def close(self):
+        """Close database connection"""
+        if hasattr(self, 'engine'):
+            self.engine.dispose()
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()

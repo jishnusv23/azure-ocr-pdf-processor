@@ -45,16 +45,6 @@ class BoundingBox(BaseModel):
     def bottom(self) -> float:
         return self.top + self.height
 
-# class ComponentData(BaseModel):
-#     TSN: Optional[float] = Field(default=None, description="Component Time Since New (hours)")
-#     CSN: Optional[int] = Field(default=None, description="Component Cycles Since New")
-#     MonthlyUtil_Hrs: Optional[float] = Field(default=None, description="Component Monthly Utilization in Hours")
-#     MonthlyUtil_Cyc: Optional[int] = Field(default=None, description="Component Monthly Utilization in Cycles")
-#     SerialNumber: Optional[str] = Field(default=None, description="Component Serial Number")
-#     location: Optional[str] = Field(default=None, description="Component location information (e.g., #1, #2, MSN, tail number)")
-#     attachment_status: Optional[AttachmentStatus] = Field(default=None, description="Component attachment status - Installed or Removed")
-#     derate: Optional[float] = Field(default=None, description="Engine derate percentage value as decimal (e.g., 19.08 for 19.08%)")
-#     extraction_confidence: Optional[float] = Field(default=None, description="Overall confidence score (0.0-1.0) for the extracted component data including decimal precision")
 
 class ComponentData(BaseModel):
     # Direct values (clean API)
@@ -76,7 +66,7 @@ class ComponentData(BaseModel):
     location: Optional[str] = Field(default=None)
     location_bbox: Optional[BoundingBox] = Field(default=None)
     
-    attachment_status: Optional[AttachmentStatus] = Field(default=None)
+    
     derate: Optional[float] = Field(default=None)
     
     

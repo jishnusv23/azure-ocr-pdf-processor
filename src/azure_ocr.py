@@ -1,5 +1,5 @@
 """
-Azure Computer Vision OCR Integration
+Azure Computer Vision OCR Integration - Fixed
 """
 import time
 import json
@@ -34,6 +34,18 @@ class AzureOCR:
         
         logger.info("✅ Azure Computer Vision client initialized")
     
+    def analyze_image(self, image: Image.Image) -> Dict[str, Any]:
+        """
+        Analyze a PIL Image with Azure OCR (main method used by your code)
+        
+        Args:
+            image: PIL Image object
+            
+        Returns:
+            Dictionary containing OCR results with text and positions
+        """
+        return self.process_image(image)
+    
     def process_image(self, image: Image.Image) -> Dict[str, Any]:
         """
         Process a PIL Image with Azure OCR
@@ -64,13 +76,17 @@ class AzureOCR:
             
             # Wait for the operation to complete
             logger.info("   ⏳ Waiting for OCR to complete...")
-            while True:
+            max_retries = 30
+            retry_count = 0
+            
+            while retry_count < max_retries:
                 read_result = self.client.get_read_result(operation_id)
                 
                 if read_result.status not in [OperationStatusCodes.running, OperationStatusCodes.not_started]:
                     break
-                    
+                
                 time.sleep(1)
+                retry_count += 1
             
             if read_result.status == OperationStatusCodes.succeeded:
                 logger.info("   ✅ OCR completed successfully")
@@ -97,7 +113,10 @@ class AzureOCR:
         width, height = image_size
         
         results = {
-            "image_size": {"width": width, "height": height},
+            "image_dimensions": {
+                "width": width, 
+                "height": height
+            },
             "pages": [],
             "all_text": "",
             "text_blocks": []
@@ -185,7 +204,7 @@ class AzureOCR:
 if __name__ == "__main__":
     # Test Azure OCR
     from src.pdf_processor import PDFProcessor
-    from config.settings import INPUT_DIR
+    from config.config import INPUT_DIR
     
     # Find first PDF in input directory
     pdf_files = list(INPUT_DIR.glob("*.pdf"))
@@ -196,17 +215,17 @@ if __name__ == "__main__":
         
         # Convert PDF to image
         processor = PDFProcessor()
-        images = processor.convert_pdf_to_images(str(test_pdf))
+        images = processor.pdf_to_images(str(test_pdf))
         
         if images:
             # Process first page with OCR
-            page_num, image = images[0]
+            image = images[0]
             
             ocr = AzureOCR()
-            results = ocr.process_image(image)
+            results = ocr.analyze_image(image)
             
             # Save results
-            output_path = OCR_RESULTS_DIR / f"{test_pdf.stem}_page_{page_num}_ocr.json"
+            output_path = OCR_RESULTS_DIR / f"{test_pdf.stem}_page_1_ocr.json"
             ocr.save_results(results, str(output_path))
             
             # Print summary
