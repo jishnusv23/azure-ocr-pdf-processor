@@ -1,5 +1,6 @@
 """
 Database operations for storing OCR results using Pydantic models
+FIXED: Properly extracts plain values from {'value': ..., 'bounding_box': ...} structure
 """
 from sqlalchemy import create_engine, Column, Integer, String, Float, Text, DateTime, JSON, ForeignKey, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
@@ -86,7 +87,7 @@ class ExtractedData(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     identifier_id = Column(Integer, ForeignKey('identifiers.id'), nullable=False)
-    document_type = Column(String)  # 'standalone_assets' or 'flight_info'
+    document_type = Column(String)
     layout_type = Column(String)
     extraction_json = Column(Text, nullable=False)
     total_fields = Column(Integer)
@@ -118,10 +119,10 @@ class ComponentTable(Base):
     monthly_util_cyc = Column(Integer)
     monthly_util_cyc_bbox_json = Column(JSONB)
     
-    serial_number = Column(JSONB)
+    serial_number = Column(String)
     serial_number_bbox_json = Column(JSONB)
     
-    location = Column(JSONB)
+    location = Column(String)
     location_bbox_json = Column(JSONB)
     
     derate = Column(Float)
@@ -129,6 +130,7 @@ class ComponentTable(Base):
     created_date = Column(DateTime, default=datetime.utcnow)
     
     extracted_data = relationship("ExtractedData", back_populates="components")
+
 
 class StandaloneAssetTable(Base):
     """Standalone Assets Data"""
@@ -299,15 +301,16 @@ class DatabaseManager:
                 # Parse extraction result based on document type
                 doc_type = extraction_result.get('document_type', '').lower()
                 
-                if 'component' in doc_type or 'standalone' in doc_type:
-                    # Try to parse as ExtractedComponentData
+                if 'component' in doc_type:
+                    # Parse as ExtractedComponentData
                     self._save_component_data(session, extracted_data.id, extraction_result)
-                    
-                    # Try to parse as StandaloneAssetsData
+                
+                elif 'standalone' in doc_type:
+                    # Parse as StandaloneAssetsData
                     self._save_standalone_assets(session, extracted_data.id, extraction_result)
                 
                 elif 'flight' in doc_type:
-                    # Try to parse as FlightInfo
+                    # Parse as FlightInfo
                     self._save_flight_info(session, extracted_data.id, extraction_result)
                 
                 session.commit()
@@ -318,10 +321,38 @@ class DatabaseManager:
                 logger.error(f"Error saving extraction result: {e}")
                 raise
     
+    def _extract_value_from_field(self, field_data: Any) -> Any:
+        """
+        Extract plain value from field data structure
+        Handles both {'value': X, 'bounding_box': Y} and plain values
+        """
+        if field_data is None:
+            return None
+        
+        # If it's a dict with 'value' key, extract the value
+        if isinstance(field_data, dict) and 'value' in field_data:
+            return field_data['value']
+        
+        # Otherwise return as-is
+        return field_data
+    
+    def _extract_bbox_from_field(self, field_data: Any) -> Optional[Dict]:
+        """
+        Extract bounding box from field data structure
+        Returns None if no bounding box found
+        """
+        if field_data is None:
+            return None
+        
+        # If it's a dict with 'bounding_box' key, extract it
+        if isinstance(field_data, dict) and 'bounding_box' in field_data:
+            return field_data['bounding_box']
+        
+        return None
+    
     def _save_component_data(self, session, extracted_data_id: int, extraction_result: Dict[str, Any]):
         """Save component data from ExtractedComponentData model"""
         try:
-            # Check if extraction_result contains component data
             fields = extraction_result.get('fields', {})
             
             # Component types from ExtractedComponentData
@@ -331,23 +362,33 @@ class DatabaseManager:
             for comp_type in component_types:
                 comp_data = fields.get(comp_type)
                 if comp_data and isinstance(comp_data, dict):
-                    # Extract ComponentData fields
+                    # Extract values and bboxes separately
+                    tsn_data = comp_data.get('TSN')
+                    csn_data = comp_data.get('CSN')
+                    monthly_hrs_data = comp_data.get('MonthlyUtil_Hrs')
+                    monthly_cyc_data = comp_data.get('MonthlyUtil_Cyc')
+                    serial_data = comp_data.get('SerialNumber')
+                    location_data = comp_data.get('location')
+                    derate_data = comp_data.get('derate')
+                    
                     component = ComponentTable(
                         extracted_data_id=extracted_data_id,
                         component_type=comp_type,
-                        tsn=self._get_field_value(comp_data, 'TSN'),
-                        tsn_bbox_json=self._get_bbox_json(comp_data, 'TSN_bbox'),
-                        csn=self._get_field_value(comp_data, 'CSN', as_int=True),
-                        csn_bbox_json=self._get_bbox_json(comp_data, 'CSN_bbox'),
-                        monthly_util_hrs=self._get_field_value(comp_data, 'MonthlyUtil_Hrs'),
-                        monthly_util_hrs_bbox_json=self._get_bbox_json(comp_data, 'MonthlyUtil_Hrs_bbox'),
-                        monthly_util_cyc=self._get_field_value(comp_data, 'MonthlyUtil_Cyc', as_int=True),
-                        monthly_util_cyc_bbox_json=self._get_bbox_json(comp_data, 'MonthlyUtil_Cyc_bbox'),
-                        serial_number=comp_data.get('SerialNumber'),
-                        serial_number_bbox_json=self._get_bbox_json(comp_data, 'SerialNumber_bbox'),
-                        location=comp_data.get('location'),
-                        location_bbox_json=self._get_bbox_json(comp_data, 'location_bbox'),
-                        derate=self._get_field_value(comp_data, 'derate'),
+                        # Extract plain values
+                        tsn=self._to_float(self._extract_value_from_field(tsn_data)),
+                        csn=self._to_int(self._extract_value_from_field(csn_data)),
+                        monthly_util_hrs=self._to_float(self._extract_value_from_field(monthly_hrs_data)),
+                        monthly_util_cyc=self._to_int(self._extract_value_from_field(monthly_cyc_data)),
+                        serial_number=self._to_str(self._extract_value_from_field(serial_data)),
+                        location=self._to_str(self._extract_value_from_field(location_data)),
+                        derate=self._to_float(self._extract_value_from_field(derate_data)),
+                        # Extract bounding boxes as JSON
+                        tsn_bbox_json=self._extract_bbox_from_field(tsn_data),
+                        csn_bbox_json=self._extract_bbox_from_field(csn_data),
+                        monthly_util_hrs_bbox_json=self._extract_bbox_from_field(monthly_hrs_data),
+                        monthly_util_cyc_bbox_json=self._extract_bbox_from_field(monthly_cyc_data),
+                        serial_number_bbox_json=self._extract_bbox_from_field(serial_data),
+                        location_bbox_json=self._extract_bbox_from_field(location_data),
                         extraction_confidence=comp_data.get('extraction_confidence')
                     )
                     session.add(component)
@@ -364,10 +405,10 @@ class DatabaseManager:
             if any(k in fields for k in ['Month', 'MSN', 'ComponentSerialNumber', 'FlightRegistrationNumber']):
                 standalone_asset = StandaloneAssetTable(
                     extracted_data_id=extracted_data_id,
-                    month=fields.get('Month'),
-                    msn=fields.get('MSN'),
-                    flight_registration_number=fields.get('FlightRegistrationNumber'),
-                    component_serial_number=fields.get('ComponentSerialNumber', '')
+                    month=self._to_str(self._extract_value_from_field(fields.get('Month'))),
+                    msn=self._to_str(self._extract_value_from_field(fields.get('MSN'))),
+                    flight_registration_number=self._to_str(self._extract_value_from_field(fields.get('FlightRegistrationNumber'))),
+                    component_serial_number=self._to_str(self._extract_value_from_field(fields.get('ComponentSerialNumber', '')))
                 )
                 session.add(standalone_asset)
                 
@@ -383,40 +424,39 @@ class DatabaseManager:
             if any(k in fields for k in ['Month', 'MSN', 'AirCraftType', 'RegistrationNumber']):
                 flight_info = FlightInfoTable(
                     extracted_data_id=extracted_data_id,
-                    month=fields.get('Month'),
-                    msn=fields.get('MSN'),
-                    aircraft_type=fields.get('AirCraftType'),
-                    registration_number=fields.get('RegistrationNumber')
+                    month=self._to_str(self._extract_value_from_field(fields.get('Month'))),
+                    msn=self._to_str(self._extract_value_from_field(fields.get('MSN'))),
+                    aircraft_type=self._to_str(self._extract_value_from_field(fields.get('AirCraftType'))),
+                    registration_number=self._to_str(self._extract_value_from_field(fields.get('RegistrationNumber')))
                 )
                 session.add(flight_info)
                 
         except Exception as e:
             logger.warning(f"Could not parse flight info data: {e}")
     
-    def _get_field_value(self, data: Dict[str, Any], field_name: str, as_int: bool = False) -> Optional[float]:
-        """Extract field value safely"""
-        value = data.get(field_name)
+    def _to_float(self, value: Any) -> Optional[float]:
+        """Convert to float safely"""
         if value is None:
             return None
         try:
-            if as_int:
-                return int(float(str(value).replace(',', '')))
             return float(str(value).replace(',', ''))
         except (ValueError, AttributeError):
             return None
     
-    def _get_bbox_json(self, data: Dict[str, Any], field_name: str) -> Optional[str]:
-        """Extract bounding box as JSON string"""
-        bbox = data.get(field_name)
-        if bbox:
-            try:
-                if isinstance(bbox, dict):
-                    return json.dumps(bbox)
-                elif hasattr(bbox, 'dict'):
-                    return json.dumps(bbox.dict())
-            except Exception:
-                pass
-        return None
+    def _to_int(self, value: Any) -> Optional[int]:
+        """Convert to int safely"""
+        if value is None:
+            return None
+        try:
+            return int(float(str(value).replace(',', '')))
+        except (ValueError, AttributeError):
+            return None
+    
+    def _to_str(self, value: Any) -> Optional[str]:
+        """Convert to string safely"""
+        if value is None:
+            return None
+        return str(value)
     
     def get_all_identifiers(self) -> List[Dict[str, Any]]:
         """Get all identifiers from database"""

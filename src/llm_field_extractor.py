@@ -1,6 +1,7 @@
 """
 Enhanced LLM-based field extraction using Azure OCR bounding boxes
 OPTIMIZED VERSION: Single API call for discovery + extraction
+Processes COMPLETE OCR results (no truncation, no temp files)
 Returns structured data using Pydantic models (ComponentData, ExtractedComponentData)
 """
 import json
@@ -67,15 +68,17 @@ class LLMFieldExtractor:
     def extract_all_data(self, ocr_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         OPTIMIZED: Single API call to discover identifiers AND extract all data
+        Processes COMPLETE OCR results (no truncation, no temp files)
         Returns list of extraction results
         """
         logger.info("🔍 Starting unified extraction (single API call)...")
         
+        # Prepare ALL text blocks (no truncation)
         text_blocks = ocr_results.get('text_blocks', [])
-        simplified_blocks = []
+        logger.info(f"📊 Total OCR blocks: {len(text_blocks)} (processing ALL blocks)")
         
-        # Prepare simplified blocks with bounding box info
-        for i, block in enumerate(text_blocks[:300]):
+        simplified_blocks = []
+        for i, block in enumerate(text_blocks):  # NO LIMIT - process all blocks
             simplified_blocks.append({
                 "id": i,
                 "text": block['text'],
@@ -87,11 +90,14 @@ class LLMFieldExtractor:
                 }
             })
         
-        # UNIFIED PROMPT: Discover + Extract in ONE call
+        # Create prompt with COMPLETE OCR data
+        ocr_json_str = json.dumps(simplified_blocks, indent=2)
+        logger.info(f"📄 OCR JSON size: {len(ocr_json_str)} characters")
+        
         prompt = f"""Analyze this aviation document and extract ALL data in a SINGLE operation.
 
-**OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
-{json.dumps(simplified_blocks[:150], indent=2)}
+**COMPLETE OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
+{ocr_json_str}
 
 **STEP 1: IDENTIFY DOCUMENT TYPE**
 Determine if this is:
@@ -100,8 +106,8 @@ Determine if this is:
 - **flight_info**: Contains Month, MSN, AirCraftType, RegistrationNumber
 
 **STEP 2: FIND ALL IDENTIFIERS**
-Identify ALL key identifiers (confidence > 0.8):
-- aircraft_registration (e.g., VT-ABC, N12345, P-11217)
+Scan through ALL {len(text_blocks)} OCR blocks to identify ALL key identifiers (confidence > 0.8):
+- aircraft_registration (e.g., VT-ABC, N12345, A-7575)
 - engine_sn (Engine serial numbers)
 - apu_sn (APU serial numbers)
 - msn (Manufacturer Serial Number)
@@ -126,25 +132,31 @@ Extract: Month, MSN, ComponentSerialNumber, FlightRegistrationNumber (with block
 **If flight_info:**
 Extract: Month, MSN, AirCraftType, RegistrationNumber (with block_id and bbox)
 
-**CRITICAL:** For EVERY field, include the block_id from the OCR blocks where the value was found.
+**CRITICAL:** 
+- Process ALL {len(text_blocks)} text blocks
+- For EVERY field, include the block_id from the OCR blocks where the value was found
+- Look through the ENTIRE document for identifiers and data
 
 Return the complete structured extraction with ALL identifiers and their data in ONE response.
 """
         
         try:
+            logger.info(f"🚀 Sending complete OCR ({len(text_blocks)} blocks) to LLM...")
+            
             result = self.client.chat.completions.create(
                 model=self.model,
                 response_model=CompleteDocumentExtraction,
                 messages=[
                     {"role": "system", "content": (
-        "You are an expert at analyzing Azure OCR JSON data. "
-        "Each input contains text blocks with bounding boxes from aviation documents. "
-        "Use this OCR data to extract all relevant fields and return them in a structured format."
-    )},
+                        "You are an expert at analyzing complete Azure OCR JSON data. "
+                        "Process ALL text blocks provided - do not skip any blocks. "
+                        "Each input contains ALL text blocks with bounding boxes from aviation documents. "
+                        "Use this complete OCR data to extract all relevant fields and return them in a structured format."
+                    )},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0,
-                max_tokens=8192  # Increased for comprehensive extraction
+                max_tokens=16000
             )
             
             doc_type = result.document_type
@@ -191,6 +203,7 @@ Return the complete structured extraction with ALL identifiers and their data in
             
             logger.info(f"\n{'='*60}")
             logger.info(f"🎉 Total extractions: {len(all_results)}")
+            logger.info(f"✅ Processed ALL {len(text_blocks)} OCR blocks")
             logger.info(f"✅ API Calls Made: 1 (instead of {len(all_results) + 1})")
             logger.info(f"{'='*60}")
             
@@ -250,14 +263,12 @@ Return the complete structured extraction with ALL identifiers and their data in
                 count += 1
         return count
 
-
     def discover_identifiers(self, ocr_results: Dict[str, Any]) -> tuple[List[Dict[str, Any]], str]:
         """
         DEPRECATED: Use extract_all_data() instead for single API call
         This method is kept for backwards compatibility
         """
         logger.warning("⚠️ discover_identifiers() is deprecated. Use extract_all_data() for optimized single API call.")
-        # Fallback to old behavior if needed
         results = self.extract_all_data(ocr_results)
         identifiers = [
             {
@@ -277,7 +288,6 @@ Return the complete structured extraction with ALL identifiers and their data in
         This method is kept for backwards compatibility
         """
         logger.warning("⚠️ extract_structured_data() is deprecated. Use extract_all_data() for optimized single API call.")
-        # Fallback: extract all and filter
         results = self.extract_all_data(ocr_results)
         for r in results:
             if r['identifier'] == identifier:
