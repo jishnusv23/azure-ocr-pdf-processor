@@ -1,5 +1,6 @@
 """
 Enhanced LLM-based field extraction using Azure OCR bounding boxes
+OPTIMIZED VERSION: Single API call for discovery + extraction
 Returns structured data using Pydantic models (ComponentData, ExtractedComponentData)
 """
 import json
@@ -25,21 +26,24 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class IdentifierLocation(BaseModel):
-    """Location of an identifier in the document"""
-    identifier: str = Field(description="The identifier text (e.g., serial number, registration)")
+class IdentifierWithData(BaseModel):
+    """Complete identifier with its extracted data"""
+    identifier: str = Field(description="The identifier text")
     identifier_type: str = Field(description="Type: aircraft_registration, engine_sn, apu_sn, msn, component_sn")
-    block_id: int = Field(description="Block index in OCR results")
-    confidence: float = Field(description="Confidence in identification (0-1)", ge=0, le=1)
+    confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
+    # Data fields based on document type
+    component_data: Optional[ExtractedComponentData] = None
+    standalone_assets: Optional[StandaloneAssetsData] = None
+    flight_info: Optional[FlightInfo] = None
 
 
-class IdentifierDiscovery(BaseModel):
-    """Result of identifier discovery"""
-    found_identifiers: List[IdentifierLocation] = Field(
-        description="All identifiers found in the document"
-    )
+class CompleteDocumentExtraction(BaseModel):
+    """Single unified response with all identifiers and their data"""
     document_type: str = Field(
         description="Document type: component_data, standalone_assets, flight_info"
+    )
+    identifiers_with_data: List[IdentifierWithData] = Field(
+        description="All identifiers found with their complete extracted data"
     )
 
 
@@ -60,143 +64,17 @@ class LLMFieldExtractor:
         self.client = instructor.from_openai(base_client)
         logger.info(f"✅ LLM Field Extractor initialized (Model: {self.model})")
     
-    def discover_identifiers(self, ocr_results: Dict[str, Any]) -> tuple[List[Dict[str, Any]], str]:
-        """
-        AUTO-DISCOVER all identifiers and determine document type
-        Returns (identifiers, document_type)
-        """
-        logger.info("🔍 Auto-discovering identifiers and document type...")
-        
-        text_blocks = ocr_results.get('text_blocks', [])
-        simplified_blocks = []
-        
-        for i, block in enumerate(text_blocks[:300]):
-            simplified_blocks.append({
-                "id": i,
-                "text": block['text'],
-                "x": round(block['bounding_box']['left']),
-                "y": round(block['bounding_box']['top'])
-            })
-        
-        prompt = f"""Analyze this aviation document and identify ALL key identifiers and document type.
-
-**OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
-{json.dumps(simplified_blocks[:100], indent=2)}
-
-**DOCUMENT TYPES:**
-1. **component_data**: Contains TSN, CSN, MonthlyUtil for Airframe/Engines/APU/Landing Gear
-2. **standalone_assets**: Contains Month, MSN, ComponentSerialNumber, FlightRegistrationNumber
-3. **flight_info**: Contains Month, MSN, AirCraftType, RegistrationNumber
-
-**IDENTIFIER TYPES:**
-- aircraft_registration (e.g., VT-ABC, N12345, P-11217)
-- engine_sn (Engine serial numbers)
-- apu_sn (APU serial numbers)
-- msn (Manufacturer Serial Number)
-- component_sn (Any component serial number)
-
-**TASK:**
-1. Determine the document type based on the fields present
-2. Find ALL identifiers in the document
-3. For each identifier, provide the block_id where it appears
-
-Return ALL identifiers with high confidence only (>0.8).
-"""
-        
-        try:
-            result = self.client.chat.completions.create(
-                model=self.model,
-                response_model=IdentifierDiscovery,
-                messages=[
-                    {"role": "system", "content": "You are an expert at analyzing aviation maintenance documents."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0,
-                max_tokens=2048
-            )
-            
-            identifiers = []
-            for id_loc in result.found_identifiers:
-                identifiers.append({
-                    'identifier': id_loc.identifier,
-                    'type': id_loc.identifier_type,
-                    'block_id': id_loc.block_id,
-                    'confidence': id_loc.confidence
-                })
-            
-            doc_type = result.document_type
-            
-            logger.info(f"✅ Document Type: {doc_type}")
-            logger.info(f"✅ Found {len(identifiers)} identifiers")
-            for idf in identifiers:
-                logger.info(f"   - {idf['identifier']} ({idf['type']}, conf: {idf['confidence']:.2f})")
-            
-            return identifiers, doc_type
-            
-        except Exception as e:
-            logger.error(f"❌ Error discovering identifiers: {str(e)}")
-            return [], "unknown"
-    
     def extract_all_data(self, ocr_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Extract structured data for ALL discovered identifiers using Pydantic models
+        OPTIMIZED: Single API call to discover identifiers AND extract all data
         Returns list of extraction results
         """
-        # Discover all identifiers and document type
-        identifiers, doc_type = self.discover_identifiers(ocr_results)
+        logger.info("🔍 Starting unified extraction (single API call)...")
         
-        if not identifiers:
-            logger.warning("⚠️ No identifiers found in document")
-            return []
-        
-        # Extract data for each identifier
-        all_results = []
-        
-        for idf in identifiers:
-            logger.info(f"\n{'='*60}")
-            logger.info(f"🔍 Extracting data for: {idf['identifier']} ({idf['type']})")
-            logger.info(f"{'='*60}")
-            
-            try:
-                result = self.extract_structured_data(
-                    ocr_results, 
-                    idf['identifier'], 
-                    doc_type
-                )
-                
-                if result['found']:
-                    # Add identifier metadata
-                    result['identifier_metadata'] = {
-                        'type': idf['type'],
-                        'confidence': idf['confidence'],
-                        'block_id': idf['block_id']
-                    }
-                    result['document_type'] = doc_type
-                    all_results.append(result)
-                    logger.info(f"✅ Extracted {result.get('total_fields', 0)} fields")
-                else:
-                    logger.warning(f"⚠️ Could not extract data for {idf['identifier']}")
-                    
-            except Exception as e:
-                logger.error(f"❌ Error extracting {idf['identifier']}: {str(e)}")
-                continue
-        
-        logger.info(f"\n{'='*60}")
-        logger.info(f"🎉 Total extractions: {len(all_results)}")
-        logger.info(f"{'='*60}")
-        
-        return all_results
-    
-    def extract_structured_data(self, ocr_results: Dict[str, Any], 
-                               identifier: str, doc_type: str) -> Dict[str, Any]:
-        """
-        Extract data using appropriate Pydantic model based on document type
-        Uses Azure OCR bounding boxes for precise field location
-        """
         text_blocks = ocr_results.get('text_blocks', [])
-        
-        # Create simplified blocks with bounding box info
         simplified_blocks = []
+        
+        # Prepare simplified blocks with bounding box info
         for i, block in enumerate(text_blocks[:300]):
             simplified_blocks.append({
                 "id": i,
@@ -209,166 +87,118 @@ Return ALL identifiers with high confidence only (>0.8).
                 }
             })
         
-        # Select appropriate extraction based on doc_type
-        if doc_type == "component_data":
-            return self._extract_component_data(simplified_blocks, identifier, text_blocks)
-        elif doc_type == "standalone_assets":
-            return self._extract_standalone_assets(simplified_blocks, identifier, text_blocks)
-        elif doc_type == "flight_info":
-            return self._extract_flight_info(simplified_blocks, identifier, text_blocks)
-        else:
-            # Fallback: try component data
-            return self._extract_component_data(simplified_blocks, identifier, text_blocks)
-    
-    def _extract_component_data(self, simplified_blocks: List[Dict], 
-                               identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
-        """Extract using ExtractedComponentData model"""
-        
-        prompt = f"""Extract component data for identifier "{identifier}" using the provided bounding boxes.
+        # UNIFIED PROMPT: Discover + Extract in ONE call
+        prompt = f"""Analyze this aviation document and extract ALL data in a SINGLE operation.
 
-**OCR BLOCKS (from Azure OCR):**
+**OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
 {json.dumps(simplified_blocks[:150], indent=2)}
 
-**TASK:**
-Find "{identifier}" and extract ALL component data in the same column/section.
+**STEP 1: IDENTIFY DOCUMENT TYPE**
+Determine if this is:
+- **component_data**: Contains TSN, CSN, MonthlyUtil for Airframe/Engines/APU/Landing Gear
+- **standalone_assets**: Contains Month, MSN, ComponentSerialNumber, FlightRegistrationNumber
+- **flight_info**: Contains Month, MSN, AirCraftType, RegistrationNumber
 
-**COMPONENTS TO EXTRACT:**
-- Airframe: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location
-- Engine1: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate
-- Engine2: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate
-- APU: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location
-- LandingGearLeft: TSN, CSN, SerialNumber, location
-- LandingGearRight: TSN, CSN, SerialNumber, location
-- LandingGearNose: TSN, CSN, SerialNumber, location
+**STEP 2: FIND ALL IDENTIFIERS**
+Identify ALL key identifiers (confidence > 0.8):
+- aircraft_registration (e.g., VT-ABC, N12345, P-11217)
+- engine_sn (Engine serial numbers)
+- apu_sn (APU serial numbers)
+- msn (Manufacturer Serial Number)
+- component_sn (Any component serial number)
 
-For each field, provide:
-1. Value (extracted text)
-2. block_id (the OCR block ID)
+**STEP 3: EXTRACT DATA FOR EACH IDENTIFIER**
+For EACH identifier found, extract the complete data based on document type:
 
-Return structured data with bounding boxes from Azure OCR.
+**If component_data:**
+Extract for each identifier in its column/section:
+- Airframe: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location (with block_id and bbox)
+- Engine1: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate (with block_id and bbox)
+- Engine2: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location, derate (with block_id and bbox)
+- APU: TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, SerialNumber, location (with block_id and bbox)
+- LandingGearLeft: TSN, CSN, SerialNumber, location (with block_id and bbox)
+- LandingGearRight: TSN, CSN, SerialNumber, location (with block_id and bbox)
+- LandingGearNose: TSN, CSN, SerialNumber, location (with block_id and bbox)
+
+**If standalone_assets:**
+Extract: Month, MSN, ComponentSerialNumber, FlightRegistrationNumber (with block_id and bbox)
+
+**If flight_info:**
+Extract: Month, MSN, AirCraftType, RegistrationNumber (with block_id and bbox)
+
+**CRITICAL:** For EVERY field, include the block_id from the OCR blocks where the value was found.
+
+Return the complete structured extraction with ALL identifiers and their data in ONE response.
 """
         
         try:
             result = self.client.chat.completions.create(
                 model=self.model,
-                response_model=ExtractedComponentData,
+                response_model=CompleteDocumentExtraction,
                 messages=[
-                    {"role": "system", "content": "Extract component data using Azure OCR bounding boxes."},
+                    {"role": "system", "content": (
+        "You are an expert at analyzing Azure OCR JSON data. "
+        "Each input contains text blocks with bounding boxes from aviation documents. "
+        "Use this OCR data to extract all relevant fields and return them in a structured format."
+    )},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0,
-                max_tokens=4096
+                max_tokens=8192  # Increased for comprehensive extraction
             )
             
-            # Convert Pydantic model to dict and enrich with bounding boxes
-            extracted_dict = result.model_dump()
-            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
+            doc_type = result.document_type
+            logger.info(f"✅ Document Type: {doc_type}")
+            logger.info(f"✅ Found {len(result.identifiers_with_data)} identifiers with data")
             
-            return {
-                'found': True,
-                'identifier': identifier,
-                'identifier_type': 'component_data',
-                'layout_type': 'columnar',
-                'fields': enriched_data,
-                'total_fields': self._count_fields(enriched_data),
-                'document_type': 'component_data'
-            }
+            # Convert to output format
+            all_results = []
             
-        except Exception as e:
-            logger.error(f"❌ Error extracting component data: {str(e)}")
-            return {'found': False, 'message': str(e)}
-    
-    def _extract_standalone_assets(self, simplified_blocks: List[Dict],
-                                   identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
-        """Extract using StandaloneAssetsData model"""
-        
-        prompt = f"""Extract standalone asset data for "{identifier}".
-
-**OCR BLOCKS:**
-{json.dumps(simplified_blocks[:100], indent=2)}
-
-**FIELDS TO EXTRACT:**
-- Month
-- MSN
-- ComponentSerialNumber
-- FlightRegistrationNumber
-
-Provide block_id for each field.
-"""
-        
-        try:
-            result = self.client.chat.completions.create(
-                model=self.model,
-                response_model=StandaloneAssetsData,
-                messages=[
-                    {"role": "system", "content": "Extract standalone asset data."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0,
-                max_tokens=2048
-            )
+            for id_data in result.identifiers_with_data:
+                logger.info(f"\n{'='*60}")
+                logger.info(f"🔍 Identifier: {id_data.identifier} ({id_data.identifier_type})")
+                logger.info(f"   Confidence: {id_data.confidence:.2f}")
+                
+                # Determine which data was extracted
+                extracted_dict = None
+                if id_data.component_data:
+                    extracted_dict = id_data.component_data.model_dump()
+                elif id_data.standalone_assets:
+                    extracted_dict = id_data.standalone_assets.model_dump()
+                elif id_data.flight_info:
+                    extracted_dict = id_data.flight_info.model_dump()
+                
+                if extracted_dict:
+                    enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
+                    
+                    result_entry = {
+                        'found': True,
+                        'identifier': id_data.identifier,
+                        'identifier_type': id_data.identifier_type,
+                        'identifier_metadata': {
+                            'type': id_data.identifier_type,
+                            'confidence': id_data.confidence
+                        },
+                        'document_type': doc_type,
+                        'fields': enriched_data,
+                        'total_fields': self._count_fields(enriched_data)
+                    }
+                    
+                    all_results.append(result_entry)
+                    logger.info(f"✅ Extracted {result_entry['total_fields']} fields")
+                else:
+                    logger.warning(f"⚠️ No data extracted for {id_data.identifier}")
             
-            extracted_dict = result.model_dump()
-            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
+            logger.info(f"\n{'='*60}")
+            logger.info(f"🎉 Total extractions: {len(all_results)}")
+            logger.info(f"✅ API Calls Made: 1 (instead of {len(all_results) + 1})")
+            logger.info(f"{'='*60}")
             
-            return {
-                'found': True,
-                'identifier': identifier,
-                'identifier_type': 'standalone_assets',
-                'fields': enriched_data,
-                'total_fields': len(enriched_data),
-                'document_type': 'standalone_assets'
-            }
+            return all_results
             
         except Exception as e:
-            logger.error(f"❌ Error extracting standalone assets: {str(e)}")
-            return {'found': False, 'message': str(e)}
-    
-    def _extract_flight_info(self, simplified_blocks: List[Dict],
-                            identifier: str, text_blocks: List[Dict]) -> Dict[str, Any]:
-        """Extract using FlightInfo model"""
-        
-        prompt = f"""Extract flight information for "{identifier}".
-
-**OCR BLOCKS:**
-{json.dumps(simplified_blocks[:100], indent=2)}
-
-**FIELDS TO EXTRACT:**
-- Month
-- MSN
-- AirCraftType
-- RegistrationNumber
-
-Provide block_id for each field.
-"""
-        
-        try:
-            result = self.client.chat.completions.create(
-                model=self.model,
-                response_model=FlightInfo,
-                messages=[
-                    {"role": "system", "content": "Extract flight information."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0,
-                max_tokens=2048
-            )
-            
-            extracted_dict = result.model_dump()
-            enriched_data = self._enrich_with_bounding_boxes(extracted_dict, text_blocks)
-            
-            return {
-                'found': True,
-                'identifier': identifier,
-                'identifier_type': 'flight_info',
-                'fields': enriched_data,
-                'total_fields': len(enriched_data),
-                'document_type': 'flight_info'
-            }
-            
-        except Exception as e:
-            logger.error(f"❌ Error extracting flight info: {str(e)}")
-            return {'found': False, 'message': str(e)}
+            logger.error(f"❌ Error in unified extraction: {str(e)}")
+            return []
     
     def _enrich_with_bounding_boxes(self, extracted_dict: Dict[str, Any], 
                                     text_blocks: List[Dict]) -> Dict[str, Any]:
@@ -391,6 +221,8 @@ Provide block_id for each field.
                             # Convert BoundingBox model to dict if needed
                             if hasattr(bbox_data, 'dict'):
                                 bbox_dict = bbox_data.dict()
+                            elif hasattr(bbox_data, 'model_dump'):
+                                bbox_dict = bbox_data.model_dump()
                             else:
                                 bbox_dict = bbox_data
                             
@@ -417,3 +249,37 @@ Provide block_id for each field.
             elif value is not None:
                 count += 1
         return count
+
+
+    def discover_identifiers(self, ocr_results: Dict[str, Any]) -> tuple[List[Dict[str, Any]], str]:
+        """
+        DEPRECATED: Use extract_all_data() instead for single API call
+        This method is kept for backwards compatibility
+        """
+        logger.warning("⚠️ discover_identifiers() is deprecated. Use extract_all_data() for optimized single API call.")
+        # Fallback to old behavior if needed
+        results = self.extract_all_data(ocr_results)
+        identifiers = [
+            {
+                'identifier': r['identifier'],
+                'type': r['identifier_type'],
+                'confidence': r['identifier_metadata']['confidence']
+            }
+            for r in results
+        ]
+        doc_type = results[0]['document_type'] if results else "unknown"
+        return identifiers, doc_type
+    
+    def extract_structured_data(self, ocr_results: Dict[str, Any], 
+                               identifier: str, doc_type: str) -> Dict[str, Any]:
+        """
+        DEPRECATED: Use extract_all_data() instead for single API call
+        This method is kept for backwards compatibility
+        """
+        logger.warning("⚠️ extract_structured_data() is deprecated. Use extract_all_data() for optimized single API call.")
+        # Fallback: extract all and filter
+        results = self.extract_all_data(ocr_results)
+        for r in results:
+            if r['identifier'] == identifier:
+                return r
+        return {'found': False, 'message': 'Identifier not found'}
