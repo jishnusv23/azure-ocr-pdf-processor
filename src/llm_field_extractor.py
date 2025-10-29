@@ -1,6 +1,6 @@
 """
-Enhanced LLM-based field extraction using Azure OCR bounding boxes
-FIXED: MSN (9999) now extracts COMPLETE Airframe data (TSN, CSN, MonthlyUtil, etc.)
+Enhanced LLM Field Extractor - COMPLETE MULTI-PAGE SUPPORT
+Location: src/llm_field_extractor.py
 """
 import json
 import os
@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 import instructor
 from pydantic import BaseModel, Field
 
-# Import your extraction models
 from src.model.extractor_model import (
     ComponentData, 
     BoundingBox, 
@@ -25,12 +24,42 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# ============================================================================
+# MULTI-PAGE MODELS
+# ============================================================================
+
+class FieldWithPage(BaseModel):
+    """Field value with its page number and bounding box"""
+    field_name: str = Field(description="Field name (e.g., 'TSN', 'CSN', 'SerialNumber')")
+    value: str = Field(description="Field value")
+    page_number: int = Field(description="Page number where this field appears (1-indexed)")
+    bounding_box: BoundingBox = Field(description="Bounding box coordinates")
+
+
+class IdentifierWithPageData(BaseModel):
+    """Identifier with ALL its fields organized by page"""
+    identifier: str = Field(description="The identifier text")
+    identifier_type: str = Field(description="Type: aircraft_registration, engine_sn, apu_sn, msn, component_sn")
+    confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
+    fields: List[FieldWithPage] = Field(description="All fields with their page numbers and bounding boxes")
+
+
+class MultiPageDocumentExtraction(BaseModel):
+    """Complete extraction with page-aware field tracking"""
+    document_type: str = Field(description="Document type: component_data, standalone_assets, flight_info")
+    total_pages: int = Field(description="Total pages processed")
+    identifiers: List[IdentifierWithPageData] = Field(description="All identifiers with page-aware fields")
+
+
+# ============================================================================
+# LEGACY MODELS (for backward compatibility)
+# ============================================================================
+
 class IdentifierWithData(BaseModel):
     """Complete identifier with its extracted data"""
     identifier: str = Field(description="The identifier text")
     identifier_type: str = Field(description="Type: aircraft_registration, engine_sn, apu_sn, msn, component_sn")
     confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
-    # Data fields based on document type
     component_data: Optional[ExtractedComponentData] = None
     standalone_assets: Optional[StandaloneAssetsData] = None
     flight_info: Optional[FlightInfo] = None
@@ -46,12 +75,16 @@ class CompleteDocumentExtraction(BaseModel):
     )
 
 
+# ============================================================================
+# LLM FIELD EXTRACTOR
+# ============================================================================
+
 class LLMFieldExtractor:
-    """LLM Field Extractor using Azure OCR bounding boxes and Pydantic models"""
+    """LLM Field Extractor - Multi-Page Support for ALL aviation PDF formats"""
     
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
-        self.model = model or os.getenv("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet")
+        self.model = model or os.getenv("OPENROUTER_MODEL", "openai/o3")
         
         if not self.api_key:
             raise ValueError("❌ OPENROUTER_API_KEY not set in .env file")
@@ -63,17 +96,221 @@ class LLMFieldExtractor:
         self.client = instructor.from_openai(base_client)
         logger.info(f"✅ LLM Field Extractor initialized (Model: {self.model})")
     
+    def extract_all_data_multipage(self, all_ocr_data: List[Dict[str, Any]], 
+                                   pdf_filename: str) -> List[Dict[str, Any]]:
+        """
+        MULTI-PAGE EXTRACTION: Process ALL pages together
+        Returns identifiers with fields organized by page number
+        
+        Args:
+            all_ocr_data: List of OCR data dicts, one per page
+            pdf_filename: Name of PDF file
+            
+        Returns:
+            List of dicts with structure:
+            {
+                'identifier': 'ENGINE_SN',
+                'identifier_type': 'engine_sn',
+                'fields_by_page': {
+                    1: [{'field': 'SerialNumber', 'value': '862909', 'bounding_box': {...}}],
+                    2: [{'field': 'TSN', 'value': '16300', 'bounding_box': {...}}]
+                }
+            }
+        """
+        logger.info(f"🔍 Multi-page extraction: Processing {len(all_ocr_data)} pages together...")
+        
+        # Combine all OCR blocks from all pages
+        combined_blocks = []
+        page_to_blocks = {}  # Map page number to its block indices
+        
+        block_id = 0
+        for ocr_data in all_ocr_data:
+            page_num = ocr_data['page_number']
+            page_blocks_start = block_id
+            
+            for block in ocr_data['text_blocks']:
+                combined_blocks.append({
+                    "id": block_id,
+                    "page": page_num,
+                    "text": block['text'],
+                    "bbox": {
+                        "left": round(block['bounding_box']['left']),
+                        "top": round(block['bounding_box']['top']),
+                        "width": round(block['bounding_box']['width']),
+                        "height": round(block['bounding_box']['height'])
+                    }
+                })
+                block_id += 1
+            
+            page_to_blocks[page_num] = list(range(page_blocks_start, block_id))
+        
+        ocr_json_str = json.dumps(combined_blocks, indent=2)
+        logger.info(f"📄 Combined OCR: {len(combined_blocks)} blocks from {len(all_ocr_data)} pages")
+        
+        prompt = self._get_multipage_prompt(ocr_json_str, len(combined_blocks), len(all_ocr_data))
+        
+        try:
+            logger.info(f"🚀 Sending ALL pages ({len(all_ocr_data)} pages, {len(combined_blocks)} blocks) to LLM...")
+            
+            result = self.client.chat.completions.create(
+                model=self.model,
+                response_model=MultiPageDocumentExtraction,
+                messages=[
+                    {"role": "system", "content": (
+                        "You are an expert aviation document analyzer processing MULTI-PAGE reports. "
+                        "Each OCR block has a 'page' field indicating which page it's on. "
+                        "For EVERY field you extract, you MUST: "
+                        "1. Include the page number where the field appears "
+                        "2. Include the exact bounding box from that page's OCR data "
+                        "3. Track which page each field is on (page numbers are in the OCR data) "
+                        "Example: If Engine TSN appears on page 2, record: page_number=2, bbox from page 2 "
+                        "Process ALL pages and ALL blocks. Extract ALL fields for each identifier across ALL pages."
+                    )},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0,
+                max_tokens=16000
+            )
+            
+            logger.info(f"✅ Document Type: {result.document_type}")
+            logger.info(f"✅ Found {len(result.identifiers)} identifiers across {result.total_pages} pages")
+            
+            # Organize results by identifier with fields grouped by page
+            final_results = []
+            
+            for id_data in result.identifiers:
+                logger.info(f"\n{'='*60}")
+                logger.info(f"🔍 Identifier: {id_data.identifier} ({id_data.identifier_type})")
+                
+                # Group fields by page
+                fields_by_page = {}
+                for field in id_data.fields:
+                    page_num = field.page_number
+                    if page_num not in fields_by_page:
+                        fields_by_page[page_num] = []
+                    
+                    fields_by_page[page_num].append({
+                        'field': field.field_name,
+                        'value': field.value,
+                        'bounding_box': field.bounding_box.model_dump()
+                    })
+                
+                logger.info(f"   📄 Fields found on pages: {sorted(fields_by_page.keys())}")
+                for page_num, fields in sorted(fields_by_page.items()):
+                    logger.info(f"      Page {page_num}: {len(fields)} fields")
+                
+                final_results.append({
+                    'identifier': id_data.identifier,
+                    'identifier_type': id_data.identifier_type,
+                    'confidence': id_data.confidence,
+                    'fields_by_page': fields_by_page,
+                    'total_fields': len(id_data.fields)
+                })
+            
+            logger.info(f"\n{'='*60}")
+            logger.info(f"🎉 Multi-page extraction complete")
+            logger.info(f"✅ Identifiers: {len(final_results)}")
+            logger.info(f"✅ Pages processed: {len(all_ocr_data)}")
+            logger.info(f"{'='*60}")
+            
+            return final_results
+            
+        except Exception as e:
+            logger.error(f"❌ Error in multi-page extraction: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
+    def _get_multipage_prompt(self, ocr_json_str: str, total_blocks: int, total_pages: int) -> str:
+        """Prompt for multi-page extraction"""
+        
+        return f"""Extract ALL identifiers and their complete data from this MULTI-PAGE aviation report.
+
+═══════════════════════════════════════════════════════════════════════════════
+📊 MULTI-PAGE OCR DATA (ALL {total_pages} pages combined):
+═══════════════════════════════════════════════════════════════════════════════
+
+{ocr_json_str}
+
+Total blocks: {total_blocks} from {total_pages} pages
+Each block has: {{"id", "page", "text", "bbox"}}
+
+═══════════════════════════════════════════════════════════════════════════════
+🎯 CRITICAL: TRACK PAGE NUMBERS
+═══════════════════════════════════════════════════════════════════════════════
+
+For EVERY field extracted, you MUST record:
+1. **field_name**: The field name (e.g., "TSN", "CSN", "SerialNumber")
+2. **value**: The field value
+3. **page_number**: Which page this field appears on (from the "page" key in OCR block)
+4. **bounding_box**: The exact bbox from that page's OCR block
+
+Example:
+- OCR block: {{"id": 45, "page": 2, "text": "16300", "bbox": {{...}}}}
+- Extract as: field_name="TSN", value="16300", page_number=2, bounding_box={{...}}
+
+═══════════════════════════════════════════════════════════════════════════════
+📋 EXTRACTION TASK
+═══════════════════════════════════════════════════════════════════════════════
+
+**STEP 1: Find ALL identifiers** (scan ALL {total_blocks} blocks across ALL pages)
+- msn: "MSN", "Serialnumber" (e.g., 9999, 02607, 3184)
+- aircraft_registration: "REGISTRATION", "Current Registration" (e.g., A-7575, AKNT, G-EZBZ)
+- engine_sn: "S/N of Engine", "ESN", "Serialnumber" in engine section (e.g., 862909, 779682, 643464)
+- apu_sn: APU serial, "Serialnumber" in APU section (e.g., P-11217, P-3775, P-2882)
+- component_sn: Landing gear (e.g., MDG1233, B3219, MDL-2946)
+
+**STEP 2: Extract ALL fields for each identifier across ALL pages**
+
+**TERMINOLOGY VARIATIONS:**
+- TSN = "Total Time Since New" = "Time Since New" = "TAH" = "Total Airframe Hours" = "Flight Hours"
+- CSN = "Total Cycles Since New" = "Cycles Since New" = "TAC" = "Total Airframe Cycles" = "Flight Cycles"
+- MonthlyUtil_Hrs = "HOURS FLOWN DURING MONTH" = "Delta Hrs" = "Period Hours" = "Period Airframe Hours"
+- MonthlyUtil_Cyc = "CYCLES/LANDINGS DURING MONTH" = "Delta Cyc" = "Period Cycles" = "Period Airframe Cycles"
+
+**For AIRFRAME (MSN identifier):**
+Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+(Track which page each field appears on!)
+
+**For ENGINES (Position 1, Position 2, 1000EM1, 1000EM2):**
+Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
+(Engine data may span multiple pages - track each field's page!)
+
+**For APU:**
+Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
+(APU data may span multiple pages - track each field's page!)
+
+**For LANDING GEAR (Left, Right, Nose, Main Gear 1, Main Gear 2):**
+Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+(Track which page each field appears on!)
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ REQUIREMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. ✓ Process ALL {total_blocks} blocks from ALL {total_pages} pages
+2. ✓ For EVERY field, include: field_name, value, page_number, bounding_box
+3. ✓ Page numbers come from the "page" key in OCR blocks
+4. ✓ Extract ALL fields (not just SerialNumber) for each identifier
+5. ✓ If an identifier's data spans multiple pages, extract from ALL pages
+
+Return: MultiPageDocumentExtraction with page-aware field tracking"""
+    
+    # ============================================================================
+    # LEGACY METHOD (for backward compatibility)
+    # ============================================================================
+    
     def extract_all_data(self, ocr_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        OPTIMIZED: Single API call to discover identifiers AND extract all data
-        FIXED: MSN now extracts COMPLETE Airframe data (TSN, CSN, MonthlyUtil, etc.)
+        LEGACY: Single-page extraction (kept for backward compatibility)
+        For multi-page PDFs, use extract_all_data_multipage() instead
         """
-        logger.info("🔍 Starting unified extraction (single API call)...")
+        logger.warning("⚠️ Using legacy single-page extraction. Use extract_all_data_multipage() for better multi-page support.")
         
-        # Prepare ALL text blocks (no truncation)
         text_blocks = ocr_results.get('text_blocks', [])
-        logger.info(f"📊 Total OCR blocks: {len(text_blocks)} (processing ALL blocks)")
+        logger.info(f"📊 Total OCR blocks: {len(text_blocks)}")
         
+        # Prepare simplified OCR blocks
         simplified_blocks = []
         for i, block in enumerate(text_blocks):
             simplified_blocks.append({
@@ -87,116 +324,19 @@ class LLMFieldExtractor:
                 }
             })
         
-        # Create prompt with COMPLETE OCR data
         ocr_json_str = json.dumps(simplified_blocks, indent=2)
-        logger.info(f"📄 OCR JSON size: {len(ocr_json_str)} characters")
-        
-        prompt = f"""Analyze this aviation utilization report and extract ALL data in a SINGLE operation.
-
-**COMPLETE OCR TEXT BLOCKS (with Azure OCR bounding boxes):**
-{ocr_json_str}
-
-**STEP 1: IDENTIFY DOCUMENT TYPE**
-Determine if this is:
-- **component_data**: Contains component utilization data (TSN, CSN, hours, cycles for aircraft components)
-- **standalone_assets**: Contains standalone component data with Month, MSN, ComponentSerialNumber
-- **flight_info**: Contains flight/aircraft information with Month, MSN, AirCraftType, RegistrationNumber
-
-**STEP 2: FIND ALL IDENTIFIERS**
-Scan through ALL {len(text_blocks)} OCR blocks to identify ALL key identifiers (confidence > 0.8):
-- **aircraft_registration**: Aircraft registration numbers (e.g., VT-ABC, N12345, A-7575, AKNT, AKNU, AKNV, OO-SSJ)
-- **engine_sn**: Engine serial numbers (e.g., 862909, 779682, 577611)
-- **apu_sn**: APU serial numbers (e.g., P-11217, P-3775, P-3067, P-4503, P-4431)
-- **msn**: Manufacturer Serial Number (e.g., 9999, 02607, 02628, 02632, 1759)
-- **component_sn**: Component serial numbers (e.g., MDG1233, B3219, M-DG-1967-010)
-- **esn**: Engine Serial Number from standalone reports
-
-**STEP 3: EXTRACT DATA FOR EACH IDENTIFIER**
-For EACH identifier found, extract ALL available data based on document type and format:
-
-**CRITICAL FOR MSN IDENTIFIERS:**
-When you find an MSN identifier (e.g., "9999"), you MUST extract the COMPLETE Airframe component data:
-- Airframe.SerialNumber: The MSN value itself (with bounding box)
-- Airframe.TSN: "AIRCRAFT TOTAL TIME SINCE NEW" or "TAH" (with bounding box)
-- Airframe.CSN: "TOTAL CYCLES SINCE NEW" or "TAC" (with bounding box)
-- Airframe.MonthlyUtil_Hrs: "HOURS FLOWN DURING MONTH" (with bounding box)
-- Airframe.MonthlyUtil_Cyc: "CYCLES/LANDINGS DURING MONTH" (with bounding box)
-
-DO NOT extract ONLY Airframe.SerialNumber for MSN - extract ALL Airframe fields!
-
-**If component_data (handles ALL util report formats):**
-
-For Airframe (EXTRACT ALL FIELDS, not just SerialNumber):
-- **SerialNumber**: Extract the **MSN (Manufacturer Serial Number)** value
-  - Look for "MSN:", "Manufacturer Serial No.", "M.S.N.", or similar labels
-  - Find the OCR block containing the MSN VALUE (e.g., "9999")
-  - Extract the bounding box from that OCR block (use the block's id and bbox)
-- **TSN**: "AIRCRAFT TOTAL TIME SINCE NEW" or "TAH" (with bounding box)
-- **CSN**: "TOTAL CYCLES SINCE NEW" or "TAC" (with bounding box)
-- **MonthlyUtil_Hrs**: "HOURS FLOWN DURING MONTH" (with bounding box)
-- **MonthlyUtil_Cyc**: "CYCLES/LANDINGS DURING MONTH" (with bounding box)
-
-For each Engine Position (1, 2, etc.) - EXTRACT ALL FIELDS:
-- **SerialNumber**: Value from "S/N of Engine Installed" field (PRIMARY serial number)
-- **SerialNumber_Original**: Value from "S/N of Original Engine" or "S/N of Original Engine's" field
-- **TSN**: "Total Time Since New of Original Engine" or "Total Time Since New"
-- **CSN**: "Total Cycles Since New of Original Engine" or "Total Cycles Since New"
-- **MonthlyUtil_Hrs**: "Hours flown during Month of Original Engine" or "Hours flown during Month"
-- **MonthlyUtil_Cyc**: "Cycles During Month of Original Engine" or "Cycles During Month"
-- **location**: "Present Location of Original Engine" or "Present Location"
-
-For APU - EXTRACT ALL FIELDS:
-- **SerialNumber**: From "S/N of Engine Installed" or APU serial number field
-- **SerialNumber_Original**: From "S/N of Original Engine" or "S/N of Original Engine's"
-- **TSN**, **CSN**, **MonthlyUtil_Hrs**, **MonthlyUtil_Cyc**, **location**
-
-For Landing Gear (Left/Main 1, Right/Main 2, Nose) - EXTRACT ALL FIELDS:
-- **SerialNumber**: From "S/N of Landing Gear Installed"
-- **TSN**: "Total Time Since New"
-- **CSN**: "Total Cycles Since New"
-- **MonthlyUtil_Hrs**: "Total Hours Flown During Month"
-- **MonthlyUtil_Cyc**: "Total Cycles Made During Month"
-
-**CRITICAL BOUNDING BOX EXTRACTION:**
-1. For EVERY field value extracted, find the OCR block containing that value
-2. Use the block's "id" and "bbox" from the OCR JSON
-3. Include the bounding box in the extraction result
-4. Example: If Airframe.TSN = "56748.23", find the block where text="56748.23" and use its bbox
-5. DO NOT extract fields without bounding boxes unless the value is computed or unavailable in OCR
-
-**If standalone_assets:**
-Extract: Month, MSN, ComponentSerialNumber, FlightRegistrationNumber, AircraftType
-(with bounding boxes from OCR blocks)
-
-**If flight_info:**
-Extract: Month, MSN, AirCraftType, RegistrationNumber
-(with bounding boxes from OCR blocks)
-
-**EXTRACTION RULES:**
-1. Process ALL {len(text_blocks)} text blocks
-2. For EVERY field extracted, include the block_id and bounding box from OCR
-3. For identifiers like MSN, engine_sn, apu_sn, component_sn: Extract the COMPLETE component data (all TSN, CSN, MonthlyUtil fields)
-4. DO NOT create partial extractions with only SerialNumber - extract ALL available fields for that component
-5. If you cannot find a bounding box for a field, check if it's in the OCR blocks
-
-Return the complete structured extraction with ALL identifiers and their COMPLETE component data in ONE response.
-"""
+        prompt = self._get_universal_prompt(ocr_json_str, len(text_blocks))
         
         try:
-            logger.info(f"🚀 Sending complete OCR ({len(text_blocks)} blocks) to LLM...")
-            
             result = self.client.chat.completions.create(
                 model=self.model,
                 response_model=CompleteDocumentExtraction,
                 messages=[
                     {"role": "system", "content": (
-                        "You are an expert at analyzing complete Azure OCR JSON data. "
-                        "Process ALL text blocks provided - do not skip any blocks. "
-                        "For EVERY field extracted, you MUST include the bounding box from the OCR blocks. "
-                        "Find the exact OCR block containing each field value and extract its bbox coordinates. "
-                        "When extracting component data (Airframe, Engine, APU, Landing Gear), extract ALL fields "
-                        "(SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc) not just the serial number. "
-                        "This is critical for PDF highlighting to work correctly."
+                        "You are an expert aviation document analyzer with deep knowledge of ALL aircraft utilization report formats. "
+                        "You process ALL OCR blocks without skipping. "
+                        "For EVERY field extracted, you include the exact bounding box from the OCR data. "
+                        "When you find an identifier (MSN, Engine S/N, etc.), you extract ALL associated fields, not just the serial number."
                     )},
                     {"role": "user", "content": prompt}
                 ],
@@ -204,19 +344,10 @@ Return the complete structured extraction with ALL identifiers and their COMPLET
                 max_tokens=16000
             )
             
-            doc_type = result.document_type
-            logger.info(f"✅ Document Type: {doc_type}")
-            logger.info(f"✅ Found {len(result.identifiers_with_data)} identifiers with data")
-            
             # Convert to output format
             all_results = []
             
             for id_data in result.identifiers_with_data:
-                logger.info(f"\n{'='*60}")
-                logger.info(f"🔍 Identifier: {id_data.identifier} ({id_data.identifier_type})")
-                logger.info(f"   Confidence: {id_data.confidence:.2f}")
-                
-                # Determine which data was extracted
                 extracted_dict = None
                 if id_data.component_data:
                     extracted_dict = id_data.component_data.model_dump()
@@ -236,27 +367,32 @@ Return the complete structured extraction with ALL identifiers and their COMPLET
                             'type': id_data.identifier_type,
                             'confidence': id_data.confidence
                         },
-                        'document_type': doc_type,
+                        'document_type': result.document_type,
                         'fields': enriched_data,
                         'total_fields': self._count_fields(enriched_data)
                     }
-                    
                     all_results.append(result_entry)
-                    logger.info(f"✅ Extracted {result_entry['total_fields']} fields")
-                else:
-                    logger.warning(f"⚠️ No data extracted for {id_data.identifier}")
-            
-            logger.info(f"\n{'='*60}")
-            logger.info(f"🎉 Total extractions: {len(all_results)}")
-            logger.info(f"✅ Processed ALL {len(text_blocks)} OCR blocks")
-            logger.info(f"✅ API Calls Made: 1 (instead of {len(all_results) + 1})")
-            logger.info(f"{'='*60}")
             
             return all_results
             
         except Exception as e:
-            logger.error(f"❌ Error in unified extraction: {str(e)}")
+            logger.error(f"❌ Error in extraction: {str(e)}")
             return []
+    
+    def _get_universal_prompt(self, ocr_json_str: str, total_blocks: int) -> str:
+        """Universal prompt for single-page extraction"""
+        
+        return f"""Analyze this aviation utilization report and extract ALL data.
+
+{ocr_json_str}
+
+Total blocks: {total_blocks}
+
+Find ALL identifiers (msn, aircraft_registration, engine_sn, apu_sn, component_sn) and extract their COMPLETE data.
+For each identifier, extract ALL fields: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location.
+Include bounding boxes for ALL fields from the OCR data.
+
+Terminology: TSN = Total Time Since New = TAH, CSN = Total Cycles Since New = TAC"""
     
     def _enrich_with_bounding_boxes(self, extracted_dict: Dict[str, Any], 
                                     text_blocks: List[Dict]) -> Dict[str, Any]:
@@ -267,16 +403,13 @@ Return the complete structured extraction with ALL identifiers and their COMPLET
             if value is None:
                 continue
             
-            # Handle nested ComponentData objects
             if isinstance(value, dict):
                 component_enriched = {}
                 for field_name, field_value in value.items():
                     if field_value is not None and not field_name.endswith('_bbox'):
-                        # Check if there's a corresponding bbox field
                         bbox_key = f"{field_name}_bbox"
                         if bbox_key in value and value[bbox_key]:
                             bbox_data = value[bbox_key]
-                            # Convert BoundingBox model to dict if needed
                             if hasattr(bbox_data, 'dict'):
                                 bbox_dict = bbox_data.dict()
                             elif hasattr(bbox_data, 'model_dump'):
@@ -307,34 +440,3 @@ Return the complete structured extraction with ALL identifiers and their COMPLET
             elif value is not None:
                 count += 1
         return count
-
-    def discover_identifiers(self, ocr_results: Dict[str, Any]) -> tuple[List[Dict[str, Any]], str]:
-        """
-        DEPRECATED: Use extract_all_data() instead for single API call
-        This method is kept for backwards compatibility
-        """
-        logger.warning("⚠️ discover_identifiers() is deprecated. Use extract_all_data() for optimized single API call.")
-        results = self.extract_all_data(ocr_results)
-        identifiers = [
-            {
-                'identifier': r['identifier'],
-                'type': r['identifier_type'],
-                'confidence': r['identifier_metadata']['confidence']
-            }
-            for r in results
-        ]
-        doc_type = results[0]['document_type'] if results else "unknown"
-        return identifiers, doc_type
-    
-    def extract_structured_data(self, ocr_results: Dict[str, Any], 
-                               identifier: str, doc_type: str) -> Dict[str, Any]:
-        """
-        DEPRECATED: Use extract_all_data() instead for single API call
-        This method is kept for backwards compatibility
-        """
-        logger.warning("⚠️ extract_structured_data() is deprecated. Use extract_all_data() for optimized single API call.")
-        results = self.extract_all_data(ocr_results)
-        for r in results:
-            if r['identifier'] == identifier:
-                return r
-        return {'found': False, 'message': 'Identifier not found'}
