@@ -2,14 +2,15 @@
 Pydantic models for extraction service
 """
 
-from pydantic import BaseModel, Field,computed_field
-from typing import Optional, List,Dict,Any
+from pydantic import BaseModel, Field, computed_field
+from typing import Optional, List, Dict, Any
 from enum import Enum
 
 
 class DocumentType(str, Enum):
     STANDALONE_ASSETS = "standalone_assets"
     FLIGHT_INFO = "flight_info"
+    COMPONENT_DATA = "component_data"
 
 
 class DocumentClassification(BaseModel):
@@ -27,6 +28,7 @@ class DocumentClassification(BaseModel):
 class AttachmentStatus(str, Enum):
     ATTACHED = "Attached"
     REMOVED = "Removed"
+
 
 class BoundingBox(BaseModel):
     left: float = Field(ge=0)
@@ -69,20 +71,17 @@ class ComponentData(BaseModel):
     location: Optional[str] = Field(default=None)
     location_bbox: Optional[BoundingBox] = Field(default=None)
     
-    
     derate: Optional[float] = Field(default=None)
     
-    
     extraction_confidence: Optional[float] = Field(default=None, ge=0, le=1)
-    
     
     # Helper methods make it easy to use
     def to_field_dict(self) -> Dict[str, Dict[str, Any]]:
         """Convert to field-oriented structure"""
         fields = {}
         for field_name in ['TSN', 'CSN', 'MonthlyUtil_Hrs', 'MonthlyUtil_Cyc', 
-                           'SerialNumber', 'location', 'attachment_status', 'derate']:
-            value = getattr(self, field_name)
+                           'SerialNumber', 'SerialNumber_Original', 'location', 'derate']:
+            value = getattr(self, field_name, None)
             bbox = getattr(self, f"{field_name}_bbox", None)
             
             if value is not None:
@@ -93,35 +92,37 @@ class ComponentData(BaseModel):
         
         return fields
 
+
 class ExtractedComponentData(BaseModel):
-    """Extracted component data with utilization metrics"""
+    """Extracted component data with utilization metrics - MULTI-PAGE SUPPORT"""
+    
     Airframe: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Airframe component with utilization metrics, TSN/CSN values, and status information"
+        description="Airframe component with utilization metrics, TSN/CSN values. Extract SerialNumber (MSN), TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc with bounding boxes including page_number."
     )
     Engine1: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Engine 1 component with serial report, utilization metrics, TSN/CSN values, and status information"
+        description="Engine 1 component (Position 1, 1000EM1). Extract SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location with bounding boxes including page_number."
     )
     Engine2: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Engine 2 component with serial report, utilization metrics, TSN/CSN values, and status information"
+        description="Engine 2 component (Position 2, 1000EM2). Extract SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location with bounding boxes including page_number."
     )
     APU: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Auxiliary Power Unit component with utilization metrics, TSN/CSN values, and status information"
+        description="Auxiliary Power Unit component. Extract SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location with bounding boxes including page_number."
     )
     LandingGearLeft: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Left Landing Gear component with serial report, utilization metrics, TSN/CSN values, and status information"
+        description="Left Landing Gear component (Main Gear 1). Extract SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc with bounding boxes including page_number."
     )
     LandingGearRight: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Right Landing Gear component with serial report, utilization metrics, TSN/CSN values, and status information"
+        description="Right Landing Gear component (Main Gear 2). Extract SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc with bounding boxes including page_number."
     )
     LandingGearNose: Optional[ComponentData] = Field(
         default_factory=ComponentData,
-        description="Nose Landing Gear component with serial report, utilization metrics, TSN/CSN values, and status information"
+        description="Nose Landing Gear component. Extract SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc with bounding boxes including page_number."
     )
 
 

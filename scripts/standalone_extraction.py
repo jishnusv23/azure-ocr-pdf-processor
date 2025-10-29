@@ -1,6 +1,6 @@
 """
 Standalone PDF extraction - COMPLETE MULTI-PAGE SUPPORT
-Highlights ALL fields across ALL pages for each identifier
+Highlights ALL fields across ALL pages for each component
 Location: scripts/standalone_extraction.py
 """
 import argparse
@@ -29,8 +29,8 @@ def process_pdf_standalone(pdf_path: str, output_dir: str = None) -> None:
     """
     COMPLETE MULTI-PAGE PROCESSING
     - Processes ALL pages at once
-    - Extracts identifiers and ALL their fields across ALL pages
-    - Creates ONE highlighted PDF per identifier showing ALL fields on ALL pages
+    - Extracts components and ALL their fields across ALL pages
+    - Creates ONE highlighted PDF per component showing ALL fields on ALL pages
     
     Args:
         pdf_path: Path to input PDF file
@@ -102,35 +102,63 @@ def process_pdf_standalone(pdf_path: str, output_dir: str = None) -> None:
         logger.info(f"🧠 Step 3: LLM Extraction (ALL {len(all_ocr_data)} pages together)")
         logger.info(f"{'='*80}")
         
-        # Combine all OCR data with page numbers
-        combined_extraction = llm_extractor.extract_all_data_multipage(
+        # Extract component data (returns dict with Airframe, Engine1, etc.)
+        component_data = llm_extractor.extract_all_data_multipage(
             all_ocr_data=all_ocr_data,
             pdf_filename=pdf_path.name
         )
         
-        if not combined_extraction:
-            logger.warning("⚠️  No identifiers found in entire PDF")
+        if not component_data:
+            logger.warning("⚠️  No components found in entire PDF")
             return
         
-        logger.info(f"   ✅ Found {len(combined_extraction)} identifiers across all pages")
-        
-        # Step 4: Generate highlighted PDFs
+        # Step 4: Convert ExtractedComponentData to fields_by_page format for highlighting
         logger.info(f"\n{'='*80}")
         logger.info(f"🎨 Step 4: Generating Multi-Page Highlighted PDFs")
         logger.info(f"{'='*80}")
         
+        component_names = ['Airframe', 'Engine1', 'Engine2', 'APU', 
+                          'LandingGearLeft', 'LandingGearRight', 'LandingGearNose']
+        
         generated_pdfs = []
         
-        for idx, identifier_data in enumerate(combined_extraction, 1):
-            identifier = identifier_data['identifier']
-            fields_by_page = identifier_data['fields_by_page']
+        for comp_name in component_names:
+            comp_dict = component_data.get(comp_name)
             
-            logger.info(f"\n{idx}. Highlighting: {identifier}")
+            if not comp_dict:
+                continue
+            
+            # Extract fields_by_page from component data
+            fields_by_page = {}
+            field_names = ['SerialNumber', 'SerialNumber_Original', 'TSN', 'CSN', 
+                          'MonthlyUtil_Hrs', 'MonthlyUtil_Cyc', 'location']
+            
+            for field_name in field_names:
+                value = comp_dict.get(field_name)
+                bbox_dict = comp_dict.get(f"{field_name}_bbox")
+                
+                if value is not None and bbox_dict is not None:
+                    page_num = bbox_dict.get('page_number', 1)
+                    
+                    if page_num not in fields_by_page:
+                        fields_by_page[page_num] = []
+                    
+                    fields_by_page[page_num].append({
+                        'field': field_name,
+                        'value': str(value),
+                        'bounding_box': bbox_dict
+                    })
+            
+            # Skip if no fields found
+            if not fields_by_page:
+                logger.info(f"   ⚠️  {comp_name}: No fields with bounding boxes")
+                continue
+            
+            logger.info(f"\n   Highlighting: {comp_name}")
             logger.info(f"   Pages with data: {list(fields_by_page.keys())}")
             
             # Generate output filename
-            safe_identifier = identifier.replace('/', '-').replace('\\', '-')
-            output_filename = f"{pdf_path.stem}_{safe_identifier}_multipage_highlighted.pdf"
+            output_filename = f"{pdf_path.stem}_{comp_name}_multipage_highlighted.pdf"
             output_path = output_dir / output_filename
             
             try:
@@ -146,7 +174,7 @@ def process_pdf_standalone(pdf_path: str, output_dir: str = None) -> None:
                 total_fields = sum(len(fields) for fields in fields_by_page.values())
                 
                 generated_pdfs.append({
-                    'identifier': identifier,
+                    'component': comp_name,
                     'pages': list(fields_by_page.keys()),
                     'file': highlighted_pdf,
                     'total_fields': total_fields
@@ -157,7 +185,9 @@ def process_pdf_standalone(pdf_path: str, output_dir: str = None) -> None:
                 logger.info(f"   📄 Pages: {list(fields_by_page.keys())}")
             
             except Exception as e:
-                logger.error(f"   ❌ Error highlighting {identifier}: {str(e)}\n")
+                logger.error(f"   ❌ Error highlighting {comp_name}: {str(e)}\n")
+                import traceback
+                traceback.print_exc()
         
         # Summary
         logger.info("\n" + "="*80)
@@ -165,14 +195,14 @@ def process_pdf_standalone(pdf_path: str, output_dir: str = None) -> None:
         logger.info("="*80)
         logger.info(f"   📄 Input PDF: {pdf_path.name}")
         logger.info(f"   📄 Pages processed: {len(images)}")
-        logger.info(f"   🔍 Identifiers found: {len(combined_extraction)}")
+        logger.info(f"   🔍 Components extracted: {len([c for c in component_names if component_data.get(c)])}")
         logger.info(f"   ✅ PDFs generated: {len(generated_pdfs)}")
         logger.info(f"\n   📁 Output Directory: {output_dir}")
         logger.info(f"\n   📋 Generated Files:")
         
         for i, pdf_info in enumerate(generated_pdfs, 1):
             logger.info(f"      {i}. {Path(pdf_info['file']).name}")
-            logger.info(f"         → {pdf_info['identifier']}")
+            logger.info(f"         → {pdf_info['component']}")
             logger.info(f"         → Pages: {pdf_info['pages']}")
             logger.info(f"         → Fields: {pdf_info['total_fields']}")
         
@@ -190,11 +220,11 @@ def main():
         epilog="""
 Examples:
   python standalone_extraction.py --file data/sample.pdf
-  python standalone_extraction.py --file data/sample3.pdf --output-dir results/
+  python standalone_extraction.py --file data/sample4.pdf --output-dir results/
 
 Features:
   - Processes ALL pages in one operation
-  - Creates ONE PDF per identifier
+  - Creates ONE PDF per component (Airframe, Engine1, Engine2, APU, Landing Gears)
   - Highlights ALL fields on ALL pages where they appear
   - Handles 2-page, 3-page, or any multi-page PDFs
         """

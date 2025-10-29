@@ -1,10 +1,10 @@
 """
-Enhanced LLM Field Extractor - COMPLETE MULTI-PAGE SUPPORT
+Enhanced LLM Field Extractor - COMPLETE MULTI-PAGE SUPPORT with ExtractedComponentData
 Location: src/llm_field_extractor.py
 """
 import json
 import os
-from typing import Dict, Any, List, Optional,Literal
+from typing import Dict, Any, List, Optional
 import logging
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -12,11 +12,10 @@ import instructor
 from pydantic import BaseModel, Field
 
 from src.model.extractor_model import (
-    ComponentData, 
     BoundingBox, 
     ExtractedComponentData,
-    StandaloneAssetsData,
-    FlightInfo
+    ComponentData,
+    DocumentType
 )
 
 load_dotenv()
@@ -25,47 +24,11 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# MULTI-PAGE MODELS
-# ============================================================================
-
-class FieldWithPage(BaseModel):
-    """Field value with its page number and bounding box"""
-    field_name: Literal[
-    "SerialNumber",
-    "SerialNumber_Original", 
-    "TSN",
-    "CSN",
-    "MonthlyUtil_Hrs",
-    "MonthlyUtil_Cyc",
-    "location"
-] = Field(...)
-    value: str = Field(description="Field value")
-    page_number: int = Field(description="Page number where this field appears (1-indexed)")
-    bounding_box: BoundingBox = Field(description="Bounding box coordinates")
-
-
-class IdentifierWithPageData(BaseModel):
-    """Identifier with ALL its fields organized by page"""
-    identifier: str = Field(description="The identifier text")
-    identifier_type: str = Field(description=("Component type: one of ['airframe', 'engine1', 'engine2', 'apu', ""'landing_gear_left', 'landing_gear_right', 'landing_gear_nose']"))
-    confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
-    fields: List[FieldWithPage] = Field(description="All fields with their page numbers and bounding boxes")
-
-
-class MultiPageDocumentExtraction(BaseModel):
-    """Complete extraction with page-aware field tracking"""
-    document_type: str = Field(description="Document type: component_data, standalone_assets, flight_info")
-    total_pages: int = Field(description="Total pages processed")
-    identifiers: List[IdentifierWithPageData] = Field(description="All identifiers with page-aware fields")
-
-
-
-# ============================================================================
 # LLM FIELD EXTRACTOR
 # ============================================================================
 
 class LLMFieldExtractor:
-    """LLM Field Extractor - Multi-Page Support for ALL aviation PDF formats"""
+    """LLM Field Extractor - Multi-Page Support using ExtractedComponentData structure"""
     
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
@@ -82,24 +45,25 @@ class LLMFieldExtractor:
         logger.info(f"✅ LLM Field Extractor initialized (Model: {self.model})")
     
     def extract_all_data_multipage(self, all_ocr_data: List[Dict[str, Any]], 
-                                   pdf_filename: str) -> List[Dict[str, Any]]:
+                                   pdf_filename: str) -> Dict[str, Any]:
         """
-        MULTI-PAGE EXTRACTION: Process ALL pages together
-        Returns identifiers with fields organized by page number
+        MULTI-PAGE EXTRACTION using ExtractedComponentData structure
+        Returns component data organized by Airframe, Engine1, Engine2, APU, Landing Gears
         
         Args:
             all_ocr_data: List of OCR data dicts, one per page
             pdf_filename: Name of PDF file
             
         Returns:
-            List of dicts with structure:
+            Dict with structure:
             {
-                'identifier': 'ENGINE_SN',
-                'identifier_type': 'engine_sn',
-                'fields_by_page': {
-                    1: [{'field': 'SerialNumber', 'value': '862909', 'bounding_box': {...}}],
-                    2: [{'field': 'TSN', 'value': '16300', 'bounding_box': {...}}]
-                }
+                'Airframe': {'TSN': 12345, 'TSN_bbox': {...}, 'CSN': 6789, ...},
+                'Engine1': {'SerialNumber': '862909', 'TSN': 16300, ...},
+                'Engine2': {...},
+                'APU': {...},
+                'LandingGearLeft': {...},
+                'LandingGearRight': {...},
+                'LandingGearNose': {...}
             }
         """
         logger.info(f"🔍 Multi-page extraction: Processing {len(all_ocr_data)} pages together...")
@@ -139,17 +103,19 @@ class LLMFieldExtractor:
             
             result = self.client.chat.completions.create(
                 model=self.model,
-                response_model=MultiPageDocumentExtraction,
+                response_model=ExtractedComponentData,
                 messages=[
                     {"role": "system", "content": (
                         "You are an expert aviation document analyzer processing MULTI-PAGE reports. "
                         "Each OCR block has a 'page' field indicating which page it's on. "
                         "For EVERY field you extract, you MUST: "
-                        "1. Include the page number where the field appears "
-                        "2. Include the exact bounding box from that page's OCR data "
-                        "3. Track which page each field is on (page numbers are in the OCR data) "
-                        "Example: If Engine TSN appears on page 2, record: page_number=2, bbox from page 2 "
-                        "Process ALL pages and ALL blocks. Extract ALL fields for each identifier across ALL pages."
+                        "1. Set the value in the appropriate field (TSN, CSN, SerialNumber, etc.) "
+                        "2. Create a BoundingBox with 'page_number' set to the page where the field appears "
+                        "3. Include the exact bounding box coordinates from that page's OCR data "
+                        "Example: If Engine1 TSN '16300' appears on page 2 at coordinates (100, 200, 50, 20): "
+                        "  Engine1.TSN = 16300 "
+                        "  Engine1.TSN_bbox = BoundingBox(left=100, top=200, width=50, height=20, page_number=2) "
+                        "Process ALL pages and ALL blocks. Extract ALL fields across ALL pages."
                     )},
                     {"role": "user", "content": prompt}
                 ],
@@ -157,59 +123,51 @@ class LLMFieldExtractor:
                 max_tokens=16000
             )
             
-            logger.info(f"✅ Document Type: {result.document_type}")
-            logger.info(f"✅ Found {len(result.identifiers)} identifiers across {result.total_pages} pages")
-            
-            # Organize results by identifier with fields grouped by page
-            final_results = []
-            
-            for id_data in result.identifiers:
-                logger.info(f"\n{'='*60}")
-                logger.info(f"🔍 Identifier: {id_data.identifier} ({id_data.identifier_type})")
-                
-                # Group fields by page
-                fields_by_page = {}
-                for field in id_data.fields:
-                    page_num = field.page_number
-                    if page_num not in fields_by_page:
-                        fields_by_page[page_num] = []
-                    
-                    fields_by_page[page_num].append({
-                        'field': field.field_name,
-                        'value': field.value,
-                        'bounding_box': field.bounding_box.model_dump()
-                    })
-                
-                logger.info(f"   📄 Fields found on pages: {sorted(fields_by_page.keys())}")
-                for page_num, fields in sorted(fields_by_page.items()):
-                    logger.info(f"      Page {page_num}: {len(fields)} fields")
-                
-                final_results.append({
-                    'identifier': id_data.identifier,
-                    'identifier_type': id_data.identifier_type,
-                    'confidence': id_data.confidence,
-                    'fields_by_page': fields_by_page,
-                    'total_fields': len(id_data.fields)
-                })
-            
+            logger.info(f"✅ Extraction complete!")
             logger.info(f"\n{'='*60}")
-            logger.info(f"🎉 Multi-page extraction complete")
-            logger.info(f"✅ Identifiers: {len(final_results)}")
-            logger.info(f"✅ Pages processed: {len(all_ocr_data)}")
-            logger.info(f"{'='*60}")
             
-            return final_results
+            # Log extracted components
+            component_names = ['Airframe', 'Engine1', 'Engine2', 'APU', 
+                             'LandingGearLeft', 'LandingGearRight', 'LandingGearNose']
+            
+            for comp_name in component_names:
+                comp_data = getattr(result, comp_name, None)
+                if comp_data and comp_data != ComponentData():
+                    # Check if component has any non-None values
+                    has_data = any(
+                        getattr(comp_data, field, None) is not None 
+                        for field in ['SerialNumber', 'TSN', 'CSN', 'MonthlyUtil_Hrs', 
+                                     'MonthlyUtil_Cyc', 'location', 'SerialNumber_Original']
+                    )
+                    
+                    if has_data:
+                        logger.info(f"🔧 {comp_name}:")
+                        
+                        # Log each field with its page number
+                        for field_name in ['SerialNumber', 'SerialNumber_Original', 'TSN', 'CSN', 
+                                         'MonthlyUtil_Hrs', 'MonthlyUtil_Cyc', 'location']:
+                            value = getattr(comp_data, field_name, None)
+                            bbox = getattr(comp_data, f"{field_name}_bbox", None)
+                            
+                            if value is not None:
+                                page_num = bbox.page_number if bbox else "?"
+                                logger.info(f"   {field_name}: {value} (Page {page_num})")
+            
+            logger.info(f"{'='*60}\n")
+            
+            # Convert to dict format for return
+            return result.model_dump()
             
         except Exception as e:
             logger.error(f"❌ Error in multi-page extraction: {str(e)}")
             import traceback
             traceback.print_exc()
-            return []
+            return {}
     
     def _get_multipage_prompt(self, ocr_json_str: str, total_blocks: int, total_pages: int) -> str:
-        """Prompt for multi-page extraction"""
+        """Prompt for multi-page extraction using ExtractedComponentData structure"""
         
-        return f"""Extract ALL identifiers and their complete data from this MULTI-PAGE aviation report.
+        return f"""Extract ALL component data from this MULTI-PAGE aviation report.
 
 ═══════════════════════════════════════════════════════════════════════════════
 📊 MULTI-PAGE OCR DATA (ALL {total_pages} pages combined):
@@ -221,31 +179,25 @@ Total blocks: {total_blocks} from {total_pages} pages
 Each block has: {{"id", "page", "text", "bbox"}}
 
 ═══════════════════════════════════════════════════════════════════════════════
-🎯 CRITICAL: TRACK PAGE NUMBERS
+🎯 CRITICAL: TRACK PAGE NUMBERS IN BOUNDING BOXES
 ═══════════════════════════════════════════════════════════════════════════════
 
-For EVERY field extracted, you MUST record:
-1. **field_name**: The field name (e.g., "TSN", "CSN", "SerialNumber")
-2. **value**: The field value
-3. **page_number**: Which page this field appears on (from the "page" key in OCR block)
-4. **bounding_box**: The exact bbox from that page's OCR block
+For EVERY field extracted, you MUST:
+1. Set the field value (e.g., TSN = 16300)
+2. Create the corresponding _bbox field with:
+   - left, top, width, height from the OCR block's bbox
+   - **page_number** from the OCR block's "page" field
 
-Example:
-- OCR block: {{"id": 45, "page": 2, "text": "16300", "bbox": {{...}}}}
-- Extract as: field_name="TSN", value="16300", page_number=2, bounding_box={{...}}
+Example from OCR:
+{{"id": 45, "page": 2, "text": "16300", "bbox": {{"left": 100, "top": 200, "width": 50, "height": 20}}}}
+
+Extract as:
+- Engine1.TSN = 16300
+- Engine1.TSN_bbox = BoundingBox(left=100, top=200, width=50, height=20, page_number=2)
 
 ═══════════════════════════════════════════════════════════════════════════════
-📋 EXTRACTION TASK
+📋 EXTRACTION STRUCTURE
 ═══════════════════════════════════════════════════════════════════════════════
-
-**STEP 1: Find ALL identifiers** (scan ALL {total_blocks} blocks across ALL pages)
-- msn: "MSN", "Serialnumber" (e.g., 9999, 02607, 3184)
-- aircraft_registration: "REGISTRATION", "Current Registration" (e.g., A-7575, AKNT, G-EZBZ)
-- engine_sn: "S/N of Engine", "ESN", "Serialnumber" in engine section (e.g., 862909, 779682, 643464)
-- apu_sn: APU serial, "Serialnumber" in APU section (e.g., P-11217, P-3775, P-2882)
-- component_sn: Landing gear (e.g., MDG1233, B3219, MDL-2946)
-
-**STEP 2: Extract ALL fields for each identifier across ALL pages**
 
 **TERMINOLOGY VARIATIONS:**
 - TSN = "Total Time Since New" = "Time Since New" = "TAH" = "Total Airframe Hours" = "Flight Hours"
@@ -253,36 +205,43 @@ Example:
 - MonthlyUtil_Hrs = "HOURS FLOWN DURING MONTH" = "Delta Hrs" = "Period Hours" = "Period Airframe Hours"
 - MonthlyUtil_Cyc = "CYCLES/LANDINGS DURING MONTH" = "Delta Cyc" = "Period Cycles" = "Period Airframe Cycles"
 
-**For AIRFRAME (MSN identifier):**
-Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
-(Track which page each field appears on!)
+**1. Airframe** (Look for MSN, Aircraft Serial Number, Manufacturer Serial Number):
+   Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+   Each field with its _bbox (including page_number)
 
-**For ENGINES (Position 1, Position 2, 1000EM1, 1000EM2):**
-Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
-(Engine data may span multiple pages - track each field's page!)
+**2. Engine1** (Look for Position 1, 1000EM1, Engine 1, Left Engine):
+   Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
+   Each field with its _bbox (including page_number)
 
-**For APU:**
-Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
-(APU data may span multiple pages - track each field's page!)
+**3. Engine2** (Look for Position 2, 1000EM2, Engine 2, Right Engine):
+   Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
+   Each field with its _bbox (including page_number)
 
-**For LANDING GEAR (Left, Right, Nose, Main Gear 1, Main Gear 2):**
-Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
-(Track which page each field appears on!)
+**4. APU** (Look for APU, Auxiliary Power Unit):
+   Extract: SerialNumber, SerialNumber_Original, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc, location
+   Each field with its _bbox (including page_number)
+
+**5. LandingGearLeft** (Look for Main Gear 1, Left Main Landing Gear):
+   Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+   Each field with its _bbox (including page_number)
+
+**6. LandingGearRight** (Look for Main Gear 2, Right Main Landing Gear):
+   Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+   Each field with its _bbox (including page_number)
+
+**7. LandingGearNose** (Look for Nose Gear, Nose Landing Gear):
+   Extract: SerialNumber, TSN, CSN, MonthlyUtil_Hrs, MonthlyUtil_Cyc
+   Each field with its _bbox (including page_number)
 
 ═══════════════════════════════════════════════════════════════════════════════
 ✅ REQUIREMENTS
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. ✓ Process ALL {total_blocks} blocks from ALL {total_pages} pages
-2. ✓ For EVERY field, include: field_name, value, page_number, bounding_box
-3. ✓ Page numbers come from the "page" key in OCR blocks
-4. ✓ Extract ALL fields (not just SerialNumber) for each identifier
-5. ✓ If an identifier's data spans multiple pages, extract from ALL pages
+2. ✓ For EVERY field, create both value AND _bbox fields
+3. ✓ EVERY _bbox MUST include page_number from OCR block's "page" field
+4. ✓ Extract ALL available fields for each component
+5. ✓ If a component's data spans multiple pages, extract from ALL pages
+6. ✓ Use None for fields that are not found
 
-Return: MultiPageDocumentExtraction with page-aware field tracking"""
-    
-    # ============================================================================
-    # LEGACY METHOD (for backward compatibility)
-    # ============================================================================
-    
-   
+Return: ExtractedComponentData with all components populated"""
