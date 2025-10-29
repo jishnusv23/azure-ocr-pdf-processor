@@ -59,29 +59,6 @@ class MultiPageDocumentExtraction(BaseModel):
     identifiers: List[IdentifierWithPageData] = Field(description="All identifiers with page-aware fields")
 
 
-# ============================================================================
-# LEGACY MODELS (for backward compatibility)
-# ============================================================================
-
-class IdentifierWithData(BaseModel):
-    """Complete identifier with its extracted data"""
-    identifier: str = Field(description="The identifier text")
-    identifier_type: str = Field(description=("Component type: one of ['airframe', 'engine1', 'engine2', 'apu', ""'landing_gear_left', 'landing_gear_right', 'landing_gear_nose']"))
-    confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
-    component_data: Optional[ExtractedComponentData] = None
-    standalone_assets: Optional[StandaloneAssetsData] = None
-    flight_info: Optional[FlightInfo] = None
-
-
-class CompleteDocumentExtraction(BaseModel):
-    """Single unified response with all identifiers and their data"""
-    document_type: str = Field(
-        description="Document type: component_data, standalone_assets, flight_info"
-    )
-    identifiers_with_data: List[IdentifierWithData] = Field(
-        description="All identifiers found with their complete extracted data"
-    )
-
 
 # ============================================================================
 # LLM FIELD EXTRACTOR
