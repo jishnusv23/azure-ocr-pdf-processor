@@ -4,7 +4,7 @@ Location: src/llm_field_extractor.py
 """
 import json
 import os
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional,Literal
 import logging
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -30,7 +30,15 @@ logger = logging.getLogger(__name__)
 
 class FieldWithPage(BaseModel):
     """Field value with its page number and bounding box"""
-    field_name: str = Field(description="Field name (e.g., 'TSN', 'CSN', 'SerialNumber')")
+    field_name: Literal[
+    "SerialNumber",
+    "SerialNumber_Original", 
+    "TSN",
+    "CSN",
+    "MonthlyUtil_Hrs",
+    "MonthlyUtil_Cyc",
+    "location"
+] = Field(...)
     value: str = Field(description="Field value")
     page_number: int = Field(description="Page number where this field appears (1-indexed)")
     bounding_box: BoundingBox = Field(description="Bounding box coordinates")
@@ -39,7 +47,7 @@ class FieldWithPage(BaseModel):
 class IdentifierWithPageData(BaseModel):
     """Identifier with ALL its fields organized by page"""
     identifier: str = Field(description="The identifier text")
-    identifier_type: str = Field(description="Type: aircraft_registration, engine_sn, apu_sn, msn, component_sn")
+    identifier_type: str = Field(description=("Component type: one of ['airframe', 'engine1', 'engine2', 'apu', ""'landing_gear_left', 'landing_gear_right', 'landing_gear_nose']"))
     confidence: float = Field(description="Confidence (0-1)", ge=0, le=1)
     fields: List[FieldWithPage] = Field(description="All fields with their page numbers and bounding boxes")
 
